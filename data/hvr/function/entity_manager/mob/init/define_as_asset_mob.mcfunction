@@ -11,6 +11,9 @@
     execute if entity @s[type=zombified_piglin] run data modify storage hvr:api __input__.id set value "zombified_piglin"
     execute if entity @s[type=zombie_villager] run data modify storage hvr:api __input__.id set value "zombie_villager"
     execute if entity @s[type=skeleton] run data modify storage hvr:api __input__.id set value "skeleton"
+    execute if entity @s[type=stray] run data modify storage hvr:api __input__.id set value "stray"
+    execute if entity @s[type=bogged] run data modify storage hvr:api __input__.id set value "bogged"
+    execute if entity @s[type=parched] run data modify storage hvr:api __input__.id set value "parched"
     execute if entity @s[type=enderman] run data modify storage hvr:api __input__.id set value "enderman"
     execute if entity @s[type=warden] run data modify storage hvr:api __input__.id set value "warden"
 

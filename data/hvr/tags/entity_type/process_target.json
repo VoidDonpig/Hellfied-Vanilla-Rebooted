@@ -6,6 +6,9 @@
         "zombified_piglin",
         "zombie_villager",
         "skeleton",
+        "stray",
+        "bogged",
+        "parched",
         "enderman",
         "warden"
     ]

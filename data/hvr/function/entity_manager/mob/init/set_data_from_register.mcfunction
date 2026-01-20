@@ -6,23 +6,23 @@
 
 # Validation
     # equipment
-        execute unless data storage hvr:asset/mob equipment.mainhand run data modify storage hvr:asset/mob equipment.mainhand set value {}
-        execute unless data storage hvr:asset/mob equipment.offhand run data modify storage hvr:asset/mob equipment.offhand set value {}
-        execute unless data storage hvr:asset/mob equipment.head run data modify storage hvr:asset/mob equipment.head set value {}
-        execute unless data storage hvr:asset/mob equipment.chest run data modify storage hvr:asset/mob equipment.chest set value {}
-        execute unless data storage hvr:asset/mob equipment.legs run data modify storage hvr:asset/mob equipment.legs set value {}
-        execute unless data storage hvr:asset/mob equipment.feet run data modify storage hvr:asset/mob equipment.feet set value {}
-        execute unless data storage hvr:asset/mob equipment.body run data modify storage hvr:asset/mob equipment.body set value {}
-        execute unless data storage hvr:asset/mob equipment.saddle run data modify storage hvr:asset/mob equipment.saddle set value {}
+        #execute unless data storage hvr:asset/mob equipment.mainhand run data modify storage hvr:asset/mob equipment.mainhand set value {}
+        #execute unless data storage hvr:asset/mob equipment.offhand run data modify storage hvr:asset/mob equipment.offhand set value {}
+        #execute unless data storage hvr:asset/mob equipment.head run data modify storage hvr:asset/mob equipment.head set value {}
+        #execute unless data storage hvr:asset/mob equipment.chest run data modify storage hvr:asset/mob equipment.chest set value {}
+        #execute unless data storage hvr:asset/mob equipment.legs run data modify storage hvr:asset/mob equipment.legs set value {}
+        #execute unless data storage hvr:asset/mob equipment.feet run data modify storage hvr:asset/mob equipment.feet set value {}
+        #execute unless data storage hvr:asset/mob equipment.body run data modify storage hvr:asset/mob equipment.body set value {}
+        #execute unless data storage hvr:asset/mob equipment.saddle run data modify storage hvr:asset/mob equipment.saddle set value {}
     # drop_chances
-        execute unless data storage hvr:asset/mob drop_chances.mainhand run data modify storage hvr:asset/mob drop_chances.mainhand set value 0f
-        execute unless data storage hvr:asset/mob drop_chances.offhand run data modify storage hvr:asset/mob drop_chances.offhand set value 0f
-        execute unless data storage hvr:asset/mob drop_chances.head run data modify storage hvr:asset/mob drop_chances.head set value 0f
-        execute unless data storage hvr:asset/mob drop_chances.chest run data modify storage hvr:asset/mob drop_chances.chest set value 0f
-        execute unless data storage hvr:asset/mob drop_chances.legs run data modify storage hvr:asset/mob drop_chances.legs set value 0f
-        execute unless data storage hvr:asset/mob drop_chances.feet run data modify storage hvr:asset/mob drop_chances.feet set value 0f
-        execute unless data storage hvr:asset/mob drop_chances.body run data modify storage hvr:asset/mob drop_chances.body set value 0f
-        execute unless data storage hvr:asset/mob drop_chances.saddle run data modify storage hvr:asset/mob drop_chances.saddle set value 0f
+        #execute unless data storage hvr:asset/mob drop_chances.mainhand run data modify storage hvr:asset/mob drop_chances.mainhand set value 0f
+        #execute unless data storage hvr:asset/mob drop_chances.offhand run data modify storage hvr:asset/mob drop_chances.offhand set value 0f
+        #execute unless data storage hvr:asset/mob drop_chances.head run data modify storage hvr:asset/mob drop_chances.head set value 0f
+        #execute unless data storage hvr:asset/mob drop_chances.chest run data modify storage hvr:asset/mob drop_chances.chest set value 0f
+        #execute unless data storage hvr:asset/mob drop_chances.legs run data modify storage hvr:asset/mob drop_chances.legs set value 0f
+        #execute unless data storage hvr:asset/mob drop_chances.feet run data modify storage hvr:asset/mob drop_chances.feet set value 0f
+        #execute unless data storage hvr:asset/mob drop_chances.body run data modify storage hvr:asset/mob drop_chances.body set value 0f
+        #execute unless data storage hvr:asset/mob drop_chances.saddle run data modify storage hvr:asset/mob drop_chances.saddle set value 0f
     # Misc NBT
         execute unless data storage hvr:asset/mob silent run data modify storage hvr:asset/mob silent set value false
         execute unless data storage hvr:asset/mob no_ai run data modify storage hvr:asset/mob no_ai set value false
