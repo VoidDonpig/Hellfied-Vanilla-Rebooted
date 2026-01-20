@@ -1,0 +1,24 @@
+{
+    "replace": false,
+    "values": [
+        "bee",
+        "cave_spider",
+        "dolphin",
+        "drowned",
+        "enderman",
+        "fox",
+        "goat",
+        "iron_golem",
+        "llama",
+        "nautilus",
+        "panda",
+        "piglin",
+        "polar_bear",
+        "pufferfish",
+        "spider",
+        "trader_llama",
+        "wolf",
+        "zombie_nautilus",
+        "zombified_piglin"
+    ]
+}

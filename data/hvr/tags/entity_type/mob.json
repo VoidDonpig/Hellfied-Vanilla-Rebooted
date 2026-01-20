@@ -1,0 +1,10 @@
+{
+    "replace": false,
+    "values": [
+        "#hvr:boss",
+        "#hvr:hostile",
+        "#hvr:neutral",
+        "#hvr:passive",
+        "#hvr:unused"
+    ]
+}

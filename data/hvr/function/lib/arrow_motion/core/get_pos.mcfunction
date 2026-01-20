@@ -1,0 +1,14 @@
+#> hvr:lib/arrow_motion/core/get_pos
+#
+# Get arrow pos
+#
+# @within function hvr:lib/arrow_motion/core/exec
+
+# Get pos
+    data modify storage hvr:lib __temp__.pos set from entity @s Pos
+    data modify storage hvr:lib __temp__.x set from storage hvr:lib __temp__.pos[0]
+    data modify storage hvr:lib __temp__.y set from storage hvr:lib __temp__.pos[1]
+    data modify storage hvr:lib __temp__.z set from storage hvr:lib __temp__.pos[2]
+
+# Remove marker
+    kill @s

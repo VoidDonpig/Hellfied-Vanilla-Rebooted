@@ -1,0 +1,11 @@
+{
+    "values": [
+        "firework_rocket",
+        "fishing_bobber",
+        "llama_spit",
+        "shulker_bullet",
+        "#hvr:arrows",
+        "#hvr:hurting_projectiles",
+        "#hvr:throwable_projectiles"
+    ]
+}

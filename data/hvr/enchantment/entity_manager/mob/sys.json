@@ -1,0 +1,188 @@
+{
+    "anvil_cost": 0,
+    "description": "",
+    "max_cost": {
+        "base": 255,
+        "per_level_above_first": 255
+    },
+    "max_level": 1,
+    "min_cost": {
+        "base": 255,
+        "per_level_above_first": 255
+    },
+    "slots": [
+        "body",
+        "feet"
+    ],
+    "supported_items": "#hvr:all",
+    "weight": 1,
+    "effects": {
+        "prevent_equipment_drop": {},
+        "post_attack": [
+            {
+                "affected": "attacker",
+                "enchanted": "victim",
+                "effect": {
+                    "type": "run_function",
+                    "function": "hvr:entity_manager/mob/event/attack/on_attack"
+                },
+                "requirements": {
+                    "condition": "damage_source_properties",
+                    "predicate": {
+                        "source_entity": {
+                            "type": "#hvr:mob"
+                        }
+                    }
+                }
+            },
+            {
+                "affected": "damaging_entity",
+                "enchanted": "victim",
+                "effect": {
+                    "type": "run_function",
+                    "function": "hvr:entity_manager/mob/event/attack/on_attack_via_projectile"
+                },
+                "requirements": {
+                    "condition": "damage_source_properties",
+                    "predicate": {
+                        "source_entity": {
+                            "type": "#hvr:mob"
+                        },
+                        "tags": [
+                            {
+                                "id": "hvr:is_projectile",
+                                "expected": true
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "affected": "victim",
+                "enchanted": "victim",
+                "effect": {
+                    "type": "run_function",
+                    "function": "hvr:entity_manager/mob/event/hurt/damage_type/is_melee"
+                },
+                "requirements": {
+                    "condition": "damage_source_properties",
+                    "predicate": {
+                        "source_entity": {
+                            "type": "#hvr:mob"
+                        },
+                        "tags": [
+                            {
+                                "id": "hvr:is_melee",
+                                "expected": true
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "affected": "victim",
+                "enchanted": "victim",
+                "effect": {
+                    "type": "run_function",
+                    "function": "hvr:entity_manager/mob/event/hurt/damage_type/is_projectile"
+                },
+                "requirements": {
+                    "condition": "damage_source_properties",
+                    "predicate": {
+                        "source_entity": {
+                            "type": "#hvr:mob"
+                        },
+                        "tags": [
+                            {
+                                "id": "hvr:is_projectile",
+                                "expected": true
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "affected": "victim",
+                "enchanted": "victim",
+                "effect": {
+                    "type": "run_function",
+                    "function": "hvr:entity_manager/mob/event/hurt/damage_type/is_explosion"
+                },
+                "requirements": {
+                    "condition": "damage_source_properties",
+                    "predicate": {
+                        "source_entity": {
+                            "type": "#hvr:mob"
+                        },
+                        "tags": [
+                            {
+                                "id": "hvr:is_explosion",
+                                "expected": true
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "affected": "victim",
+                "enchanted": "victim",
+                "effect": {
+                    "type": "run_function",
+                    "function": "hvr:entity_manager/mob/event/hurt/damage_type/is_other"
+                },
+                "requirements": {
+                    "condition": "damage_source_properties",
+                    "predicate": {
+                        "source_entity": {
+                            "type": "#hvr:mob"
+                        },
+                        "tags": [
+                            {
+                                "id": "hvr:is_melee",
+                                "expected": false
+                            },
+                            {
+                                "id": "hvr:is_projectile",
+                                "expected": false
+                            },
+                            {
+                                "id": "hvr:is_explosion",
+                                "expected": false
+                            }
+                        ]
+                    }
+                }
+            }
+        ],
+        "tick": [
+            {
+                "effect": {
+                    "type": "run_function",
+                    "function": "hvr:entity_manager/mob/event/death/on_death"
+                },
+                "requirements": {
+                    "condition": "all_of",
+                    "terms": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "predicate": {
+                                "nbt": "{Health:0.0f}"
+                            }
+                        },
+                        {
+                            "condition": "inverted",
+                            "term": {
+                                "condition": "entity_properties",
+                                "entity": "this",
+                                "predicate": {
+                                    "nbt": "{Tags:[\"hvr.death\"]}"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
