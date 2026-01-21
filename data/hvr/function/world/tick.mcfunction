@@ -9,3 +9,6 @@
 
 # Prevent invade unsafe area
     execute in minecraft:overworld positioned -1 -64 -1 as @e[dx=2,dy=1,dz=2] run tp @s 0 -62 0
+
+# Immediately kill item have sys ench
+    execute as @e[type=item] if items entity @s container.0 *[enchantments~[{enchantments:["hvr:entity_manager/mob/sys"]}]] run kill @s

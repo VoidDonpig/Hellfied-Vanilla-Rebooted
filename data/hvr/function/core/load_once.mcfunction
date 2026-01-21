@@ -57,6 +57,7 @@
 
 # Load asset function
     function hvr:asset/mob/zombie/load
+    function hvr:asset/mob/creeper/load
     function hvr:asset/mob/warden/load
 
 # Declare this function is loaded
@@ -73,7 +74,7 @@
     {text:"    H A V E  F U N",color:"dark_purple"},\
     "\n",\
     "\n",\
-    {text:"    Hellfied Vanilla-Rework",color:"dark_red"},{text:" created by ",color:"white"},{text:"VoidDonpig",color:"dark_purple",underlined:true,hover_event:{action:"show_text",value:{text:"Click to open GitHub Page"}},click_event:{action:"open_url",url:"https://github.com/VoidDonpig"}},\
+    {text:"    Hellfied Vanilla Rebooted",color:"dark_red"},{text:" created by ",color:"white"},{text:"VoidDonpig",color:"dark_purple",underlined:true,hover_event:{action:"show_text",value:{text:"Click to open GitHub Page"}},click_event:{action:"open_url",url:"https://github.com/VoidDonpig"}},\
     "\n",\
     "\n",\
     {text:"                                                                                ",strikethrough:true,color:"white"}]
