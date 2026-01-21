@@ -2,18 +2,23 @@
 #
 # Summon explosive creeper
 #
-# @within function hvr:asset/mob/creeper/explode/exec
+# @within function
+#   hvr:asset/mob/creeper/explode/exec
+#   hvr:asset/mob/creeper/death
 
 # Set data
     data modify entity @s Invulnerable set value true
     data modify entity @s Fuse set value 0s
-    data modify entity @s ExplosionRadius set from entity @n[tag=hvr.this] ExplosionRadius
-    execute if data entity @n[tag=hvr.this] {powered:1b} run data modify entity @s powered set value true
-    execute if data entity @n[tag=hvr.this] CustomName run data modify entity @s CustomName set from entity @n[tag=hvr.this] CustomName
-    execute if data entity @n[tag=hvr.this] active_effects run data modify entity @s active_effects set from entity @n[tag=hvr.this] active_effects
+    data modify entity @s ExplosionRadius set from storage hvr.__temp__:asset/mob __temp__.explosion_radius
+    execute if data storage hvr.__temp__:asset/mob __temp__{powered:1b} run data modify entity @s powered set value true
+    execute if data storage hvr.__temp__:asset/mob __temp__.custom_name run data modify entity @s CustomName set from storage hvr.__temp__:asset/mob __temp__.custom_name
+    execute if data storage hvr.__temp__:asset/mob __temp__.active_effects run data modify entity @s active_effects set from storage hvr.__temp__:asset/mob __temp__.active_effects
 
 # Declare no process mob
     tag @s add hfv.no_process_mob
 
 # Tp to origin location
     tp @s ~ ~-1024 ~
+
+# Reset
+    data remove storage hvr.__temp__:asset/mob __temp__

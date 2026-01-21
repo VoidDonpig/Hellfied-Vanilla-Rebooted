@@ -16,6 +16,9 @@
 # 0 <= swell
     execute if score @s hvr.mob_asset.creeper.swell matches ..-1 run scoreboard players set @s hvr.mob_asset.creeper.swell 0
 
+# Swelling SFX
+    execute if score @s hvr.mob_asset.creeper.swell matches 1.. run function hvr:asset/mob/creeper/explode/swelling_sfx
+
 # Explode
     execute if score @s hvr.mob_asset.creeper.swell >= @s hvr.mob_asset.creeper.max_swell run function hvr:asset/mob/creeper/explode/exec
 

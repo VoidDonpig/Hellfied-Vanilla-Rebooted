@@ -1,8 +1,8 @@
-#> hvr:asset/mob/creeper/explode/exec
+#> hvr:asset/mob/creeper/death
 #
-# Execute explosion
+# Death process
 #
-# @within function hvr:asset/mob/creeper/explode/swell
+# @within function hvr:entity_manager/mob/event/death/dispatch/dispatcher.m
 
 # Copy data
     data modify storage hvr.__temp__:asset/mob __temp__.explosion_radius set from entity @s ExplosionRadius
@@ -13,14 +13,5 @@
 # Cause explosion
     execute positioned ~ ~1024 ~ summon creeper run function hvr:asset/mob/creeper/explode/summon_explosion
 
-# Set swell
-    scoreboard players set @s hvr.mob_asset.creeper.swell 1
-
 # Flash
     particle flash{color:[1,1,1,1]} ~ ~ ~ 0.0 0.0 0.0 0 1
-
-# Reload SFX
-    execute unless data entity @s {ignited:1b} run function hvr:asset/mob/creeper/explode/reload_explosion_sfx
-
-# If ignited, vanish
-    execute if data entity @s {ignited:1b} run function hvr:asset/mob/creeper/explode/vanish
