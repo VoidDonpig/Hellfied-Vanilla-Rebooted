@@ -68,7 +68,7 @@
     {text:"                                                                                ",strikethrough:true,color:"white"},\
     "\n",\
     "\n",\
-    {text:"    Hellfied Vanilla-Rework has been loaded successfully.",color:"white"},\
+    {text:"    Hellfied Vanilla Rebooted has been loaded successfully.",color:"white"},\
     "\n",\
     "\n",\
     {text:"    H A V E  F U N",color:"dark_purple"},\
