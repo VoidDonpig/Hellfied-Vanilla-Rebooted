@@ -2,7 +2,7 @@
 #
 # Initialize mob
 #
-# @within function hvr:api/mob/core/summon
+# @within function hvr:api/mob/core/summon.m
 
 # Finish init
     tag @s remove hvr.mob_need_init

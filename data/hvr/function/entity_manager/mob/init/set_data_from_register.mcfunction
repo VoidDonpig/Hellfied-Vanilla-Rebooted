@@ -76,8 +76,8 @@
     execute if data storage hvr:asset/mob death_loot_table run data modify entity @s DeathLootTable set from storage hvr:asset/mob death_loot_table
 
 # Set health
-    execute unless data storage hvr:asset/mob {is_newly_converted_mob:true} store result entity @s Health float 0.01 run attribute @s max_health get 100
-    execute unless data storage hvr:asset/mob {is_newly_converted_mob:true} store result entity @s AbsorptionAmount float 0.01 run attribute @s max_absorption get 100
+    execute store result entity @s Health float 0.01 run attribute @s max_health get 100
+    execute store result entity @s AbsorptionAmount float 0.01 run attribute @s max_absorption get 100
 
 # Set misc NBT
     data modify entity @s Silent set from storage hvr:asset/mob silent
@@ -117,6 +117,8 @@
     data remove storage hvr:asset/mob explosion_knockback_resistance
     data remove storage hvr:asset/mob spawn_reinforcements
     data remove storage hvr:asset/mob scale
+
+    data remove storage hvr:asset/mob attributes
 
     data remove storage hvr:asset/mob equipment
     data remove storage hvr:asset/mob drop_chances

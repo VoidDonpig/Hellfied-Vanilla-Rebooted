@@ -42,7 +42,7 @@
 # Reset
     data remove storage hvr:asset/context damage
     data remove storage hvr:asset/context damage_type
-    tag @n[tag=hvr.attacker] remove hvr.attacker
+    tag @n[type=#hvr:mob,tag=hvr.attacker] remove hvr.attacker
     scoreboard players reset $previous_health hvr.temporary
     scoreboard players reset $previous_absorption_amount hvr.temporary
     scoreboard players reset $current_health hvr.temporary

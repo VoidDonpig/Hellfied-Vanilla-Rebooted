@@ -15,6 +15,8 @@
     execute if entity @s[type=bogged] run data modify storage hvr:api __input__.id set value "bogged"
     execute if entity @s[type=parched] run data modify storage hvr:api __input__.id set value "parched"
     execute if entity @s[type=creeper] run data modify storage hvr:api __input__.id set value "creeper"
+    execute if entity @s[type=spider] run data modify storage hvr:api __input__.id set value "spider"
+    execute if entity @s[type=cave_spider] run data modify storage hvr:api __input__.id set value "cave_spider"
     execute if entity @s[type=enderman] run data modify storage hvr:api __input__.id set value "enderman"
     execute if entity @s[type=warden] run data modify storage hvr:api __input__.id set value "warden"
 

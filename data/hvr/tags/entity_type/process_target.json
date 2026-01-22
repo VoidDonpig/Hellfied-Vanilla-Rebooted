@@ -10,6 +10,8 @@
         "bogged",
         "parched",
         "creeper",
+        "spider",
+        "cave_spider",
         "enderman",
         "warden"
     ]

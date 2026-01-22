@@ -8,8 +8,8 @@
     tag @s add hvr.mob_victim
 
 # Add tag for event dispatcher
-    tag @n[tag=hvr.mob_attacker] add hvr.attacker
-    tag @n[tag=hvr.mob_damaging_projectile] add hvr.damaging_projectile
+    tag @n[type=#hvr:mob,tag=hvr.mob_attacker] add hvr.attacker
+    tag @n[type=#hvr:projectiles,tag=hvr.mob_damaging_projectile] add hvr.damaging_projectile
     tag @s add hvr.victim
     execute if entity @s[nbt={Health:0f}] run tag @s add hvr.killed
     execute if entity @s[tag=hvr.killed] run tag @s add hvr.death
@@ -56,12 +56,12 @@
     data remove storage hvr:entity_manager/mob damage_type
     data remove storage hvr:asset/context damage
     data remove storage hvr:asset/context damage_type
-    tag @n[tag=hvr.mob_attacker] remove hvr.mob_attacker
-    tag @n[tag=hvr.mob_damaging_projectile] remove hvr.mob_damaging_projectile
+    tag @n[type=#hvr:mob,tag=hvr.mob_attacker] remove hvr.mob_attacker
+    tag @n[type=#hvr:projectiles,tag=hvr.mob_damaging_projectile] remove hvr.mob_damaging_projectile
     tag @s remove hvr.mob_victim
-    tag @n[tag=hvr.attacker] remove hvr.attacker
-    tag @n[tag=hvr.killer] remove hvr.killer
-    tag @n[tag=hvr.damaging_projectile] remove hvr.damaging_projectile
+    tag @n[type=#hvr:mob,tag=hvr.attacker] remove hvr.attacker
+    tag @n[type=#hvr:mob,tag=hvr.killer] remove hvr.killer
+    tag @n[type=#hvr:projectiles,tag=hvr.damaging_projectile] remove hvr.damaging_projectile
     tag @s remove hvr.victim
     scoreboard players reset $previous_health hvr.temporary
     scoreboard players reset $previous_absorption_amount hvr.temporary

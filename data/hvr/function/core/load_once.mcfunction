@@ -24,6 +24,12 @@
 # Declare difficulty
     execute unless score $difficulty hvr.global matches 1.. run scoreboard players set $difficulty hvr.global 1
 
+# Listener objectives
+    scoreboard objectives add hvr.used_milk used:milk_bucket
+    scoreboard objectives add hvr.used_totem used:totem_of_undying
+    scoreboard objectives add hvr.death_event deathCount
+    scoreboard objectives add hvr.respawn_event custom:time_since_death
+
 # Player id objective
     scoreboard objectives add hvr.player_id dummy
 

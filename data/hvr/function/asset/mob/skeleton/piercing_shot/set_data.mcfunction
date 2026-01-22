@@ -13,5 +13,5 @@
 
 # Set motion
     data modify storage hvr:lib __input__.vector_magnitude set value 3.2d
-    data modify storage hvr:lib __input__.selector set value "@n[tag=hvr.target]"
+    data modify storage hvr:lib __input__.selector set value "@n[type=#hvr:living,tag=hvr.target]"
     function hvr:lib/arrow_motion/exec

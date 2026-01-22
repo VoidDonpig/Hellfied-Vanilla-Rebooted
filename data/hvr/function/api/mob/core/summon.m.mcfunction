@@ -1,4 +1,4 @@
-#> hvr:api/mob/core/summon
+#> hvr:api/mob/core/summon.m
 #
 # Summon declared mob
 #
@@ -8,7 +8,7 @@
     $function hvr:asset/mob/$(id)/register
 
 # Validation
-    $execute unless data storage hvr:asset/mob id run return run tellraw @a [{storage:"hvr:global",nbt:"Prefix.Error"},{text:"This id mob is not registed: "},{text:"$(id)",color:"red"}]
+    execute unless data storage hvr:asset/mob id run return run tellraw @a [{storage:"hvr:global",nbt:"prefix.error"},{text:"This id mob is not registed: "},{storage:"hvr:api",nbt:"__input__.id"}]
 
 # Summon mob
     execute unless data storage hvr:api __input__{skip_summon:true} run function hvr:entity_manager/mob/event/summon/dispatch/dispatcher.m with storage hvr:api __input__

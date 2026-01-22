@@ -8,7 +8,7 @@
     function hvr:asset/mob/warden/sonic_boom/get_length
 
 # Repeat process until reach
-    execute unless score $sonic_boom_length hvr.temporary matches ..0 positioned ~ ~1.6 ~ facing entity @n[tag=hvr.target] eyes run function hvr:asset/mob/warden/sonic_boom/for_until_reach
+    execute unless score $sonic_boom_length hvr.temporary matches ..0 positioned ~ ~1.6 ~ facing entity @n[type=#hvr:living,tag=hvr.target] eyes run function hvr:asset/mob/warden/sonic_boom/for_until_reach
 
 # Reset
     scoreboard players reset $sonic_boom_length hvr.temporary
