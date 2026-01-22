@@ -10,9 +10,9 @@
 # @api
 
 # Validation
-    execute unless entity @s[type=#hvr:arrows] run tellraw @a [{storage:"hvr:global",nbt:"Prefix.Error"},{text:"hvr:lib/arrow_motion/exec must be executed by arrow entity."}]
-    execute unless data storage hvr:lib __input__.vector_magnitude run tellraw @a [{storage:"hvr:global",nbt:"Prefix.Error"},{text:"Missing argument: "},{text:"vector_magnitude",color:"red"}]
-    execute unless data storage hvr:lib __input__.selector run tellraw @a [{storage:"hvr:global",nbt:"Prefix.Error"},{text:"Missing argument: "},{text:"selector",color:"red"}]
+    execute unless entity @s[type=#hvr:arrows] run tellraw @a [{storage:"hvr:global",nbt:"prefix.error"},{text:"hvr:lib/arrow_motion/exec must be executed by arrow entity."}]
+    execute unless data storage hvr:lib __input__.vector_magnitude run tellraw @a [{storage:"hvr:global",nbt:"prefix.error"},{text:"Missing argument: "},{text:"vector_magnitude",color:"red"}]
+    execute unless data storage hvr:lib __input__.selector run tellraw @a [{storage:"hvr:global",nbt:"prefix.error"},{text:"Missing argument: "},{text:"selector",color:"red"}]
 
 # Exec
     execute if entity @s[type=#hvr:arrows] if data storage hvr:lib __input__.vector_magnitude if data storage hvr:lib __input__.selector run function hvr:lib/arrow_motion/core/exec with storage hvr:lib __input__

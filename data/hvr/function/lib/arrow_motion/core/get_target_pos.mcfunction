@@ -5,10 +5,10 @@
 # @within function hvr:lib/arrow_motion/core/exec
 
 # Get pos
-    $data modify storage hvr:lib __temp__.pos set from entity $(selector) Pos
-    data modify storage hvr.__temp__:lib target_pos.x set from storage hvr:lib __temp__.pos[0]
-    data modify storage hvr.__temp__:lib target_pos.y set from storage hvr:lib __temp__.pos[1]
-    data modify storage hvr.__temp__:lib target_pos.z set from storage hvr:lib __temp__.pos[2]
+    $data modify storage hvr.__temp__:lib __temp__.pos set from entity $(selector) Pos
+    data modify storage hvr.__temp__:lib target_pos.x set from storage hvr.__temp__:lib __temp__.pos[0]
+    data modify storage hvr.__temp__:lib target_pos.y set from storage hvr.__temp__:lib __temp__.pos[1]
+    data modify storage hvr.__temp__:lib target_pos.z set from storage hvr.__temp__:lib __temp__.pos[2]
 
 # Get eye pos
     $execute as $(selector) at @s anchored eyes positioned ^ ^ ^ summon marker run function hvr:lib/arrow_motion/core/get_eye_pos

@@ -17,7 +17,7 @@
 
 # Get arrow pos
     execute positioned as @s summon marker run function hvr:lib/arrow_motion/core/get_pos
-    data modify storage hvr.__temp__:lib arrow_pos set from storage hvr:lib __temp__
+    data modify storage hvr.__temp__:lib arrow_pos set from storage hvr.__temp__:lib __temp__
 
 # Get target pos
     function hvr:lib/arrow_motion/core/get_target_pos with storage hvr:lib __input__
@@ -86,9 +86,6 @@
     data remove storage hvr.__temp__:lib motion
     data remove storage hvr.__temp__:lib arrow_pos
     data remove storage hvr.__temp__:lib target_pos
-    data remove storage hvr.__temp__:lib __temp__.pos
-    data remove storage hvr.__temp__:lib __temp__.x
-    data remove storage hvr.__temp__:lib __temp__.y
-    data remove storage hvr.__temp__:lib __temp__.z
-    data remove storage hvr.__temp__:lib __output__.distance
-    data remove storage hvr.__temp__:lib __output__.horizonal_distance
+    data remove storage hvr.__temp__:lib __temp__
+    data remove storage hvr:lib __output__.distance
+    data remove storage hvr:lib __output__.horizonal_distance
