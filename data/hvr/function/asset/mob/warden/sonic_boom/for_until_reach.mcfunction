@@ -20,7 +20,7 @@
     playsound block.beacon.power_select hostile @a[distance=..48] ~ ~ ~ 3 0.8
 
 # Damage
-    execute positioned ~-1 ~-1 ~-1 as @e[type=#hvr:living,type=!warden,dx=2,dy=2,dz=2] run damage @s 1024 sonic_boom by @n[type=warden,tag=hvr.this]
+    execute positioned ~-1 ~-1 ~-1 as @e[type=#hvr:living,type=!warden,dx=2,dy=2,dz=2] run function hvr:asset/mob/warden/sonic_boom/damage
 
 # Decrement count
     scoreboard players remove $sonic_boom_length hvr.temporary 1
