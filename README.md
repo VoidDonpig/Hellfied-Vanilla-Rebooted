@@ -123,7 +123,7 @@ Hellfied-Vanilla-Rebooted/
 ### Tooling
 
 This project uses **Spyglass** for datapack validation and development:
-[https://github.com/SpyglassMC/Spyglass](https://github.com/SpyglassMC/Spyglass)
+<https://github.com/SpyglassMC/Spyglass>
 
 ---
 
@@ -188,18 +188,18 @@ OhMyDat is used in compliance with the terms of the MIT License.
 
 Created and maintained by
 **VoidDonpig**
-[https://github.com/VoidDonpig](https://github.com/VoidDonpig)
+<https://github.com/VoidDonpig>
 
 ---
 
 ## 🔗 Links
 
 * **Repository**
-  [https://github.com/VoidDonpig/Hellfied-Vanilla-Rebooted](https://github.com/VoidDonpig/Hellfied-Vanilla-Rebooted)
+  <https://github.com/VoidDonpig/Hellfied-Vanilla-Rebooted>
 * **Issues / Bug Reports**
-  [https://github.com/VoidDonpig/Hellfied-Vanilla-Rebooted/issues](https://github.com/VoidDonpig/Hellfied-Vanilla-Rebooted/issues)
+  <https://github.com/VoidDonpig/Hellfied-Vanilla-Rebooted/issues>
 * **Releases**
-  [https://github.com/VoidDonpig/Hellfied-Vanilla-Rebooted/releases](https://github.com/VoidDonpig/Hellfied-Vanilla-Rebooted/releases)
+  <https://github.com/VoidDonpig/Hellfied-Vanilla-Rebooted/releases>
 
 ---
 
