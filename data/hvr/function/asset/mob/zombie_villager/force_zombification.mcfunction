@@ -15,7 +15,7 @@
     difficulty hard
 
 # Dealt extreme damage
-    damage @s 9999 mob_attack by @n[type=zombie_villager,tag=hvr.this]
+    damage @s 9999 mob_attack by @n[type=zombie_villager,tag=hvr.self]
 
 # SFX
     execute anchored eyes positioned ^ ^ ^ run particle spore_blossom_air ~ ~ ~ 0.4 0.4 0.4 0 16

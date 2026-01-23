@@ -1,6 +1,6 @@
 #> hvr:asset/mob/husk/give_strong_hunger
 #
-# Give strong hunger effect to mob run this
+# Give strong hunger effect to mob run self
 #
 # @within function hvr:asset/mob/husk/attack
 

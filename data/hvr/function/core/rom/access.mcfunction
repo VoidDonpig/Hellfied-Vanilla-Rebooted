@@ -6,8 +6,8 @@
 #
 # @output storage hvr:core/rom _[-4][-4][-4][-4][-4][-4][-4][-4]
 
-# Get address score
-    execute store result score $ hvr.rom run data get storage hvr:core/rom __input__.address
+# Provide int id or get id
+    function hvr:core/rom/allocate_int_id with storage hvr:core/rom __input__
 
 # Call storage
     execute unless score $ hvr.rom = $latest_called_address hvr.rom run function hvr:core/rom/provide

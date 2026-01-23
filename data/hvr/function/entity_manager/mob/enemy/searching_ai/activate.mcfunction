@@ -15,10 +15,10 @@
     ride @n[type=zombified_piglin,tag=hvr.enemy_searching_ai.need_init] mount @s
 
 # Mount origin passengers
-    tag @s add hvr.enemy_searching_ai.this
-    execute as @e[tag=hvr.temporary_dismounted] run ride @s mount @n[type=#hvr:enemy/all_without_boss,tag=hvr.enemy_searching_ai.this]
+    tag @s add hvr.enemy_searching_ai.self
+    execute as @e[tag=hvr.temporary_dismounted] run ride @s mount @n[type=#hvr:enemy/all_without_boss,tag=hvr.enemy_searching_ai.self]
     execute on passengers run tag @s remove hvr.temporary_dismounted
-    tag @s remove hvr.enemy_searching_ai.this
+    tag @s remove hvr.enemy_searching_ai.self
 
 # Force hostile
     data modify entity @n[type=zombified_piglin,tag=hvr.enemy_searching_ai.need_init] angry_at set from entity @p[tag=!hvr.player_may_exception,distance=..64] UUID

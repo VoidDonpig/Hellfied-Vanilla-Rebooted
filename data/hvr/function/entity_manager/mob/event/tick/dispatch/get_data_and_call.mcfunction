@@ -2,26 +2,26 @@
 #
 # Get data for dispatch
 #
-# @within function
+# @within function hvr:core/tick/object/_
 
-# this
-    tag @s add hvr.this
+# self
+    tag @s add hvr.self
 
 # Get storage
     function hvr:entity_manager/storage/access
 
 # Set Context
     data modify storage hvr:asset/context id set from storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].id
-    data modify storage hvr:asset/context this set from storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].mob_field
+    data modify storage hvr:asset/context self set from storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].mob_field
     
 # Call dispatcher
     function hvr:entity_manager/mob/event/tick/dispatch/dispatcher.m with storage hvr:asset/context
 
 # Set field
     function hvr:entity_manager/storage/access
-    data modify storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].mob_field set from storage hvr:asset/context this
+    data modify storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].mob_field set from storage hvr:asset/context self
 
 # Reset
-    tag @s remove hvr.this
+    tag @s remove hvr.self
     data remove storage hvr:asset/context id
-    data remove storage hvr:asset/context this
+    data remove storage hvr:asset/context self

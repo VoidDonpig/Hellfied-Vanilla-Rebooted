@@ -15,7 +15,7 @@
     execute if entity @s[type=slime,tag=hvr.mob_asset.slime] run data modify storage hvr:api __input__.id set value "slime"
     execute if entity @s[type=magma_cube,tag=hvr.mob_asset.magma_cube] run data modify storage hvr:api __input__.id set value "magma_cube"
 
-# Tag this mob
+# Tag self mob
     tag @s add hvr.mob_need_init
 
 # Init via summon api

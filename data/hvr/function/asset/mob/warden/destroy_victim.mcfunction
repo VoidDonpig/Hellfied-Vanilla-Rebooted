@@ -12,7 +12,7 @@
     effect clear @s resistance
 
 # Deal damage
-    damage @s 340282346638528860000000000000000000000 mob_attack by @n[type=warden,tag=hvr.this]
+    damage @s 340282346638528860000000000000000000000 mob_attack by @n[type=warden,tag=hvr.self]
 
 # Remove modifier
     attribute @s armor modifier remove hvr:asset/mob.warden.destroy_victim.no_armor
