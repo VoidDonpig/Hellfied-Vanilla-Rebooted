@@ -12,7 +12,7 @@
 #   cache: [T] @ Index
 
 # Check settion
-    execute unless data storage hvr:lib {array_session_opened:true} run tellraw @a [{"storage":"global:","nbt":"Prefix.Caution"},{"text":"Lib array session is not opened","color":"white"}]
+    execute unless data storage hvr:lib {array_session_opened:true} run tellraw @a [{"storage":"hvr:global","nbt":"prefix.caution"},{"text":"Lib array session is not opened","color":"white"}]
 
 # Calc
     execute store result score $index hvr.temporary if data storage hvr:lib array[]

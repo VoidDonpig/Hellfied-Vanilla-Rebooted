@@ -20,8 +20,8 @@
     data remove storage hvr:lib array_b[-1]
 
 # Check
-    execute if data storage hvr:lib array_a[0] unless data storage hvr:lib array_b[0] run tellraw @a [{"storage":"global:","nbt":"prefix.error"},{"text":"The number of factors of arrays is different.","color":"white"}]
-    execute unless data storage hvr:lib array_a[0] if data storage hvr:lib array_b[0] run tellraw @a [{"storage":"global:","nbt":"prefix.error"},{"text":"The number of factors of arrays is different.","color":"white"}]
+    execute if data storage hvr:lib array_a[0] unless data storage hvr:lib array_b[0] run tellraw @a [{"storage":"hvr:global","nbt":"prefix.error"},{"text":"The number of factors of arrays is different.","color":"white"}]
+    execute unless data storage hvr:lib array_a[0] if data storage hvr:lib array_b[0] run tellraw @a [{"storage":"hvr:global","nbt":"prefix.error"},{"text":"The number of factors of arrays is different.","color":"white"}]
 
 # Repeat
     execute if data storage hvr:lib array_a[0] if data storage hvr:lib array_b[0] run function hvr:lib/array/core/compare

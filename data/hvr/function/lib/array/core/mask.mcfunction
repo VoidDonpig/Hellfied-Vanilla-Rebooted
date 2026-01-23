@@ -18,8 +18,8 @@
     data remove storage hvr:lib copied_array[-1]
 
 # Check
-    execute if data storage hvr:lib masks[0] unless data storage hvr:lib copied_array[0] run tellraw @a [{"storage":"global:","nbt":"prefix.error"},{"text":"The number of factors of arrays is different.","color":"white"}]
-    execute unless data storage hvr:lib masks[0] if data storage hvr:lib copied_array[0] run tellraw @a [{"storage":"global:","nbt":"prefix.error"},{"text":"The number of factors of arrays is different.","color":"white"}]
+    execute if data storage hvr:lib masks[0] unless data storage hvr:lib copied_array[0] run tellraw @a [{"storage":"hvr:global","nbt":"prefix.error"},{"text":"The number of factors of arrays is different.","color":"white"}]
+    execute unless data storage hvr:lib masks[0] if data storage hvr:lib copied_array[0] run tellraw @a [{"storage":"hvr:global","nbt":"prefix.error"},{"text":"The number of factors of arrays is different.","color":"white"}]
 
 # Repeat
     execute if data storage hvr:lib masks[0] if data storage hvr:lib copied_array[0] run function hvr:lib/array/core/mask
