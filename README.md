@@ -1,6 +1,6 @@
 # Hellfied Vanilla Rebooted
 
-**A hardcore difficulty enhancement datapack for experienced Minecraft players**
+## A hardcore difficulty enhancement datapack for experienced Minecraft players
 
 Hellfied Vanilla Rebooted turns vanilla Minecraft into a relentless survival experience where hesitation is punished and mastery is rewarded.
 This is not a simple difficulty tweak—it is a **hardcore evolution of vanilla combat**, built to challenge players who already know the game inside and out.
@@ -80,7 +80,7 @@ The goal is simple: **raise the skill ceiling without breaking vanilla immersion
 
 Run the following command:
 
-```
+```text
 /datapack list
 ```
 
@@ -113,7 +113,7 @@ Custom items and special mob variants are planned for future updates.
 
 ### Project Structure
 
-```
+```text
 Hellfied-Vanilla-Rebooted/
 ├── data/                 # Datapack functions and assets
 ├── pack.mcmeta           # Datapack metadata
@@ -177,8 +177,8 @@ See the [LICENSE](LICENSE) file for full license text and terms.
 
 Parts of this datapack (specifically the entity manager storage system) make use of **OhMyDat** by Ai-Akaishi.
 
-- Repository: https://github.com/Ai-Akaishi/OhMyDat
-- License: **MIT License**
+* Repository: <https://github.com/Ai-Akaishi/OhMyDat>
+* License: **MIT License**
 
 OhMyDat is used in compliance with the terms of the MIT License.
 
