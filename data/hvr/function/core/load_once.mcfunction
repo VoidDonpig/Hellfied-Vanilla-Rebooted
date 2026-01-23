@@ -46,6 +46,9 @@
 # Rom objective
     scoreboard objectives add hvr.rom dummy
 
+# World objective
+    scoreboard objectives add hvr.world dummy
+
 # Lib objective
     scoreboard objectives add hvr.lib dummy
 

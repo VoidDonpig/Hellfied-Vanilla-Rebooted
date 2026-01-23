@@ -4,6 +4,9 @@
 #
 # @within tag/function minecraft:tick
 
+# Get time
+    execute store result storage hvr:global time int 1 run time query gametime
+
 # Player pre tick
     execute as @a at @s run function hvr:core/tick/player/pre
 

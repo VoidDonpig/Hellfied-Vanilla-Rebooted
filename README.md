@@ -115,8 +115,8 @@ Custom items and special mob variants are planned for future updates.
 
 ```text
 Hellfied-Vanilla-Rebooted/
-├── data/                 # Datapack functions and assets
-├── pack.mcmeta           # Datapack metadata
+├── data/                 # datapack functions and assets
+├── pack.mcmeta           # datapack metadata
 └── spyglass.json         # Development configuration
 ```
 

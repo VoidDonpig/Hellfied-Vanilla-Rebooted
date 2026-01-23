@@ -1,6 +1,6 @@
 #> hvr:core/provide
 #
-# Data shifter function
+# data shifter function
 #
 # @internal
 

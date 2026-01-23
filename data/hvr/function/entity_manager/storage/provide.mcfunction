@@ -1,6 +1,6 @@
 #> hvr:entity_manager/storage/provide
 #
-# Data shifter function
+# data shifter function
 #
 # @within function
 #   hvr:entity_manager/storage/access
