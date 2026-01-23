@@ -12,3 +12,6 @@
 
 # Immediately kill item have sys ench
     execute as @e[type=item] if items entity @s container.0 *[enchantments~[{enchantments:["hvr:entity_manager/mob/sys"]}]] run kill @s
+
+# Autokill
+    execute as @e[tag=hvr.autokill] run function hvr:world/autokill/tick
