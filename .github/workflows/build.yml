@@ -120,7 +120,7 @@ jobs:
       
       - name: Create build summary
         run: |
-          echo "# 🎉 Datapack Build Complete" >> $GITHUB_STEP_SUMMARY
+          echo "# ✅ Datapack Build Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Build Information" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -131,16 +131,6 @@ jobs:
           echo "| **Commit** | \`${{ steps.artifact_info.outputs.sha_short }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **Branch** | ${{ github.ref_name }} |" >> $GITHUB_STEP_SUMMARY
           echo "| **Artifact Name** | ${{ steps.artifact_info.outputs.name }} |" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## 📦 Download" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Download the optimized datapack from the **Artifacts** section above." >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## 🔧 Installation" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "1. Download \`${{ steps.artifact_info.outputs.name }}.zip\`" >> $GITHUB_STEP_SUMMARY
-          echo "2. Extract and place \`datapack.zip\` in your world's datapacks folder" >> $GITHUB_STEP_SUMMARY
-          echo "3. Run \`/reload\` in-game" >> $GITHUB_STEP_SUMMARY
 
   release:
     runs-on: ubuntu-latest
