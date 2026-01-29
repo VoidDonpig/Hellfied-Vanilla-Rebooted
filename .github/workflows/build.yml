@@ -2,45 +2,26 @@ name: CI
 
 on:
   push:
-    branches: [ main, master, develop ]
-    paths:
-      - 'data/**'
-      - 'pack.mcmeta'
-      - '.buildignore'
-      - '.github/workflows/build.yml'
-      - '.github/workflows/optimize.sh'
-
-  pull_request:
-    branches: [ main, master ]
-    paths:
-      - 'data/**'
-      - 'pack.mcmeta'
-      - '.buildignore'
-      - '.github/workflows/build.yml'
-      - '.github/workflows/optimize.sh'
-
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    outputs:
-      artifact_name: ${{ steps.info.outputs.name }}
-      artifact_size: ${{ steps.info.outputs.size }}
-      build_date: ${{ steps.info.outputs.date }}
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Setup build environment
-        run: chmod +x .github/workflows/optimize.sh
+      - name: Setup
+        run: chmod +x optimize.sh
 
-      - name: Build optimized datapack
+      - name: Build datapack
         run: |
-          ./.github/workflows/optimize.sh . dist "Hellfied Vanilla Rebooted.zip" true .buildignore
+          ./optimize.sh . dist
 
-      - name: Generate build information
+      - name: Collect build info
         id: info
         run: |
           SIZE=$(du -h "dist/Hellfied Vanilla Rebooted.zip" | cut -f1)
@@ -56,16 +37,13 @@ jobs:
           Datapack Build Information
           ==========================
           Build Date: $DATE
-          Commit: ${{ github.sha }}
-          Branch: ${{ github.ref_name }}
+          Commit: $SHA
+          Branch: main
           File Size: $SIZE
           EOF
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.info.outputs.name }}
-          path: |
-            dist/Hellfied Vanilla Rebooted.zip
-            dist/BUILD_INFO.txt
-          compression-level: 9
+          name: datapack
+          path: dist

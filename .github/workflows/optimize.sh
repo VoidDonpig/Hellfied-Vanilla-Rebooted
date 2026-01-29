@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
 SOURCE_DIR="${1:-.}"
 OUTPUT_DIR="${2:-./dist}"
@@ -13,144 +14,65 @@ YELLOW='\033[0;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-echo -e "${BLUE}Starting datapack optimization...${NC}\n"
+echo -e "${BLUE}== Datapack build start ==${NC}"
 
-declare -a EXCLUDE_PATTERNS=()
-if [ -f "$EXCLUDE_FILE" ]; then
-    echo -e "${YELLOW}Loading exclusion patterns from $EXCLUDE_FILE${NC}"
-    while IFS= read -r line || [ -n "$line" ]; do
-        [[ "$line" =~ ^[[:space:]]*# ]] && continue
-        [[ -z "${line//[[:space:]]/}" ]] && continue
-        EXCLUDE_PATTERNS+=("$line")
-        echo -e "  ${YELLOW}Exclude:${NC} $line"
-    done < "$EXCLUDE_FILE"
-    echo ""
+rm -rf "$TEMP_DIR"
+mkdir -p "$TEMP_DIR"
+mkdir -p "$OUTPUT_DIR"
+
+# -----------------------------
+# 除外設定
+# -----------------------------
+EXCLUDES=()
+if [[ -f "$EXCLUDE_FILE" ]]; then
+  while IFS= read -r line; do
+    [[ -z "$line" || "$line" =~ ^# ]] && continue
+    EXCLUDES+=(--exclude="$line")
+  done < "$EXCLUDE_FILE"
 fi
 
-is_excluded() {
-    local path="$1"
-    local relative="${path#$SOURCE_DIR/}"
-    local base="${path##*/}"
+# -----------------------------
+# datapack 検出
+# -----------------------------
+mapfile -t PACKS < <(find "$SOURCE_DIR" -maxdepth 1 -type d ! -name ".*" ! -path "$SOURCE_DIR")
 
-    [[ "$relative" == "dist" || "$relative" == dist/* ]] && return 0
-    [[ "$relative" == ".git"  || "$relative" == .git/*  ]] && return 0
+if [[ ${#PACKS[@]} -eq 1 ]]; then
+  # -----------------------------
+  # シングル datapack
+  # -----------------------------
+  PACK_NAME="$(basename "${PACKS[0]}")"
 
-    for p in "${EXCLUDE_PATTERNS[@]}"; do
-        [[ "$relative" == "$p" || "$relative" == "$p/"* ]] && return 0
-        [[ "$base" == "$p" ]] && return 0
-    done
-    return 1
-}
+  echo -e "${GREEN}Single datapack detected:${NC} $PACK_NAME"
 
-optimize_mcfunction() {
-    local input="$1"
-    local output="$2"
-    local tmp
-    tmp="$(mktemp)"
+  rsync -a "${EXCLUDES[@]}" "${PACKS[0]}/" "$TEMP_DIR/$PACK_NAME/"
 
-    while IFS= read -r line || [ -n "$line" ]; do
-        [[ "$line" =~ ^[[:space:]]*# ]] && continue
-        [[ -z "${line//[[:space:]]/}" ]] && continue
+  (
+    cd "$TEMP_DIR"
+    zip -r "$PACK_NAME.zip" "$PACK_NAME" > /dev/null
+  )
 
-        if [[ "$line" != *'['* && "$line" == *'#'* ]]; then
-            line="${line%%#*}"
-            line="${line%"${line##*[![:space:]]}"}"
-        fi
+  # 設計思想どおり dist 直下に本体を置く
+  mv "$TEMP_DIR/$PACK_NAME.zip" "$OUTPUT_DIR/$PACK_NAME.zip"
 
-        [[ "$REMOVE_INDENT" == "true" ]] && line="${line#"${line%%[![:space:]]*}"}"
-        [[ -n "${line//[[:space:]]/}" ]] && printf '%s\n' "$line" >> "$tmp"
-    done < "$input"
+else
+  # -----------------------------
+  # 複数 datapack
+  # -----------------------------
+  echo -e "${GREEN}Multiple datapacks detected${NC}"
 
-    mv "$tmp" "$output"
-}
+  for pack in "${PACKS[@]}"; do
+    name="$(basename "$pack")"
+    rsync -a "${EXCLUDES[@]}" "$pack/" "$TEMP_DIR/$name/"
+  done
 
-process_directory() {
-    local src="$1"
-    local dst="$2"
+  (
+    cd "$TEMP_DIR"
+    zip -r "$OUTPUT_NAME" . > /dev/null
+  )
 
-    mkdir -p "$dst"
-    shopt -s nullglob
+  mv "$TEMP_DIR/$OUTPUT_NAME" "$OUTPUT_DIR/$OUTPUT_NAME"
+fi
 
-    for e in "$src"/*; do
-        is_excluded "$e" && {
-            echo -e "${YELLOW}Skipped (excluded):${NC} $e"
-            continue
-        }
+rm -rf "$TEMP_DIR"
 
-        local name="${e##*/}"
-        local out="$dst/$name"
-
-        if [ -d "$e" ]; then
-            process_directory "$e" "$out"
-        elif [ -f "$e" ]; then
-            if [[ "$name" == *.mcfunction ]]; then
-                optimize_mcfunction "$e" "$out"
-                echo -e "${GREEN}Optimized:${NC} $e"
-            else
-                cp "$e" "$out"
-                echo -e "${BLUE}Copied:${NC} $e"
-            fi
-        fi
-    done
-}
-
-find_datapacks() {
-    local dir="$1"
-    local -n out=$2
-    shopt -s nullglob
-
-    for e in "$dir"/*; do
-        [ -d "$e" ] && [ -f "$e/pack.mcmeta" ] && ! is_excluded "$e" && out+=("$e")
-    done
-}
-
-main() {
-    mkdir -p "$OUTPUT_DIR"
-    rm -rf "$TEMP_DIR"
-
-    declare -a datapacks=()
-    find_datapacks "$SOURCE_DIR" datapacks
-
-    if [ "${#datapacks[@]}" -eq 0 ]; then
-        [ ! -f "$SOURCE_DIR/pack.mcmeta" ] && {
-            echo -e "${RED}Error: No datapacks found${NC}"
-            exit 1
-        }
-
-        echo -e "${BLUE}Single datapack detected at root${NC}\n"
-
-        process_directory "$SOURCE_DIR" "$TEMP_DIR"
-
-        (
-            cd "$TEMP_DIR" || exit 1
-            zip -r -9 "$OUTPUT_DIR/$OUTPUT_NAME" . > /dev/null
-        )
-
-        rm -rf "$TEMP_DIR"
-    else
-        echo -e "${BLUE}Multiple datapacks detected: ${#datapacks[@]}${NC}\n"
-
-        local outdir="$OUTPUT_DIR/datapacks"
-        mkdir -p "$outdir"
-
-        for d in "${datapacks[@]}"; do
-            local name="${d##*/}"
-            local work="$TEMP_DIR/$name"
-
-            process_directory "$d" "$work"
-
-            (
-                cd "$work" || exit 1
-                zip -r -9 "$outdir/$name.zip" . > /dev/null
-            )
-
-            rm -rf "$work"
-        done
-
-        rm -rf "$TEMP_DIR"
-    fi
-
-    echo -e "\n${GREEN}Optimization complete!${NC}"
-}
-
-main
+echo -e "${GREEN}== Build completed ==${NC}"
