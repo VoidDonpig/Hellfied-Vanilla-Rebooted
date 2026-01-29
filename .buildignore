@@ -1,7 +1,7 @@
-.github/
-.vscode/
+.github/**
+.vscode/**
 .buildignore
 .gitignore
-.dist/
+.dist/**
 README.md
 spyglass.json
