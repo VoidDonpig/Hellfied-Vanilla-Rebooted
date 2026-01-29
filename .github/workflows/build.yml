@@ -61,15 +61,19 @@ jobs:
           else
             echo "⚠️  .buildignore not found - all files will be processed"
           fi
+
+      - name: Set build variables
+        run: |
+          echo "OUTPUT_NAME=datapack.zip" >> $GITHUB_ENV
       
       - name: Build optimized datapack
         run: |
-          ./.github/workflows/optimize.sh . dist datapack.zip true .buildignore
+          ./.github/workflows/optimize.sh . dist "$OUTPUT_NAME" true .buildignore
       
       - name: Generate build information
         id: artifact_info
         run: |
-          SIZE=$(du -h dist/datapack.zip | cut -f1)
+          SIZE=$(du -h "dist/$OUTPUT_NAME" | cut -f1)
           DATE=$(date +"%Y-%m-%d %H:%M:%S")
           SHA_SHORT=$(git rev-parse --short HEAD)
           ARTIFACT_NAME="datapack-${SHA_SHORT}"
@@ -106,7 +110,7 @@ jobs:
         with:
           name: ${{ steps.artifact_info.outputs.name }}
           path: |
-            dist/datapack.zip
+            dist/$OUTPUT_NAME
             dist/BUILD_INFO.txt
           retention-days: 30
           compression-level: 9
@@ -160,7 +164,7 @@ jobs:
         run: chmod +x .github/workflows/optimize.sh
       
       - name: Build datapack for release
-        run: ./.github/workflows/optimize.sh . dist datapack.zip true .buildignore
+        run: ./.github/workflows/optimize.sh . dist "$OUTPUT_NAME" true .buildignore
       
       - name: Determine release tag
         id: release_tag
@@ -211,7 +215,7 @@ jobs:
             ### 🔗 Links
             - [Build Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
             - [Commit Details](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
-          files: dist/datapack.zip
+          files: dist/$OUTPUT_NAME
           draft: false
           prerelease: false
           generate_release_notes: true
