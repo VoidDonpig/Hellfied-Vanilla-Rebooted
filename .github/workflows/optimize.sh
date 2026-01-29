@@ -3,9 +3,11 @@
 SOURCE_DIR="${1:-.}"
 OUTPUT_DIR="${2:-./dist}"
 OUTPUT_NAME="${3:-datapack.zip}"
-TEMP_DIR="$OUTPUT_DIR/temp"
 REMOVE_INDENT="${4:-true}"
 EXCLUDE_FILE="${5:-.buildignore}"
+
+PACK_NAME="${OUTPUT_NAME%.zip}"
+TEMP_DIR="$OUTPUT_DIR/temp"
 
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
@@ -15,6 +17,9 @@ NC='\033[0m'
 
 echo -e "${BLUE}Starting datapack optimization...${NC}\n"
 
+# -------------------------
+# Load exclude patterns
+# -------------------------
 declare -a EXCLUDE_PATTERNS=()
 if [ -f "$EXCLUDE_FILE" ]; then
     echo -e "${YELLOW}Loading exclusion patterns from $EXCLUDE_FILE${NC}"
@@ -27,6 +32,9 @@ if [ -f "$EXCLUDE_FILE" ]; then
     echo ""
 fi
 
+# -------------------------
+# Exclude check
+# -------------------------
 is_excluded() {
     local path="$1"
     local relative="${path#$SOURCE_DIR/}"
@@ -42,6 +50,9 @@ is_excluded() {
     return 1
 }
 
+# -------------------------
+# mcfunction optimizer
+# -------------------------
 optimize_mcfunction() {
     local input="$1"
     local output="$2"
@@ -64,6 +75,9 @@ optimize_mcfunction() {
     mv "$tmp" "$output"
 }
 
+# -------------------------
+# Directory processing
+# -------------------------
 process_directory() {
     local src="$1"
     local dst="$2"
@@ -94,6 +108,9 @@ process_directory() {
     done
 }
 
+# -------------------------
+# Find datapacks
+# -------------------------
 find_datapacks() {
     local dir="$1"
     local -n out=$2
@@ -104,30 +121,69 @@ find_datapacks() {
     done
 }
 
-process_single_datapack() {
-    local src="$1"
-    local tmp="$2"
-    local name="$3"
-    local zipout="$4"
+# -------------------------
+# Single datapack
+# -------------------------
+build_single() {
+    local out="$OUTPUT_DIR/$OUTPUT_NAME"
+    local packdir="$TEMP_DIR/$PACK_NAME"
 
-    echo -e "\n${BLUE}Processing datapack: ${name}${NC}"
-    process_directory "$src" "$tmp"
+    echo -e "${BLUE}Single datapack detected at root${NC}\n"
 
-    echo -e "${BLUE}Creating zip for ${name}...${NC}"
-    (cd "$tmp" && zip -r -9 "$zipout" . > /dev/null)
+    rm -rf "$TEMP_DIR"
+    mkdir -p "$packdir"
+
+    process_directory "$SOURCE_DIR" "$packdir"
+
+    echo -e "\n${BLUE}Creating zip archive...${NC}"
+    (cd "$TEMP_DIR" && zip -r -9 "../$OUTPUT_NAME" "$PACK_NAME" > /dev/null)
+
+    rm -rf "$TEMP_DIR"
 
     local size
-    size=$(du -h "$zipout" | cut -f1)
-    echo -e "${GREEN}Created: ${zipout} (${size})${NC}"
+    size=$(du -h "$out" | cut -f1)
+    echo -e "\n${GREEN}Zip created:${NC} $out"
+    echo -e "${GREEN}Total size:${NC} $size"
 }
 
+# -------------------------
+# Multiple datapacks
+# -------------------------
+build_multiple() {
+    echo -e "${BLUE}Multiple datapacks detected: ${#datapacks[@]}${NC}\n"
+
+    local outdir="$OUTPUT_DIR/datapacks"
+    mkdir -p "$outdir"
+    rm -rf "$TEMP_DIR"
+
+    for d in "${datapacks[@]}"; do
+        local name="${d##*/}"
+        local tmp="$TEMP_DIR/$name"
+
+        echo -e "\n${BLUE}Processing datapack: ${name}${NC}"
+        mkdir -p "$tmp"
+        process_directory "$d" "$tmp"
+
+        echo -e "${BLUE}Creating zip for ${name}...${NC}"
+        (cd "$TEMP_DIR" && zip -r -9 "$outdir/$name.zip" "$name" > /dev/null)
+
+        local size
+        size=$(du -h "$outdir/$name.zip" | cut -f1)
+        echo -e "${GREEN}Created:${NC} $name.zip (${size})"
+    done
+
+    rm -rf "$TEMP_DIR"
+}
+
+# -------------------------
+# Main
+# -------------------------
 main() {
     [ ! -d "$SOURCE_DIR" ] && {
         echo -e "${RED}Error: Source directory not found: $SOURCE_DIR${NC}"
         exit 1
     }
 
-    rm -rf "$TEMP_DIR"
     mkdir -p "$OUTPUT_DIR"
 
     declare -a datapacks=()
@@ -135,46 +191,12 @@ main() {
 
     if [ "${#datapacks[@]}" -eq 0 ]; then
         [ ! -f "$SOURCE_DIR/pack.mcmeta" ] && {
-            echo -e "${RED}Error: No datapacks found (no pack.mcmeta in root or subdirectories)${NC}"
+            echo -e "${RED}Error: No datapacks found${NC}"
             exit 1
         }
-
-        echo -e "${BLUE}Single datapack detected at root${NC}\n"
-        local out="$OUTPUT_DIR/$OUTPUT_NAME"
-        rm -f "$out"
-
-        echo -e "${BLUE}Processing files...${NC}"
-        process_directory "$SOURCE_DIR" "$TEMP_DIR"
-
-        echo -e "\n${BLUE}Creating zip archive...${NC}"
-        (cd "$TEMP_DIR" && zip -r -9 "../$OUTPUT_NAME" . > /dev/null)
-
-        rm -rf "$TEMP_DIR"
-
-        local size
-        size=$(du -h "$out" | cut -f1)
-        echo -e "\n${GREEN}Zip created:${NC} $out"
-        echo -e "${GREEN}Total size:${NC} $size"
+        build_single
     else
-        echo -e "${BLUE}Multiple datapacks detected: ${#datapacks[@]}${NC}\n"
-
-        local outdir="$OUTPUT_DIR/datapacks"
-        mkdir -p "$outdir"
-
-        for d in "${datapacks[@]}"; do
-            local name="${d##*/}"
-            process_single_datapack "$d" "$TEMP_DIR/$name" "$name" "$outdir/$name.zip"
-        done
-
-        rm -rf "$TEMP_DIR"
-
-        echo -e "\n${GREEN}All datapacks created in:${NC} $outdir"
-        for d in "${datapacks[@]}"; do
-            local name="${d##*/}"
-            local size
-            size=$(du -h "$outdir/$name.zip" | cut -f1)
-            echo -e "  - ${name}.zip (${size})"
-        done
+        build_multiple
     fi
 
     echo -e "\n${GREEN}Optimization complete!${NC}"
