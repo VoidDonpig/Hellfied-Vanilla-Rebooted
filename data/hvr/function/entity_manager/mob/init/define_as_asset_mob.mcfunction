@@ -1,6 +1,6 @@
 #> hvr:entity_manager/mob/init/define_as_asset_mob
 #
-# Declare self mob asset one
+# Declare this mob asset one
 #
 # @within function hvr:entity_manager/mob/init/natural_mob
 

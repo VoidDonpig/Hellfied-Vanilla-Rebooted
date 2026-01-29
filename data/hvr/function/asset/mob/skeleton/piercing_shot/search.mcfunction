@@ -4,11 +4,11 @@
 #
 # @within function hvr:asset/mob/skeleton/tick
 
-# Declare self arrow
-    tag @s add hvr.mob_asset.skeleton.arrow_self
+# Declare this arrow
+    tag @s add hvr.mob_asset.skeleton.arrow_this
 
 # Get owner and compare
-    execute on origin if entity @s[type=skeleton,tag=hvr.self] as @n[type=arrow,tag=hvr.mob_asset.skeleton.arrow_self] run function hvr:asset/mob/skeleton/piercing_shot/set_data
+    execute on origin if entity @s[type=skeleton,tag=hvr.this] as @n[type=arrow,tag=hvr.mob_asset.skeleton.arrow_this] run function hvr:asset/mob/skeleton/piercing_shot/set_data
 
 # Reset
-    tag @s remove hvr.mob_asset.skeleton.arrow_self
+    tag @s remove hvr.mob_asset.skeleton.arrow_this

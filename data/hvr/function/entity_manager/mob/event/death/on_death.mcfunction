@@ -4,7 +4,7 @@
 #
 # @within enchantment hvr:entity_manager/mob/sys
 
-# If ticks_since_last_hurt_by_mob == 1, self mob may be killed by player
+# If ticks_since_last_hurt_by_mob == 1, this mob may be killed by player
     execute if data entity @s {ticks_since_last_hurt_by_mob:1} run tag @s add hvr.killed
 
 # Call storage

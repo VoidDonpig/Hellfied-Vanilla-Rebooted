@@ -16,7 +16,7 @@
     execute anchored eyes positioned ^ ^ ^ run playsound block.fire.extinguish hostile @a[distance=..16] ~ ~ ~ 1 2
 
 # Rebound
-    function hvr:asset/mob/zombie/boost_buff/give_rebound_debuff
+    execute unless score $difficulty hvr.global matches 4.. run function hvr:asset/mob/zombie/boost_buff/give_rebound_debuff
 
 # Reset timer
     scoreboard players reset @s hvr.mob_asset.zombie.boost_buff_activating_timer

@@ -21,8 +21,8 @@
     scoreboard objectives add hvr.constant dummy
     function hvr:core/define_constant
 
-# Declare difficulty rank
-    execute unless score $difficulty_rank hvr.global matches 0.. run scoreboard players set $difficulty_rank hvr.global 0
+# Declare difficulty
+    execute unless score $difficulty hvr.global matches 1.. run scoreboard players set $difficulty hvr.global 1
 
 # Listener objectives
     scoreboard objectives add hvr.used_milk used:milk_bucket
@@ -69,7 +69,7 @@
     function hvr:asset/mob/creeper/load
     function hvr:asset/mob/warden/load
 
-# Declare self function is loaded
+# Declare this function is loaded
     execute if data storage hvr:core {is_production:true} run data modify storage hvr:core loaded_once set value true
 
 # show load message

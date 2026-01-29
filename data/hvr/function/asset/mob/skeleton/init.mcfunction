@@ -5,4 +5,4 @@
 # @within function hvr:entity_manager/mob/event/init/dispatch/dispatcher.m
 
 # Equipment
-    function hvr:asset/mob/skeleton/equipment/1
+    execute if score $difficulty hvr.global matches 1 run function hvr:asset/mob/skeleton/equipment/1
