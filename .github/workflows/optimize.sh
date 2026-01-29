@@ -113,20 +113,16 @@ main() {
 
     if [ "${#datapacks[@]}" -eq 0 ]; then
         [ ! -f "$SOURCE_DIR/pack.mcmeta" ] && {
-            echo -e "${RED}Error: No datapack found${NC}"
+            echo -e "${RED}Error: No datapacks found${NC}"
             exit 1
         }
 
-        echo -e "${BLUE}Single datapack detected${NC}\n"
+        echo -e "${BLUE}Single datapack detected at root${NC}\n"
 
-        local pack_name
-        pack_name="$(basename "$SOURCE_DIR")"
-        local work="$TEMP_DIR/$pack_name"
-
-        process_directory "$SOURCE_DIR" "$work"
+        process_directory "$SOURCE_DIR" "$TEMP_DIR"
 
         (
-            cd "$work" || exit 1
+            cd "$TEMP_DIR" || exit 1
             zip -r -9 "$OUTPUT_DIR/$OUTPUT_NAME" . > /dev/null
         )
 
