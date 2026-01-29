@@ -19,201 +19,164 @@ declare -a EXCLUDE_PATTERNS=()
 if [ -f "$EXCLUDE_FILE" ]; then
     echo -e "${YELLOW}Loading exclusion patterns from $EXCLUDE_FILE${NC}"
     while IFS= read -r line || [ -n "$line" ]; do
-        if [[ ! "$line" =~ ^[[:space:]]*# ]] && [[ -n "$(echo "$line" | tr -d '[:space:]')" ]]; then
-            EXCLUDE_PATTERNS+=("$line")
-            echo -e "  ${YELLOW}Exclude:${NC} $line"
-        fi
+        [[ "$line" =~ ^[[:space:]]*# ]] && continue
+        [[ -z "${line//[[:space:]]/}" ]] && continue
+        EXCLUDE_PATTERNS+=("$line")
+        echo -e "  ${YELLOW}Exclude:${NC} $line"
     done < "$EXCLUDE_FILE"
     echo ""
 fi
 
 is_excluded() {
     local path="$1"
-    local relative_path="${path#$SOURCE_DIR/}"
-    
-    if [[ "$relative_path" == "dist" ]] || [[ "$relative_path" == dist/* ]]; then
-        return 0
-    fi
-    
-    if [[ "$relative_path" == ".git" ]] || [[ "$relative_path" == .git/* ]]; then
-        return 0
-    fi
-    
-    for pattern in "${EXCLUDE_PATTERNS[@]}"; do
-        if [[ "$relative_path" == $pattern ]] || [[ "$relative_path" == $pattern/* ]]; then
-            return 0
-        fi
-        
-        local basename=$(basename "$path")
-        if [[ "$basename" == $pattern ]]; then
-            return 0
-        fi
+    local relative="${path#$SOURCE_DIR/}"
+    local base="${path##*/}"
+
+    [[ "$relative" == "dist" || "$relative" == dist/* ]] && return 0
+    [[ "$relative" == ".git"  || "$relative" == .git/*  ]] && return 0
+
+    for p in "${EXCLUDE_PATTERNS[@]}"; do
+        [[ "$relative" == "$p" || "$relative" == "$p/"* ]] && return 0
+        [[ "$base" == "$p" ]] && return 0
     done
-    
     return 1
 }
 
 optimize_mcfunction() {
-    local input_file="$1"
-    local output_file="$2"
-    
-    local temp_file=$(mktemp)
-    
+    local input="$1"
+    local output="$2"
+    local tmp
+    tmp="$(mktemp)"
+
     while IFS= read -r line || [ -n "$line" ]; do
-        if [[ "$line" =~ ^[[:space:]]*# ]]; then
-            continue
-        fi
-        
-        if [[ -z "$(echo "$line" | tr -d '[:space:]')" ]]; then
-            continue
-        fi
-        
-        if [[ "$line" != *'['* ]] && [[ "$line" == *"#"* ]]; then
+        [[ "$line" =~ ^[[:space:]]*# ]] && continue
+        [[ -z "${line//[[:space:]]/}" ]] && continue
+
+        if [[ "$line" != *'['* && "$line" == *'#'* ]]; then
             line="${line%%#*}"
-            line=$(echo "$line" | sed 's/[[:space:]]*$//')
+            line="${line%"${line##*[![:space:]]}"}"
         fi
-        
-        if [[ "$REMOVE_INDENT" == "true" ]]; then
-            line=$(echo "$line" | sed 's/^[[:space:]]*//')
-        fi
-        
-        if [[ -n "$(echo "$line" | tr -d '[:space:]')" ]]; then
-            echo "$line" >> "$temp_file"
-        fi
-    done < "$input_file"
-    
-    mv "$temp_file" "$output_file"
+
+        [[ "$REMOVE_INDENT" == "true" ]] && line="${line#"${line%%[![:space:]]*}"}"
+        [[ -n "${line//[[:space:]]/}" ]] && printf '%s\n' "$line" >> "$tmp"
+    done < "$input"
+
+    mv "$tmp" "$output"
 }
 
 process_directory() {
-    local src_dir="$1"
-    local dest_dir="$2"
-    
-    mkdir -p "$dest_dir"
-    
-    for entry in "$src_dir"/*; do
-        if [ ! -e "$entry" ]; then
+    local src="$1"
+    local dst="$2"
+
+    mkdir -p "$dst"
+    shopt -s nullglob
+
+    for e in "$src"/*; do
+        is_excluded "$e" && {
+            echo -e "${YELLOW}Skipped (excluded):${NC} $e"
             continue
-        fi
-        
-        if is_excluded "$entry"; then
-            echo -e "${YELLOW}Skipped (excluded):${NC} $entry"
-            continue
-        fi
-        
-        local basename=$(basename "$entry")
-        local dest_path="$dest_dir/$basename"
-        
-        if [ -d "$entry" ]; then
-            process_directory "$entry" "$dest_path"
-        elif [ -f "$entry" ]; then
-            if [[ "$basename" == *.mcfunction ]]; then
-                optimize_mcfunction "$entry" "$dest_path"
-                echo -e "${GREEN}Optimized:${NC} $entry"
+        }
+
+        local name="${e##*/}"
+        local out="$dst/$name"
+
+        if [ -d "$e" ]; then
+            process_directory "$e" "$out"
+        elif [ -f "$e" ]; then
+            if [[ "$name" == *.mcfunction ]]; then
+                optimize_mcfunction "$e" "$out"
+                echo -e "${GREEN}Optimized:${NC} $e"
             else
-                cp "$entry" "$dest_path"
-                echo -e "${BLUE}Copied:${NC} $entry"
+                cp "$e" "$out"
+                echo -e "${BLUE}Copied:${NC} $e"
             fi
         fi
     done
 }
 
 find_datapacks() {
-    local search_dir="$1"
-    local -n result_array=$2
-    
-    for entry in "$search_dir"/*; do
-        if [ -d "$entry" ] && [ -f "$entry/pack.mcmeta" ]; then
-            if ! is_excluded "$entry"; then
-                result_array+=("$entry")
-            fi
-        fi
+    local dir="$1"
+    local -n out=$2
+    shopt -s nullglob
+
+    for e in "$dir"/*; do
+        [ -d "$e" ] && [ -f "$e/pack.mcmeta" ] && ! is_excluded "$e" && out+=("$e")
     done
 }
 
 process_single_datapack() {
-    local datapack_dir="$1"
-    local temp_datapack_dir="$2"
-    local datapack_name="$3"
-    local output_path="$4"
-    
-    echo -e "\n${BLUE}Processing datapack: ${datapack_name}${NC}"
-    process_directory "$datapack_dir" "$temp_datapack_dir"
-    
-    echo -e "${BLUE}Creating zip for ${datapack_name}...${NC}"
-    cd "$temp_datapack_dir"
-    zip -r -9 "$output_path" . > /dev/null
-    cd - > /dev/null
-    
-    local size=$(du -h "$output_path" | cut -f1)
-    echo -e "${GREEN}Created: ${output_path} (${size})${NC}"
+    local src="$1"
+    local tmp="$2"
+    local name="$3"
+    local zipout="$4"
+
+    echo -e "\n${BLUE}Processing datapack: ${name}${NC}"
+    process_directory "$src" "$tmp"
+
+    echo -e "${BLUE}Creating zip for ${name}...${NC}"
+    (cd "$tmp" && zip -r -9 "$zipout" . > /dev/null)
+
+    local size
+    size=$(du -h "$zipout" | cut -f1)
+    echo -e "${GREEN}Created: ${zipout} (${size})${NC}"
 }
 
 main() {
-    if [ ! -d "$SOURCE_DIR" ]; then
+    [ ! -d "$SOURCE_DIR" ] && {
         echo -e "${RED}Error: Source directory not found: $SOURCE_DIR${NC}"
         exit 1
-    fi
-    
-    if [ -d "$TEMP_DIR" ]; then
-        rm -rf "$TEMP_DIR"
-    fi
-    
+    }
+
+    rm -rf "$TEMP_DIR"
     mkdir -p "$OUTPUT_DIR"
-    
+
     declare -a datapacks=()
     find_datapacks "$SOURCE_DIR" datapacks
-    
-    if [ ${#datapacks[@]} -eq 0 ]; then
-        if [ -f "$SOURCE_DIR/pack.mcmeta" ]; then
-            echo -e "${BLUE}Single datapack detected at root${NC}\n"
-            
-            local output_path="$OUTPUT_DIR/$OUTPUT_NAME"
-            if [ -f "$output_path" ]; then
-                rm "$output_path"
-            fi
-            
-            echo -e "${BLUE}Processing files...${NC}"
-            process_directory "$SOURCE_DIR" "$TEMP_DIR"
-            
-            echo -e "\n${BLUE}Creating zip archive...${NC}"
-            cd "$TEMP_DIR"
-            zip -r -9 "../$OUTPUT_NAME" . > /dev/null
-            cd - > /dev/null
-            
-            rm -rf "$TEMP_DIR"
-            
-            local size=$(du -h "$output_path" | cut -f1)
-            echo -e "\n${GREEN}Zip created:${NC} $output_path"
-            echo -e "${GREEN}Total size:${NC} $size"
-        else
+
+    if [ "${#datapacks[@]}" -eq 0 ]; then
+        [ ! -f "$SOURCE_DIR/pack.mcmeta" ] && {
             echo -e "${RED}Error: No datapacks found (no pack.mcmeta in root or subdirectories)${NC}"
             exit 1
-        fi
+        }
+
+        echo -e "${BLUE}Single datapack detected at root${NC}\n"
+        local out="$OUTPUT_DIR/$OUTPUT_NAME"
+        rm -f "$out"
+
+        echo -e "${BLUE}Processing files...${NC}"
+        process_directory "$SOURCE_DIR" "$TEMP_DIR"
+
+        echo -e "\n${BLUE}Creating zip archive...${NC}"
+        (cd "$TEMP_DIR" && zip -r -9 "../$OUTPUT_NAME" . > /dev/null)
+
+        rm -rf "$TEMP_DIR"
+
+        local size
+        size=$(du -h "$out" | cut -f1)
+        echo -e "\n${GREEN}Zip created:${NC} $out"
+        echo -e "${GREEN}Total size:${NC} $size"
     else
         echo -e "${BLUE}Multiple datapacks detected: ${#datapacks[@]}${NC}\n"
-        
-        local datapacks_output_dir="$OUTPUT_DIR/datapacks"
-        mkdir -p "$datapacks_output_dir"
-        
-        for datapack_path in "${datapacks[@]}"; do
-            local datapack_name=$(basename "$datapack_path")
-            local temp_datapack_dir="$TEMP_DIR/$datapack_name"
-            local output_zip="$datapacks_output_dir/${datapack_name}.zip"
-            
-            process_single_datapack "$datapack_path" "$temp_datapack_dir" "$datapack_name" "$output_zip"
+
+        local outdir="$OUTPUT_DIR/datapacks"
+        mkdir -p "$outdir"
+
+        for d in "${datapacks[@]}"; do
+            local name="${d##*/}"
+            process_single_datapack "$d" "$TEMP_DIR/$name" "$name" "$outdir/$name.zip"
         done
-        
+
         rm -rf "$TEMP_DIR"
-        
-        echo -e "\n${GREEN}All datapacks created in:${NC} $datapacks_output_dir"
-        for datapack_path in "${datapacks[@]}"; do
-            local datapack_name=$(basename "$datapack_path")
-            local size=$(du -h "$datapacks_output_dir/${datapack_name}.zip" | cut -f1)
-            echo -e "  - ${datapack_name}.zip (${size})"
+
+        echo -e "\n${GREEN}All datapacks created in:${NC} $outdir"
+        for d in "${datapacks[@]}"; do
+            local name="${d##*/}"
+            local size
+            size=$(du -h "$outdir/$name.zip" | cut -f1)
+            echo -e "  - ${name}.zip (${size})"
         done
     fi
-    
+
     echo -e "\n${GREEN}Optimization complete!${NC}"
 }
 
