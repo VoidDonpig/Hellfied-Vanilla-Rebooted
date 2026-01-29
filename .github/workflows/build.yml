@@ -4,46 +4,223 @@ on:
   push:
     branches:
       - main
+      - master
+      - develop
+    paths:
+      - 'data/**'
+      - 'pack.mcmeta'
+      - '.buildignore'
+      - '.github/workflows/build.yml'
+      - '.github/workflows/optimize.sh'
+  pull_request:
+    branches:
+      - main
+      - master
+    paths:
+      - 'data/**'
+      - 'pack.mcmeta'
+      - '.buildignore'
+      - '.github/workflows/build.yml'
+      - '.github/workflows/optimize.sh'
   workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create a release'
+        required: false
+        type: boolean
+        default: false
+      release_tag:
+        description: 'Release tag (e.g., v1.0.0)'
+        required: false
+        default: ''
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
+    outputs:
+      artifact_name: ${{ steps.artifact_info.outputs.name }}
+      artifact_size: ${{ steps.artifact_info.outputs.size }}
+      build_date: ${{ steps.artifact_info.outputs.date }}
+    
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Setup
-        run: chmod +x optimize.sh
-
-      - name: Build datapack
+      
+      - name: Setup build environment
         run: |
-          ./optimize.sh . dist
-
-      - name: Collect build info
-        id: info
+          chmod +x .github/workflows/optimize.sh
+          echo "Build started at $(date)"
+      
+      - name: Validate .buildignore
         run: |
-          SIZE=$(du -h "dist/Hellfied Vanilla Rebooted.zip" | cut -f1)
+          if [ -f .buildignore ]; then
+            echo "✅ .buildignore found"
+            echo "Exclusion patterns:"
+            grep -v '^#' .buildignore | grep -v '^[[:space:]]*$' || echo "  (none)"
+          else
+            echo "⚠️  .buildignore not found - all files will be processed"
+          fi
+      
+      - name: Build optimized datapack
+        run: |
+          ./.github/workflows/optimize.sh . dist datapack.zip true .buildignore
+      
+      - name: Generate build information
+        id: artifact_info
+        run: |
+          SIZE=$(du -h dist/datapack.zip | cut -f1)
           DATE=$(date +"%Y-%m-%d %H:%M:%S")
-          SHA=$(git rev-parse --short HEAD)
-          NAME="datapack-$SHA"
-
-          echo "size=$SIZE" >> $GITHUB_OUTPUT
-          echo "date=$DATE" >> $GITHUB_OUTPUT
-          echo "name=$NAME" >> $GITHUB_OUTPUT
-
+          SHA_SHORT=$(git rev-parse --short HEAD)
+          ARTIFACT_NAME="datapack-${SHA_SHORT}"
+          
+          echo "size=${SIZE}" >> $GITHUB_OUTPUT
+          echo "date=${DATE}" >> $GITHUB_OUTPUT
+          echo "name=${ARTIFACT_NAME}" >> $GITHUB_OUTPUT
+          echo "sha_short=${SHA_SHORT}" >> $GITHUB_OUTPUT
+          
           cat > dist/BUILD_INFO.txt << EOF
           Datapack Build Information
           ==========================
-          Build Date: $DATE
-          Commit: $SHA
-          Branch: main
-          File Size: $SIZE
+          
+          Build Date: ${DATE}
+          Commit: ${{ github.sha }}
+          Branch: ${{ github.ref_name }}
+          Short SHA: ${SHA_SHORT}
+          File Size: ${SIZE}
+          
+          Workflow: ${{ github.workflow }}
+          Run Number: ${{ github.run_number }}
+          Run ID: ${{ github.run_id }}
+          
+          Triggered by: ${{ github.event_name }}
+          Actor: ${{ github.actor }}
+          
+          Repository: ${{ github.repository }}
           EOF
-
-      - name: Upload artifact
+          
+          cat dist/BUILD_INFO.txt
+      
+      - name: Upload datapack artifact
         uses: actions/upload-artifact@v4
         with:
-          name: datapack
-          path: dist
+          name: ${{ steps.artifact_info.outputs.name }}
+          path: |
+            dist/datapack.zip
+            dist/BUILD_INFO.txt
+          retention-days: 30
+          compression-level: 9
+      
+      - name: Upload raw build files (debugging)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.artifact_info.outputs.name }}-debug
+          path: dist/
+          retention-days: 7
+      
+      - name: Create build summary
+        run: |
+          echo "# 🎉 Datapack Build Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Build Information" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Build Time** | ${{ steps.artifact_info.outputs.date }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **File Size** | ${{ steps.artifact_info.outputs.size }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Commit** | \`${{ steps.artifact_info.outputs.sha_short }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Branch** | ${{ github.ref_name }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Artifact Name** | ${{ steps.artifact_info.outputs.name }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📦 Download" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Download the optimized datapack from the **Artifacts** section above." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔧 Installation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. Download \`${{ steps.artifact_info.outputs.name }}.zip\`" >> $GITHUB_STEP_SUMMARY
+          echo "2. Extract and place \`datapack.zip\` in your world's datapacks folder" >> $GITHUB_STEP_SUMMARY
+          echo "3. Run \`/reload\` in-game" >> $GITHUB_STEP_SUMMARY
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+    if: |
+      startsWith(github.ref, 'refs/tags/v') || 
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.create_release == 'true')
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup build environment
+        run: chmod +x .github/workflows/optimize.sh
+      
+      - name: Build datapack for release
+        run: ./.github/workflows/optimize.sh . dist datapack.zip true .buildignore
+      
+      - name: Determine release tag
+        id: release_tag
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            TAG=${GITHUB_REF#refs/tags/}
+          elif [[ -n "${{ github.event.inputs.release_tag }}" ]]; then
+            TAG="${{ github.event.inputs.release_tag }}"
+          else
+            TAG="build-$(date +%Y%m%d-%H%M%S)"
+          fi
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "Release tag: ${TAG}"
+      
+      - name: Generate changelog
+        id: changelog
+        run: |
+          if [ -f CHANGELOG.md ]; then
+            CHANGELOG=$(cat CHANGELOG.md | head -n 50)
+          else
+            CHANGELOG="See commit history for changes."
+          fi
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "${CHANGELOG}" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.release_tag.outputs.tag }}
+          name: "Datapack ${{ steps.release_tag.outputs.tag }}"
+          body: |
+            ## 🎮 Datapack Release ${{ steps.release_tag.outputs.tag }}
+            
+            **Build Date:** ${{ needs.build.outputs.build_date }}
+            **Commit:** ${{ github.sha }}
+            **Branch:** ${{ github.ref_name }}
+            **File Size:** ${{ needs.build.outputs.artifact_size }}
+            
+            ### 📥 Installation
+            1. Download `datapack.zip` from the assets below
+            2. Place it in your world's `datapacks` folder
+            3. Run `/reload` in-game
+            
+            ### 📝 Changes
+            ${{ steps.changelog.outputs.changelog }}
+            
+            ### 🔗 Links
+            - [Build Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            - [Commit Details](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+          files: dist/datapack.zip
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ steps.release_tag.outputs.tag }}
+          path: dist/datapack.zip
+          retention-days: 90
