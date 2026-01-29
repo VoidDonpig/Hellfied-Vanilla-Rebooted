@@ -118,6 +118,36 @@ process_directory() {
     done
 }
 
+find_datapacks() {
+    local search_dir="$1"
+    local -n result_array=$2
+    
+    for entry in "$search_dir"/*; do
+        if [ -d "$entry" ] && [ -f "$entry/pack.mcmeta" ]; then
+            if ! is_excluded "$entry"; then
+                result_array+=("$entry")
+            fi
+        fi
+    done
+}
+
+process_single_datapack() {
+    local datapack_dir="$1"
+    local temp_datapack_dir="$2"
+    local datapack_name="$3"
+    
+    echo -e "\n${BLUE}Processing datapack: ${datapack_name}${NC}"
+    process_directory "$datapack_dir" "$temp_datapack_dir"
+    
+    echo -e "${BLUE}Creating zip for ${datapack_name}...${NC}"
+    cd "$temp_datapack_dir"
+    zip -r -9 "$OUTPUT_DIR/${datapack_name}.zip" . > /dev/null
+    cd - > /dev/null
+    
+    local size=$(du -h "$OUTPUT_DIR/${datapack_name}.zip" | cut -f1)
+    echo -e "${GREEN}Created: ${datapack_name}.zip (${size})${NC}"
+}
+
 main() {
     if [ ! -d "$SOURCE_DIR" ]; then
         echo -e "${RED}Error: Source directory not found: $SOURCE_DIR${NC}"
@@ -128,27 +158,65 @@ main() {
         rm -rf "$TEMP_DIR"
     fi
     
-    local output_path="$OUTPUT_DIR/$OUTPUT_NAME"
-    if [ -f "$output_path" ]; then
-        rm "$output_path"
-    fi
-    
     mkdir -p "$OUTPUT_DIR"
     
-    echo -e "\n${BLUE}Processing files...${NC}"
-    process_directory "$SOURCE_DIR" "$TEMP_DIR"
+    declare -a datapacks=()
+    find_datapacks "$SOURCE_DIR" datapacks
     
-    echo -e "\n${BLUE}Creating zip archive...${NC}"
-    cd "$TEMP_DIR"
-    zip -r -9 "../$OUTPUT_NAME" . > /dev/null
-    cd - > /dev/null
+    if [ ${#datapacks[@]} -eq 0 ]; then
+        if [ -f "$SOURCE_DIR/pack.mcmeta" ]; then
+            echo -e "${BLUE}Single datapack detected at root${NC}\n"
+            
+            local output_path="$OUTPUT_DIR/$OUTPUT_NAME"
+            if [ -f "$output_path" ]; then
+                rm "$output_path"
+            fi
+            
+            echo -e "${BLUE}Processing files...${NC}"
+            process_directory "$SOURCE_DIR" "$TEMP_DIR"
+            
+            echo -e "\n${BLUE}Creating zip archive...${NC}"
+            cd "$TEMP_DIR"
+            zip -r -9 "../$OUTPUT_NAME" . > /dev/null
+            cd - > /dev/null
+            
+            rm -rf "$TEMP_DIR"
+            
+            local size=$(du -h "$output_path" | cut -f1)
+            echo -e "\n${GREEN}Zip created:${NC} $output_path"
+            echo -e "${GREEN}Total size:${NC} $size"
+        else
+            echo -e "${RED}Error: No datapacks found (no pack.mcmeta in root or subdirectories)${NC}"
+            exit 1
+        fi
+    else
+        echo -e "${BLUE}Multiple datapacks detected: ${#datapacks[@]}${NC}\n"
+        
+        for datapack_path in "${datapacks[@]}"; do
+            local datapack_name=$(basename "$datapack_path")
+            local temp_datapack_dir="$TEMP_DIR/$datapack_name"
+            
+            process_single_datapack "$datapack_path" "$temp_datapack_dir" "$datapack_name"
+        done
+        
+        rm -rf "$TEMP_DIR"
+        
+        echo -e "\n${BLUE}Creating main archive...${NC}"
+        cd "$OUTPUT_DIR"
+        zip -r -9 "$OUTPUT_NAME" *.zip -x "$OUTPUT_NAME" > /dev/null 2>&1
+        cd - > /dev/null
+        
+        local main_size=$(du -h "$OUTPUT_DIR/$OUTPUT_NAME" | cut -f1)
+        echo -e "${GREEN}Main archive created:${NC} $OUTPUT_DIR/$OUTPUT_NAME (${main_size})"
+        
+        echo -e "\n${GREEN}All datapacks:${NC}"
+        for datapack_path in "${datapacks[@]}"; do
+            local datapack_name=$(basename "$datapack_path")
+            local size=$(du -h "$OUTPUT_DIR/${datapack_name}.zip" | cut -f1)
+            echo -e "  - ${datapack_name}.zip (${size})"
+        done
+    fi
     
-    rm -rf "$TEMP_DIR"
-    
-    local size=$(du -h "$output_path" | cut -f1)
-    
-    echo -e "\n${GREEN}Zip created:${NC} $output_path"
-    echo -e "${GREEN}Total size:${NC} $size"
     echo -e "\n${GREEN}Optimization complete!${NC}"
 }
 
