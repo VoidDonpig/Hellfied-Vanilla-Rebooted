@@ -3,13 +3,32 @@ name: CI
 on:
   push:
     branches: [ main, master, develop ]
+    paths:
+      - 'data/**'
+      - 'pack.mcmeta'
+      - '.buildignore'
+      - '.github/workflows/build.yml'
+      - '.github/workflows/optimize.sh'
+
   pull_request:
     branches: [ main, master ]
+    paths:
+      - 'data/**'
+      - 'pack.mcmeta'
+      - '.buildignore'
+      - '.github/workflows/build.yml'
+      - '.github/workflows/optimize.sh'
+
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    outputs:
+      artifact_name: ${{ steps.info.outputs.name }}
+      artifact_size: ${{ steps.info.outputs.size }}
+      build_date: ${{ steps.info.outputs.date }}
 
     steps:
       - uses: actions/checkout@v4
@@ -17,25 +36,40 @@ jobs:
       - name: Setup
         run: chmod +x .github/workflows/optimize.sh
 
-      - name: Set variables
+      - name: Set build variables
         run: |
           SHA=$(git rev-parse --short HEAD)
-          echo "ZIP_NAME=Hellfied Vanilla Rebooted.zip" >> $GITHUB_ENV
-          echo "ARTIFACT=datapack-$SHA" >> $GITHUB_ENV
+          echo "OUTPUT_NAME=Hellfied Vanilla Rebooted.zip" >> $GITHUB_ENV
+          echo "ARTIFACT_NAME=datapack-$SHA" >> $GITHUB_ENV
 
-      - name: Build
+      - name: Build datapack
         run: |
-          ./.github/workflows/optimize.sh . dist "$ZIP_NAME" true .buildignore
+          ./.github/workflows/optimize.sh . dist "$OUTPUT_NAME" true .buildignore
 
-      - name: Build info
+      - name: Generate build information
+        id: info
         run: |
+          SIZE=$(du -h "dist/$OUTPUT_NAME" | cut -f1)
+          DATE=$(date +"%Y-%m-%d %H:%M:%S")
+
+          echo "size=$SIZE" >> $GITHUB_OUTPUT
+          echo "date=$DATE" >> $GITHUB_OUTPUT
+          echo "name=$ARTIFACT_NAME" >> $GITHUB_OUTPUT
+
           cat > dist/BUILD_INFO.txt << EOF
+          Datapack Build Information
+          ==========================
+          Build Date: $DATE
           Commit: ${{ github.sha }}
           Branch: ${{ github.ref_name }}
+          File Size: $SIZE
           EOF
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.ARTIFACT }}
-          path: dist/
+          name: ${{ steps.info.outputs.name }}
+          path: |
+            dist/${{ env.OUTPUT_NAME }}
+            dist/BUILD_INFO.txt
+          compression-level: 9

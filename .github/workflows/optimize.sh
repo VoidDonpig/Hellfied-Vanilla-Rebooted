@@ -112,15 +112,23 @@ main() {
     find_datapacks "$SOURCE_DIR" datapacks
 
     if [ "${#datapacks[@]}" -eq 0 ]; then
+        [ ! -f "$SOURCE_DIR/pack.mcmeta" ] && {
+            echo -e "${RED}Error: No datapack found${NC}"
+            exit 1
+        }
+
         echo -e "${BLUE}Single datapack detected${NC}\n"
 
         local pack_name
         pack_name="$(basename "$SOURCE_DIR")"
-
         local work="$TEMP_DIR/$pack_name"
+
         process_directory "$SOURCE_DIR" "$work"
 
-        (cd "$TEMP_DIR" && zip -r -9 "$OUTPUT_DIR/$OUTPUT_NAME" "$pack_name" > /dev/null)
+        (
+            cd "$work" || exit 1
+            zip -r -9 "$OUTPUT_DIR/$OUTPUT_NAME" . > /dev/null
+        )
 
         rm -rf "$TEMP_DIR"
     else
@@ -131,11 +139,19 @@ main() {
 
         for d in "${datapacks[@]}"; do
             local name="${d##*/}"
-            local tmp="$TEMP_DIR/$name"
-            process_directory "$d" "$tmp"
-            (cd "$TEMP_DIR" && zip -r -9 "$outdir/$name.zip" "$name" > /dev/null)
-            rm -rf "$tmp"
+            local work="$TEMP_DIR/$name"
+
+            process_directory "$d" "$work"
+
+            (
+                cd "$work" || exit 1
+                zip -r -9 "$outdir/$name.zip" . > /dev/null
+            )
+
+            rm -rf "$work"
         done
+
+        rm -rf "$TEMP_DIR"
     fi
 
     echo -e "\n${GREEN}Optimization complete!${NC}"
