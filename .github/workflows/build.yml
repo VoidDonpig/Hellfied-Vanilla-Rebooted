@@ -3,104 +3,39 @@ name: CI
 on:
   push:
     branches: [ main, master, develop ]
-    paths:
-      - 'data/**'
-      - 'pack.mcmeta'
-      - '.buildignore'
-      - '.github/workflows/build.yml'
-      - '.github/workflows/optimize.sh'
-
   pull_request:
     branches: [ main, master ]
-    paths:
-      - 'data/**'
-      - 'pack.mcmeta'
-      - '.buildignore'
-      - '.github/workflows/build.yml'
-      - '.github/workflows/optimize.sh'
-
   workflow_dispatch:
-
-env:
-  DATAPACK_NAME: Hellfied Vanilla Rebooted
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    outputs:
-      artifact_name: ${{ steps.info.outputs.name }}
-      artifact_size: ${{ steps.info.outputs.size }}
-      build_date: ${{ steps.info.outputs.date }}
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup environment
+      - name: Setup
+        run: chmod +x .github/workflows/optimize.sh
+
+      - name: Set variables
         run: |
-          chmod +x .github/workflows/optimize.sh
-          echo "Build started at $(date)"
+          SHA=$(git rev-parse --short HEAD)
+          echo "ZIP_NAME=Hellfied Vanilla Rebooted.zip" >> $GITHUB_ENV
+          echo "ARTIFACT=datapack-$SHA" >> $GITHUB_ENV
 
-      - name: Build optimized datapack
+      - name: Build
         run: |
-          ./.github/workflows/optimize.sh \
-            . \
-            dist \
-            "$DATAPACK_NAME" \
-            true \
-            .buildignore
+          ./.github/workflows/optimize.sh . dist "$ZIP_NAME" true .buildignore
 
-      - name: Generate build info
-        id: info
+      - name: Build info
         run: |
-          SHA_SHORT=$(git rev-parse --short HEAD)
-          ZIP_NAME="datapack-${SHA_SHORT}.zip"
-
-          mv "dist/${DATAPACK_NAME}.zip" "dist/${ZIP_NAME}"
-
-          SIZE=$(du -h "dist/${ZIP_NAME}" | cut -f1)
-          DATE=$(date +"%Y-%m-%d %H:%M:%S")
-
-          echo "name=datapack-${SHA_SHORT}" >> $GITHUB_OUTPUT
-          echo "size=${SIZE}" >> $GITHUB_OUTPUT
-          echo "date=${DATE}" >> $GITHUB_OUTPUT
-
           cat > dist/BUILD_INFO.txt << EOF
-          Datapack Build Information
-          ==========================
-
-          Build Date: ${DATE}
           Commit: ${{ github.sha }}
           Branch: ${{ github.ref_name }}
-          Short SHA: ${SHA_SHORT}
-          File Size: ${SIZE}
-
-          Workflow: ${{ github.workflow }}
-          Run Number: ${{ github.run_number }}
-          Run ID: ${{ github.run_id }}
-
-          Actor: ${{ github.actor }}
-          Repository: ${{ github.repository }}
           EOF
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.info.outputs.name }}
-          path: |
-            dist/datapack-*.zip
-            dist/BUILD_INFO.txt
-          retention-days: 30
-          compression-level: 9
-
-      - name: Build summary
-        run: |
-          echo "# ✅ Datapack Build Complete" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Item | Value |" >> $GITHUB_STEP_SUMMARY
-          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
-          echo "| Datapack | $DATAPACK_NAME |" >> $GITHUB_STEP_SUMMARY
-          echo "| Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| Size | ${{ steps.info.outputs.size }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Date | ${{ steps.info.outputs.date }} |" >> $GITHUB_STEP_SUMMARY
+          name: ${{ env.ARTIFACT }}
+          path: dist/

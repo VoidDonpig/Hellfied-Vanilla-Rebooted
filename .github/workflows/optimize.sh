@@ -3,11 +3,9 @@
 SOURCE_DIR="${1:-.}"
 OUTPUT_DIR="${2:-./dist}"
 OUTPUT_NAME="${3:-datapack.zip}"
+TEMP_DIR="$OUTPUT_DIR/temp"
 REMOVE_INDENT="${4:-true}"
 EXCLUDE_FILE="${5:-.buildignore}"
-
-TEMP_DIR="$OUTPUT_DIR/temp"
-SINGLE_PACK_DIR="$OUTPUT_NAME"
 
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
@@ -106,78 +104,38 @@ find_datapacks() {
     done
 }
 
-build_single() {
-    local out="$OUTPUT_DIR/$OUTPUT_NAME"
-
-    local zip_root="$TEMP_DIR/root"
-    local packdir="$zip_root/$OUTPUT_NAME"
-
-    echo -e "${BLUE}Single datapack detected at root${NC}\n"
-
-    rm -rf "$TEMP_DIR"
-    mkdir -p "$packdir"
-
-    process_directory "$SOURCE_DIR" "$packdir"
-
-    echo -e "\n${BLUE}Creating zip archive...${NC}"
-    (
-      cd "$zip_root" &&
-      zip -r -9 "$out" "$OUTPUT_NAME" > /dev/null
-    )
-
-    rm -rf "$TEMP_DIR"
-
-    local size
-    size=$(du -h "$out" | cut -f1)
-    echo -e "\n${GREEN}Zip created:${NC} $out"
-    echo -e "${GREEN}Total size:${NC} $size"
-}
-
-build_multiple() {
-    echo -e "${BLUE}Multiple datapacks detected: ${#datapacks[@]}${NC}\n"
-
-    local outdir="$OUTPUT_DIR/datapacks"
-    mkdir -p "$outdir"
-    rm -rf "$TEMP_DIR"
-
-    for d in "${datapacks[@]}"; do
-        local name="${d##*/}"
-        local tmp="$TEMP_DIR/$name"
-
-        echo -e "\n${BLUE}Processing datapack: ${name}${NC}"
-        mkdir -p "$tmp"
-        process_directory "$d" "$tmp"
-
-        echo -e "${BLUE}Creating zip for ${name}...${NC}"
-        (cd "$TEMP_DIR" && zip -r -9 "$outdir/$name.zip" "$name" > /dev/null)
-
-        local size
-        size=$(du -h "$outdir/$name.zip" | cut -f1)
-        echo -e "${GREEN}Created:${NC} $name.zip (${size})"
-    done
-
-    rm -rf "$TEMP_DIR"
-}
-
 main() {
-    [ ! -d "$SOURCE_DIR" ] && {
-        echo -e "${RED}Error: Source directory not found: $SOURCE_DIR${NC}"
-        exit 1
-    }
-
     mkdir -p "$OUTPUT_DIR"
+    rm -rf "$TEMP_DIR"
 
     declare -a datapacks=()
     find_datapacks "$SOURCE_DIR" datapacks
 
     if [ "${#datapacks[@]}" -eq 0 ]; then
-        [ ! -f "$SOURCE_DIR/pack.mcmeta" ] && {
-            echo -e "${RED}Error: No datapacks found${NC}"
-            exit 1
-        }
-        build_single
+        echo -e "${BLUE}Single datapack detected${NC}\n"
+
+        local pack_name
+        pack_name="$(basename "$SOURCE_DIR")"
+
+        local work="$TEMP_DIR/$pack_name"
+        process_directory "$SOURCE_DIR" "$work"
+
+        (cd "$TEMP_DIR" && zip -r -9 "$OUTPUT_DIR/$OUTPUT_NAME" "$pack_name" > /dev/null)
+
+        rm -rf "$TEMP_DIR"
     else
-        build_multiple
+        echo -e "${BLUE}Multiple datapacks detected: ${#datapacks[@]}${NC}\n"
+
+        local outdir="$OUTPUT_DIR/datapacks"
+        mkdir -p "$outdir"
+
+        for d in "${datapacks[@]}"; do
+            local name="${d##*/}"
+            local tmp="$TEMP_DIR/$name"
+            process_directory "$d" "$tmp"
+            (cd "$TEMP_DIR" && zip -r -9 "$outdir/$name.zip" "$name" > /dev/null)
+            rm -rf "$tmp"
+        done
     fi
 
     echo -e "\n${GREEN}Optimization complete!${NC}"
