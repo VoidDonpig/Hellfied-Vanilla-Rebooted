@@ -11,4 +11,4 @@
     execute anchored eyes positioned ^ ^ ^ run playsound entity.player.attack.sweep hostile @a[distance=..16] ~ ~ ~ 1 0.8
 
 # Damage itself
-    damage @s 9999 mob_attack by @n[type=enderman,tag=hvr.this]
+    damage @s 9999 mob_attack by @n[type=enderman,tag=hvr.self]

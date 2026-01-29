@@ -12,7 +12,7 @@
     effect clear @s resistance
 
 # Damage
-    damage @s 340282346638528860000000000000000000000 sonic_boom by @n[type=warden,tag=hvr.this]
+    damage @s 340282346638528860000000000000000000000 sonic_boom by @n[type=warden,tag=hvr.self]
 
 # Remove modifier
     attribute @s armor modifier remove hvr:asset/mob.warden.sonic_boom.no_armor
