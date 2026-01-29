@@ -69,7 +69,7 @@ jobs:
       - name: Generate build information
         id: artifact_info
         run: |
-          SIZE=$(du -h dist/Hellfied Vanilla Rebooted.zip | cut -f1)
+          SIZE=$(du -h "dist/Hellfied Vanilla Rebooted.zip" | cut -f1)
           DATE=$(date +"%Y-%m-%d %H:%M:%S")
           SHA_SHORT=$(git rev-parse --short HEAD)
           ARTIFACT_NAME="datapack-${SHA_SHORT}"
