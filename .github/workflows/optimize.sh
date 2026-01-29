@@ -135,17 +135,18 @@ process_single_datapack() {
     local datapack_dir="$1"
     local temp_datapack_dir="$2"
     local datapack_name="$3"
+    local output_path="$4"
     
     echo -e "\n${BLUE}Processing datapack: ${datapack_name}${NC}"
     process_directory "$datapack_dir" "$temp_datapack_dir"
     
     echo -e "${BLUE}Creating zip for ${datapack_name}...${NC}"
     cd "$temp_datapack_dir"
-    zip -r -9 "$OUTPUT_DIR/${datapack_name}.zip" . > /dev/null
+    zip -r -9 "$output_path" . > /dev/null
     cd - > /dev/null
     
-    local size=$(du -h "$OUTPUT_DIR/${datapack_name}.zip" | cut -f1)
-    echo -e "${GREEN}Created: ${datapack_name}.zip (${size})${NC}"
+    local size=$(du -h "$output_path" | cut -f1)
+    echo -e "${GREEN}Created: ${output_path} (${size})${NC}"
 }
 
 main() {
@@ -192,27 +193,23 @@ main() {
     else
         echo -e "${BLUE}Multiple datapacks detected: ${#datapacks[@]}${NC}\n"
         
+        local datapacks_output_dir="$OUTPUT_DIR/datapacks"
+        mkdir -p "$datapacks_output_dir"
+        
         for datapack_path in "${datapacks[@]}"; do
             local datapack_name=$(basename "$datapack_path")
             local temp_datapack_dir="$TEMP_DIR/$datapack_name"
+            local output_zip="$datapacks_output_dir/${datapack_name}.zip"
             
-            process_single_datapack "$datapack_path" "$temp_datapack_dir" "$datapack_name"
+            process_single_datapack "$datapack_path" "$temp_datapack_dir" "$datapack_name" "$output_zip"
         done
         
         rm -rf "$TEMP_DIR"
         
-        echo -e "\n${BLUE}Creating main archive...${NC}"
-        cd "$OUTPUT_DIR"
-        zip -r -9 "$OUTPUT_NAME" *.zip -x "$OUTPUT_NAME" > /dev/null 2>&1
-        cd - > /dev/null
-        
-        local main_size=$(du -h "$OUTPUT_DIR/$OUTPUT_NAME" | cut -f1)
-        echo -e "${GREEN}Main archive created:${NC} $OUTPUT_DIR/$OUTPUT_NAME (${main_size})"
-        
-        echo -e "\n${GREEN}All datapacks:${NC}"
+        echo -e "\n${GREEN}All datapacks created in:${NC} $datapacks_output_dir"
         for datapack_path in "${datapacks[@]}"; do
             local datapack_name=$(basename "$datapack_path")
-            local size=$(du -h "$OUTPUT_DIR/${datapack_name}.zip" | cut -f1)
+            local size=$(du -h "$datapacks_output_dir/${datapack_name}.zip" | cut -f1)
             echo -e "  - ${datapack_name}.zip (${size})"
         done
     fi
