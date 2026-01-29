@@ -64,7 +64,7 @@ jobs:
 
       - name: Set build variables
         run: |
-          echo "OUTPUT_NAME=datapack.zip" >> $GITHUB_ENV
+          echo "OUTPUT_NAME=Hellfied Vanilla Rebooted.zip" >> $GITHUB_ENV
       
       - name: Build optimized datapack
         run: |
@@ -110,7 +110,7 @@ jobs:
         with:
           name: ${{ steps.artifact_info.outputs.name }}
           path: |
-            dist/$OUTPUT_NAME
+            dist/"$OUTPUT_NAME"
             dist/BUILD_INFO.txt
           retention-days: 30
           compression-level: 9
