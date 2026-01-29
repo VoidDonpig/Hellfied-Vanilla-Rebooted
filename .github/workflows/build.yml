@@ -64,12 +64,12 @@ jobs:
       
       - name: Build optimized datapack
         run: |
-          ./.github/workflows/optimize.sh . dist datapack.zip true .buildignore
+          ./.github/workflows/optimize.sh . dist "Hellfied Vanilla Rebooted.zip" true .buildignore
       
       - name: Generate build information
         id: artifact_info
         run: |
-          SIZE=$(du -h dist/datapack.zip | cut -f1)
+          SIZE=$(du -h dist/Hellfied Vanilla Rebooted.zip | cut -f1)
           DATE=$(date +"%Y-%m-%d %H:%M:%S")
           SHA_SHORT=$(git rev-parse --short HEAD)
           ARTIFACT_NAME="datapack-${SHA_SHORT}"
@@ -106,7 +106,7 @@ jobs:
         with:
           name: ${{ steps.artifact_info.outputs.name }}
           path: |
-            dist/datapack.zip
+            dist/Hellfied Vanilla Rebooted.zip
             dist/BUILD_INFO.txt
           retention-days: 30
           compression-level: 9
@@ -150,7 +150,7 @@ jobs:
         run: chmod +x .github/workflows/optimize.sh
       
       - name: Build datapack for release
-        run: ./.github/workflows/optimize.sh . dist datapack.zip true .buildignore
+        run: ./.github/workflows/optimize.sh . dist "Hellfied Vanilla Rebooted.zip" true .buildignore
       
       - name: Determine release tag
         id: release_tag
@@ -191,7 +191,7 @@ jobs:
             **File Size:** ${{ needs.build.outputs.artifact_size }}
             
             ### 📥 Installation
-            1. Download `datapack.zip` from the assets below
+            1. Download `"Hellfied Vanilla Rebooted.zip"` from the assets below
             2. Place it in your world's `datapacks` folder
             3. Run `/reload` in-game
             
@@ -201,7 +201,7 @@ jobs:
             ### 🔗 Links
             - [Build Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
             - [Commit Details](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
-          files: dist/datapack.zip
+          files: dist/Hellfied Vanilla Rebooted.zip
           draft: false
           prerelease: false
           generate_release_notes: true
@@ -212,5 +212,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-${{ steps.release_tag.outputs.tag }}
-          path: dist/datapack.zip
+          path: dist/Hellfied Vanilla Rebooted.zip
           retention-days: 90
