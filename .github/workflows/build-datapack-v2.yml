@@ -7,7 +7,7 @@ on:
       - master
       - develop
     paths:
-      - 'datapack/**'
+      - './**'
       - '.buildignore'
       - '.github/workflows/build-datapack-v2.yml'
   pull_request:
@@ -15,7 +15,7 @@ on:
       - main
       - master
     paths:
-      - 'datapack/**'
+      - './**'
   workflow_dispatch:
     inputs:
       create_release:

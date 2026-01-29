@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 設定
-SOURCE_DIR="${1:-./datapack}"
+SOURCE_DIR="${1:-.}"
 OUTPUT_DIR="${2:-./dist}"
 OUTPUT_NAME="${3:-datapack.zip}"
 TEMP_DIR="$OUTPUT_DIR/temp"
