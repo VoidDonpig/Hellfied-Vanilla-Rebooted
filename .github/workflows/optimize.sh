@@ -6,8 +6,8 @@ OUTPUT_NAME="${3:-datapack.zip}"
 REMOVE_INDENT="${4:-true}"
 EXCLUDE_FILE="${5:-.buildignore}"
 
-PACK_NAME="${OUTPUT_NAME%.zip}"
 TEMP_DIR="$OUTPUT_DIR/temp"
+SINGLE_PACK_DIR="$OUTPUT_NAME"
 
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
@@ -17,9 +17,6 @@ NC='\033[0m'
 
 echo -e "${BLUE}Starting datapack optimization...${NC}\n"
 
-# -------------------------
-# Load exclude patterns
-# -------------------------
 declare -a EXCLUDE_PATTERNS=()
 if [ -f "$EXCLUDE_FILE" ]; then
     echo -e "${YELLOW}Loading exclusion patterns from $EXCLUDE_FILE${NC}"
@@ -32,9 +29,6 @@ if [ -f "$EXCLUDE_FILE" ]; then
     echo ""
 fi
 
-# -------------------------
-# Exclude check
-# -------------------------
 is_excluded() {
     local path="$1"
     local relative="${path#$SOURCE_DIR/}"
@@ -50,9 +44,6 @@ is_excluded() {
     return 1
 }
 
-# -------------------------
-# mcfunction optimizer
-# -------------------------
 optimize_mcfunction() {
     local input="$1"
     local output="$2"
@@ -75,9 +66,6 @@ optimize_mcfunction() {
     mv "$tmp" "$output"
 }
 
-# -------------------------
-# Directory processing
-# -------------------------
 process_directory() {
     local src="$1"
     local dst="$2"
@@ -108,9 +96,6 @@ process_directory() {
     done
 }
 
-# -------------------------
-# Find datapacks
-# -------------------------
 find_datapacks() {
     local dir="$1"
     local -n out=$2
@@ -121,12 +106,9 @@ find_datapacks() {
     done
 }
 
-# -------------------------
-# Single datapack
-# -------------------------
 build_single() {
     local out="$OUTPUT_DIR/$OUTPUT_NAME"
-    local packdir="$TEMP_DIR/$PACK_NAME"
+    local packdir="$TEMP_DIR/$SINGLE_PACK_DIR"
 
     echo -e "${BLUE}Single datapack detected at root${NC}\n"
 
@@ -136,7 +118,7 @@ build_single() {
     process_directory "$SOURCE_DIR" "$packdir"
 
     echo -e "\n${BLUE}Creating zip archive...${NC}"
-    (cd "$TEMP_DIR" && zip -r -9 "../$OUTPUT_NAME" "$PACK_NAME" > /dev/null)
+    (cd "$TEMP_DIR" && zip -r -9 "../$OUTPUT_NAME" "$SINGLE_PACK_DIR" > /dev/null)
 
     rm -rf "$TEMP_DIR"
 
@@ -146,9 +128,6 @@ build_single() {
     echo -e "${GREEN}Total size:${NC} $size"
 }
 
-# -------------------------
-# Multiple datapacks
-# -------------------------
 build_multiple() {
     echo -e "${BLUE}Multiple datapacks detected: ${#datapacks[@]}${NC}\n"
 
@@ -175,9 +154,6 @@ build_multiple() {
     rm -rf "$TEMP_DIR"
 }
 
-# -------------------------
-# Main
-# -------------------------
 main() {
     [ ! -d "$SOURCE_DIR" ] && {
         echo -e "${RED}Error: Source directory not found: $SOURCE_DIR${NC}"
