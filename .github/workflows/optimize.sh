@@ -31,6 +31,14 @@ is_excluded() {
     local path="$1"
     local relative_path="${path#$SOURCE_DIR/}"
     
+    if [[ "$relative_path" == "dist" ]] || [[ "$relative_path" == dist/* ]]; then
+        return 0
+    fi
+    
+    if [[ "$relative_path" == ".git" ]] || [[ "$relative_path" == .git/* ]]; then
+        return 0
+    fi
+    
     for pattern in "${EXCLUDE_PATTERNS[@]}"; do
         if [[ "$relative_path" == $pattern ]] || [[ "$relative_path" == $pattern/* ]]; then
             return 0
