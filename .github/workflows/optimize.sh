@@ -161,9 +161,6 @@ main() {
     
     mkdir -p "$OUTPUT_DIR"
     
-    local datapacks_output_dir="$OUTPUT_DIR/datapacks"
-    mkdir -p "$datapacks_output_dir"
-    
     declare -a datapacks=()
     find_datapacks "$SOURCE_DIR" datapacks
     
@@ -171,7 +168,7 @@ main() {
         if [ -f "$SOURCE_DIR/pack.mcmeta" ]; then
             echo -e "${BLUE}Single datapack detected at root${NC}\n"
             
-            local output_path="$datapacks_output_dir/$OUTPUT_NAME"
+            local output_path="$OUTPUT_DIR/$OUTPUT_NAME"
             if [ -f "$output_path" ]; then
                 rm "$output_path"
             fi
@@ -181,7 +178,7 @@ main() {
             
             echo -e "\n${BLUE}Creating zip archive...${NC}"
             cd "$TEMP_DIR"
-            zip -r -9 "$output_path" . > /dev/null
+            zip -r -9 "../$OUTPUT_NAME" . > /dev/null
             cd - > /dev/null
             
             rm -rf "$TEMP_DIR"
@@ -195,6 +192,9 @@ main() {
         fi
     else
         echo -e "${BLUE}Multiple datapacks detected: ${#datapacks[@]}${NC}\n"
+        
+        local datapacks_output_dir="$OUTPUT_DIR/datapacks"
+        mkdir -p "$datapacks_output_dir"
         
         for datapack_path in "${datapacks[@]}"; do
             local datapack_name=$(basename "$datapack_path")
