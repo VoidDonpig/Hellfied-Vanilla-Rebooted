@@ -1,4 +1,4 @@
-name: Build and Release Datapack (v2)
+name: CI
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
       - master
       - develop
     paths:
-      - './**'
+      - '.data/**'
       - '.buildignore'
       - '.github/workflows/build-datapack-v2.yml'
   pull_request:
@@ -15,7 +15,7 @@ on:
       - main
       - master
     paths:
-      - './**'
+      - '.data/**'
   workflow_dispatch:
     inputs:
       create_release:
