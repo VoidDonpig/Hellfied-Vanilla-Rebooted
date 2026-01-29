@@ -108,7 +108,9 @@ find_datapacks() {
 
 build_single() {
     local out="$OUTPUT_DIR/$OUTPUT_NAME"
-    local packdir="$TEMP_DIR/${OUTPUT_NAME}.dir"
+
+    local zip_root="$TEMP_DIR/root"
+    local packdir="$zip_root/$OUTPUT_NAME"
 
     echo -e "${BLUE}Single datapack detected at root${NC}\n"
 
@@ -119,8 +121,8 @@ build_single() {
 
     echo -e "\n${BLUE}Creating zip archive...${NC}"
     (
-      cd "$TEMP_DIR" &&
-      zip -r -9 "../$OUTPUT_NAME" "$(basename "$packdir")" > /dev/null
+      cd "$zip_root" &&
+      zip -r -9 "$out" "$OUTPUT_NAME" > /dev/null
     )
 
     rm -rf "$TEMP_DIR"
