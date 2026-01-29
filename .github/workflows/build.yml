@@ -8,7 +8,6 @@ on:
       - develop
     paths:
       - 'data/**'
-      - '*/pack.mcmeta'
       - 'pack.mcmeta'
       - '.buildignore'
       - '.github/workflows/build.yml'
@@ -19,7 +18,6 @@ on:
       - master
     paths:
       - 'data/**'
-      - '*/pack.mcmeta'
       - 'pack.mcmeta'
       - '.buildignore'
       - '.github/workflows/build.yml'
@@ -42,6 +40,7 @@ jobs:
     
     outputs:
       artifact_name: ${{ steps.artifact_info.outputs.name }}
+      artifact_size: ${{ steps.artifact_info.outputs.size }}
       build_date: ${{ steps.artifact_info.outputs.date }}
     
     steps:
@@ -49,27 +48,33 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Setup build environment
-        run: chmod +x .github/workflows/optimize.sh
+        run: |
+          chmod +x .github/workflows/optimize.sh
+          echo "Build started at $(date)"
       
       - name: Validate .buildignore
         run: |
           if [ -f .buildignore ]; then
             echo "✅ .buildignore found"
+            echo "Exclusion patterns:"
             grep -v '^#' .buildignore | grep -v '^[[:space:]]*$' || echo "  (none)"
           else
-            echo "⚠️  .buildignore not found"
+            echo "⚠️  .buildignore not found - all files will be processed"
           fi
       
       - name: Build optimized datapack
-        run: ./.github/workflows/optimize.sh . dist datapack.zip true .buildignore
+        run: |
+          ./.github/workflows/optimize.sh . dist datapack.zip true .buildignore
       
       - name: Generate build information
         id: artifact_info
         run: |
+          SIZE=$(du -h dist/datapack.zip | cut -f1)
           DATE=$(date +"%Y-%m-%d %H:%M:%S")
           SHA_SHORT=$(git rev-parse --short HEAD)
           ARTIFACT_NAME="datapack-${SHA_SHORT}"
           
+          echo "size=${SIZE}" >> $GITHUB_OUTPUT
           echo "date=${DATE}" >> $GITHUB_OUTPUT
           echo "name=${ARTIFACT_NAME}" >> $GITHUB_OUTPUT
           echo "sha_short=${SHA_SHORT}" >> $GITHUB_OUTPUT
@@ -82,6 +87,7 @@ jobs:
           Commit: ${{ github.sha }}
           Branch: ${{ github.ref_name }}
           Short SHA: ${SHA_SHORT}
+          File Size: ${SIZE}
           
           Workflow: ${{ github.workflow }}
           Run Number: ${{ github.run_number }}
@@ -100,7 +106,7 @@ jobs:
         with:
           name: ${{ steps.artifact_info.outputs.name }}
           path: |
-            dist/datapacks/
+            dist/datapack.zip
             dist/BUILD_INFO.txt
           retention-days: 30
           compression-level: 9
@@ -121,21 +127,19 @@ jobs:
           echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
           echo "| **Build Time** | ${{ steps.artifact_info.outputs.date }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **File Size** | ${{ steps.artifact_info.outputs.size }} |" >> $GITHUB_STEP_SUMMARY
           echo "| **Commit** | \`${{ steps.artifact_info.outputs.sha_short }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **Branch** | ${{ github.ref_name }} |" >> $GITHUB_STEP_SUMMARY
           echo "| **Artifact Name** | ${{ steps.artifact_info.outputs.name }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## 📦 Datapacks" >> $GITHUB_STEP_SUMMARY
+          echo "## 📦 Download" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          find dist/datapacks -name "*.zip" -exec basename {} \; | while read file; do
-            SIZE=$(du -h "dist/datapacks/$file" | cut -f1)
-            echo "- **$file** ($SIZE)" >> $GITHUB_STEP_SUMMARY
-          done
+          echo "Download the optimized datapack from the **Artifacts** section above." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 🔧 Installation" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "1. Download the artifact from the **Artifacts** section above" >> $GITHUB_STEP_SUMMARY
-          echo "2. Extract and place the .zip files in your world's datapacks folder" >> $GITHUB_STEP_SUMMARY
+          echo "1. Download \`${{ steps.artifact_info.outputs.name }}.zip\`" >> $GITHUB_STEP_SUMMARY
+          echo "2. Extract and place \`datapack.zip\` in your world's datapacks folder" >> $GITHUB_STEP_SUMMARY
           echo "3. Run \`/reload\` in-game" >> $GITHUB_STEP_SUMMARY
 
   release:
@@ -194,10 +198,11 @@ jobs:
             **Build Date:** ${{ needs.build.outputs.build_date }}
             **Commit:** ${{ github.sha }}
             **Branch:** ${{ github.ref_name }}
+            **File Size:** ${{ needs.build.outputs.artifact_size }}
             
             ### 📥 Installation
-            1. Download the datapack(s) from the assets below
-            2. Place them in your world's `datapacks` folder
+            1. Download `datapack.zip` from the assets below
+            2. Place it in your world's `datapacks` folder
             3. Run `/reload` in-game
             
             ### 📝 Changes
@@ -206,7 +211,7 @@ jobs:
             ### 🔗 Links
             - [Build Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
             - [Commit Details](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
-          files: dist/datapacks/*.zip
+          files: dist/datapack.zip
           draft: false
           prerelease: false
           generate_release_notes: true
@@ -217,5 +222,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-${{ steps.release_tag.outputs.tag }}
-          path: dist/datapacks/
+          path: dist/datapack.zip
           retention-days: 90
