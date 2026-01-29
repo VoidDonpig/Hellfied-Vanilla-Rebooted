@@ -7,7 +7,7 @@ on:
       - master
       - develop
     paths:
-      - './**'
+      - '.'
       - '.buildignore'
       - '.github/workflows/build-datapack-v2.yml'
   pull_request:
@@ -15,7 +15,7 @@ on:
       - main
       - master
     paths:
-      - './**'
+      - '.'
   workflow_dispatch:
     inputs:
       create_release:
@@ -58,7 +58,7 @@ jobs:
       
       - name: Build optimized datapack
         run: |
-          ./optimize-datapack-v2.sh datapack dist datapack.zip true .buildignore
+          ./optimize-datapack-v2.sh . dist datapack.zip true .buildignore
       
       - name: Generate build information
         id: artifact_info
@@ -156,7 +156,7 @@ jobs:
         run: chmod +x optimize-datapack-v2.sh
       
       - name: Build datapack for release
-        run: ./optimize-datapack-v2.sh datapack dist datapack.zip true .buildignore
+        run: ./optimize-datapack-v2.sh . dist datapack.zip true .buildignore
       
       - name: Determine release tag
         id: release_tag
