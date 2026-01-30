@@ -34,9 +34,7 @@ jobs:
       - name: Build optimized datapack
         run: |
           chmod +x .github/workflows/optimize.sh
-          ./.github/workflows/optimize.sh . dist "$DATAPACK_NAME" true .buildignore
-        env:
-          DATAPACK_NAME: ${{ env.DATAPACK_NAME }}
+          ./.github/workflows/optimize.sh . dist "${{ env.DATAPACK_NAME }}" true .buildignore
       
       - name: Generate build information
         id: info
@@ -66,8 +64,6 @@ jobs:
           Actor: ${{ github.actor }}
           Repository: ${{ github.repository }}
           EOF
-        env:
-          DATAPACK_NAME: ${{ env.DATAPACK_NAME }}
       
       - uses: actions/upload-artifact@v4
         name: Upload artifacts
@@ -116,9 +112,7 @@ jobs:
       - name: Build datapack for release
         run: |
           chmod +x .github/workflows/optimize.sh
-          ./.github/workflows/optimize.sh . dist "$DATAPACK_NAME" true .buildignore
-        env:
-          DATAPACK_NAME: ${{ env.DATAPACK_NAME }}
+          ./.github/workflows/optimize.sh . dist "${{ env.DATAPACK_NAME }}" true .buildignore
       
       - name: Determine release tag
         id: tag
@@ -145,7 +139,7 @@ jobs:
         name: Create Release
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
-          name: "${{ env.DATAPACK_NAME }} ${{ steps.tag.outputs.tag }}"
+          name: "Hellfied Vanilla Rebooted ${{ steps.tag.outputs.tag }}"
           body: |
             ## ${{ steps.tag.outputs.tag }}
             
