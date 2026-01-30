@@ -123,8 +123,12 @@ process_single_datapack() {
     process_directory "$datapack_dir" "$temp_datapack_dir"
     
     log "Creating zip for $datapack_name..." "$BLUE"
+    
+    local abs_output_path
+    abs_output_path=$(cd "$(dirname "$output_path")" && pwd)/$(basename "$output_path")
+    
     cd "$temp_datapack_dir"
-    zip -r -9 -q "$output_path" . || zip -r -9 "$output_path" .
+    zip -r -9 -q "$abs_output_path" . 2>/dev/null || zip -r -9 "$abs_output_path" .
     cd - > /dev/null
     
     local size
@@ -156,8 +160,12 @@ main() {
             process_directory "$SOURCE_DIR" "$TEMP_DIR"
             
             log "\nCreating zip archive..." "$BLUE"
+            
+            local abs_output_path
+            abs_output_path=$(cd "$datapacks_dir" && pwd)/$OUTPUT_NAME
+            
             cd "$TEMP_DIR"
-            zip -r -9 -q "$output_path" . || zip -r -9 "$output_path" .
+            zip -r -9 -q "$abs_output_path" . 2>/dev/null || zip -r -9 "$abs_output_path" .
             cd - > /dev/null
             
             local size
