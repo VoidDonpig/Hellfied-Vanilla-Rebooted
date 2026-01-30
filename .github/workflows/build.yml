@@ -151,9 +151,15 @@ jobs:
             **File Size:** ${{ needs.build.outputs.artifact_size }}
             
             ### 📥 Installation
-            1. Download `${{ env.DATAPACK_NAME }}` from the assets below
-            2. Place it in your world's `datapacks` folder
-            3. Run `/reload` in-game
+            1. Download the datapack
+            2. Open your world’s `datapacks` folder:
+
+              * **Windows**: `%appdata%\.minecraft\saves\[World Name]\datapacks\`
+              * **macOS**: `~/Library/Application Support/minecraft/saves/[World Name]/datapacks/`
+              * **Linux**: `~/.minecraft/saves/[World Name]/datapacks/`
+            3. Place the datapack folder inside
+            4. Launch Minecraft and load the world
+            5. The datapack activates automatically—no setup required
             
             ### 📝 Changes
             ${{ steps.changelog.outputs.changelog }}
