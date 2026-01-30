@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -e
 
 SOURCE_DIR="${1:-.}"
 OUTPUT_DIR="${2:-./dist}"
@@ -21,8 +21,9 @@ log "Starting datapack optimization...\n" "$BLUE"
 declare -a EXCLUDE_PATTERNS=()
 if [[ -f "$EXCLUDE_FILE" ]]; then
     log "Loading exclusion patterns from $EXCLUDE_FILE" "$YELLOW"
-    while IFS= read -r line; do
-        [[ "$line" =~ ^[[:space:]]*# || -z "${line// }" ]] && continue
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        [[ "$line" =~ ^[[:space:]]*# ]] && continue
+        [[ -z "${line// }" ]] && continue
         EXCLUDE_PATTERNS+=("$line")
         log "  Exclude: $line" "$YELLOW"
     done < "$EXCLUDE_FILE"
@@ -30,12 +31,13 @@ if [[ -f "$EXCLUDE_FILE" ]]; then
 fi
 
 is_excluded() {
-    local relative_path="${1#$SOURCE_DIR/}"
+    local path="$1"
+    local relative_path="${path#$SOURCE_DIR/}"
     
     [[ "$relative_path" == "dist" || "$relative_path" == dist/* ]] && return 0
     [[ "$relative_path" == ".git" || "$relative_path" == .git/* ]] && return 0
     
-    local basename="${1##*/}"
+    local basename="${path##*/}"
     for pattern in "${EXCLUDE_PATTERNS[@]}"; do
         [[ "$relative_path" == "$pattern" || "$relative_path" == $pattern/* || "$basename" == "$pattern" ]] && return 0
     done
@@ -43,29 +45,37 @@ is_excluded() {
 }
 
 optimize_mcfunction() {
+    local input_file="$1"
     local output_file="$2"
     local temp_file
     temp_file=$(mktemp)
     
-    while IFS= read -r line; do
-        [[ "$line" =~ ^[[:space:]]*# || -z "${line// }" ]] && continue
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        [[ "$line" =~ ^[[:space:]]*# ]] && continue
+        [[ -z "${line// }" ]] && continue
         
         if [[ "$line" != *'['* && "$line" == *"#"* ]]; then
             line="${line%%#*}"
             line="${line%"${line##*[![:space:]]}"}"
         fi
         
-        [[ "$REMOVE_INDENT" == "true" ]] && line="${line#"${line%%[![:space:]]*}"}"
+        if [[ "$REMOVE_INDENT" == "true" ]]; then
+            line="${line#"${line%%[![:space:]]*}"}"
+        fi
+        
         [[ -n "${line// }" ]] && echo "$line" >> "$temp_file"
-    done < "$1"
+    done < "$input_file"
     
     mv "$temp_file" "$output_file"
 }
 
 process_directory() {
-    mkdir -p "$2"
+    local src_dir="$1"
+    local dest_dir="$2"
     
-    for entry in "$1"/*; do
+    mkdir -p "$dest_dir"
+    
+    for entry in "$src_dir"/*; do
         [[ ! -e "$entry" ]] && continue
         
         if is_excluded "$entry"; then
@@ -74,7 +84,7 @@ process_directory() {
         fi
         
         local basename="${entry##*/}"
-        local dest_path="$2/$basename"
+        local dest_path="$dest_dir/$basename"
         
         if [[ -d "$entry" ]]; then
             process_directory "$entry" "$dest_path"
@@ -91,28 +101,42 @@ process_directory() {
 }
 
 find_datapacks() {
+    local search_dir="$1"
     local -n result=$2
-    for entry in "$1"/*; do
-        [[ -d "$entry" && -f "$entry/pack.mcmeta" ]] && ! is_excluded "$entry" && result+=("$entry")
+    
+    for entry in "$search_dir"/*; do
+        if [[ -d "$entry" && -f "$entry/pack.mcmeta" ]]; then
+            if ! is_excluded "$entry"; then
+                result+=("$entry")
+            fi
+        fi
     done
 }
 
 process_single_datapack() {
+    local datapack_dir="$1"
+    local temp_datapack_dir="$2"
     local datapack_name="$3"
+    local output_path="$4"
     
     log "\nProcessing datapack: $datapack_name" "$BLUE"
-    process_directory "$1" "$2"
+    process_directory "$datapack_dir" "$temp_datapack_dir"
     
     log "Creating zip for $datapack_name..." "$BLUE"
-    (cd "$2" && zip -r -9 -q "$4" .)
+    cd "$temp_datapack_dir"
+    zip -r -9 -q "$output_path" . || zip -r -9 "$output_path" .
+    cd - > /dev/null
     
     local size
-    size=$(du -h "$4" | cut -f1)
-    log "Created: $4 ($size)" "$GREEN"
+    size=$(du -h "$output_path" | cut -f1)
+    log "Created: $output_path ($size)" "$GREEN"
 }
 
 main() {
-    [[ ! -d "$SOURCE_DIR" ]] && { log "Error: Source directory not found: $SOURCE_DIR" "$RED"; exit 1; }
+    if [[ ! -d "$SOURCE_DIR" ]]; then
+        log "Error: Source directory not found: $SOURCE_DIR" "$RED"
+        exit 1
+    fi
     
     rm -rf "$TEMP_DIR"
     mkdir -p "$OUTPUT_DIR"
@@ -132,7 +156,9 @@ main() {
             process_directory "$SOURCE_DIR" "$TEMP_DIR"
             
             log "\nCreating zip archive..." "$BLUE"
-            (cd "$TEMP_DIR" && zip -r -9 -q "$output_path" .)
+            cd "$TEMP_DIR"
+            zip -r -9 -q "$output_path" . || zip -r -9 "$output_path" .
+            cd - > /dev/null
             
             local size
             size=$(du -h "$output_path" | cut -f1)
