@@ -6,6 +6,8 @@ env:
 on:
   push:
     branches: [main, master, develop]
+    tags:
+      - 'v*'
     paths: ['data/**', '*/pack.mcmeta', 'pack.mcmeta', '.buildignore', '.github/workflows/**']
   pull_request:
     branches: [main, master]
