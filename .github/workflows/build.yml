@@ -1,7 +1,7 @@
 name: CI
 
 env:
-  DATAPACK_NAME: "Hellfied Vanilla Rebooted.zip"
+  DATAPACK_NAME: "Hellfied-Vanilla-Rebooted.zip"
 
 on:
   push:
