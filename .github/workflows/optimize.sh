@@ -152,9 +152,7 @@ main() {
         if [[ -f "$SOURCE_DIR/pack.mcmeta" ]]; then
             log "Single datapack detected at root\n" "$BLUE"
             
-            local datapacks_dir="$OUTPUT_DIR/datapacks"
-            mkdir -p "$datapacks_dir"
-            local output_path="$datapacks_dir/$OUTPUT_NAME"
+            local output_path="$OUTPUT_DIR/$OUTPUT_NAME"
             
             log "Processing files..." "$BLUE"
             process_directory "$SOURCE_DIR" "$TEMP_DIR"
@@ -162,7 +160,7 @@ main() {
             log "\nCreating zip archive..." "$BLUE"
             
             local abs_output_path
-            abs_output_path=$(cd "$datapacks_dir" && pwd)/$OUTPUT_NAME
+            abs_output_path=$(cd "$OUTPUT_DIR" && pwd)/$OUTPUT_NAME
             
             cd "$TEMP_DIR"
             zip -r -9 -q "$abs_output_path" . 2>/dev/null || zip -r -9 "$abs_output_path" .

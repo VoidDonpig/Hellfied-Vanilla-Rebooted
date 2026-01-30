@@ -1,5 +1,8 @@
 name: CI
 
+env:
+  DATAPACK_NAME: "Hellfied Vanilla Rebooted.zip"
+
 on:
   push:
     branches: [main, master, develop]
@@ -41,12 +44,12 @@ jobs:
       - name: Build optimized datapack
         run: |
           chmod +x .github/workflows/optimize.sh
-          ./.github/workflows/optimize.sh . dist "Hellfied Vanilla Rebooted.zip" true .buildignore
+          ./.github/workflows/optimize.sh . dist "${{ env.DATAPACK_NAME }}" true .buildignore
       
       - name: Generate build information
         id: info
         run: |
-          SIZE=$(du -h "dist/datapacks/Hellfied Vanilla Rebooted.zip" 2>/dev/null | cut -f1 || echo "N/A")
+          SIZE=$(du -h "dist/${{ env.DATAPACK_NAME }}" 2>/dev/null | cut -f1 || echo "N/A")
           DATE=$(date +"%Y-%m-%d %H:%M:%S")
           SHA_SHORT=$(git rev-parse --short HEAD)
           
@@ -75,7 +78,7 @@ jobs:
         with:
           name: ${{ steps.info.outputs.name }}
           path: |
-            dist/datapacks/
+            dist/${{ env.DATAPACK_NAME }}
             dist/BUILD_INFO.txt
           retention-days: 30
           compression-level: 9
@@ -101,6 +104,7 @@ jobs:
             echo "| **Commit** | \`${{ steps.info.outputs.sha_short }}\` |"
             echo "| **Branch** | ${{ github.ref_name }} |"
             echo "| **Artifact Name** | ${{ steps.info.outputs.name }} |"
+            echo "| **Datapack Name** | ${{ env.DATAPACK_NAME }} |"
           } >> $GITHUB_STEP_SUMMARY
 
   release:
@@ -116,7 +120,7 @@ jobs:
       - name: Build datapack for release
         run: |
           chmod +x .github/workflows/optimize.sh
-          ./.github/workflows/optimize.sh . dist "Hellfied Vanilla Rebooted.zip" true .buildignore
+          ./.github/workflows/optimize.sh . dist "${{ env.DATAPACK_NAME }}" true .buildignore
       
       - name: Determine release tag
         id: tag
@@ -154,7 +158,7 @@ jobs:
             **File Size:** ${{ needs.build.outputs.artifact_size }}
             
             ### 📥 Installation
-            1. Download `Hellfied Vanilla Rebooted.zip` from the assets below
+            1. Download `${{ env.DATAPACK_NAME }}` from the assets below
             2. Place it in your world's `datapacks` folder
             3. Run `/reload` in-game
             
@@ -164,7 +168,7 @@ jobs:
             ### 🔗 Links
             - [Build Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
             - [Commit Details](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
-          files: dist/datapacks/*.zip
+          files: dist/${{ env.DATAPACK_NAME }}
           draft: false
           prerelease: false
           generate_release_notes: true
@@ -175,5 +179,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-${{ steps.tag.outputs.tag }}
-          path: dist/datapacks/
+          path: dist/${{ env.DATAPACK_NAME }}
           retention-days: 90
