@@ -6,20 +6,10 @@ env:
 on:
   push:
     branches: [main, master, develop]
-    paths:
-      - 'data/**'
-      - '*/pack.mcmeta'
-      - 'pack.mcmeta'
-      - '.buildignore'
-      - '.github/workflows/**'
+    paths: ['data/**', '*/pack.mcmeta', 'pack.mcmeta', '.buildignore', '.github/workflows/**']
   pull_request:
     branches: [main, master]
-    paths:
-      - 'data/**'
-      - '*/pack.mcmeta'
-      - 'pack.mcmeta'
-      - '.buildignore'
-      - '.github/workflows/**'
+    paths: ['data/**', '*/pack.mcmeta', 'pack.mcmeta', '.buildignore', '.github/workflows/**']
   workflow_dispatch:
     inputs:
       create_release:
@@ -44,19 +34,23 @@ jobs:
       - name: Build optimized datapack
         run: |
           chmod +x .github/workflows/optimize.sh
-          ./.github/workflows/optimize.sh . dist "${{ env.DATAPACK_NAME }}" true .buildignore
+          ./.github/workflows/optimize.sh . dist "$DATAPACK_NAME" true .buildignore
+        env:
+          DATAPACK_NAME: ${{ env.DATAPACK_NAME }}
       
       - name: Generate build information
         id: info
         run: |
-          SIZE=$(du -h "dist/${{ env.DATAPACK_NAME }}" 2>/dev/null | cut -f1 || echo "N/A")
+          SIZE=$(du -h "dist/$DATAPACK_NAME" 2>/dev/null | cut -f1 || echo "N/A")
           DATE=$(date +"%Y-%m-%d %H:%M:%S")
           SHA_SHORT=$(git rev-parse --short HEAD)
           
-          echo "size=${SIZE}" >> $GITHUB_OUTPUT
-          echo "date=${DATE}" >> $GITHUB_OUTPUT
-          echo "name=datapack-${SHA_SHORT}" >> $GITHUB_OUTPUT
-          echo "sha_short=${SHA_SHORT}" >> $GITHUB_OUTPUT
+          {
+            echo "size=${SIZE}"
+            echo "date=${DATE}"
+            echo "name=datapack-${SHA_SHORT}"
+            echo "sha_short=${SHA_SHORT}"
+          } >> $GITHUB_OUTPUT
           
           cat > dist/BUILD_INFO.txt << EOF
           Datapack Build Information
@@ -72,9 +66,11 @@ jobs:
           Actor: ${{ github.actor }}
           Repository: ${{ github.repository }}
           EOF
+        env:
+          DATAPACK_NAME: ${{ env.DATAPACK_NAME }}
       
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
+        name: Upload artifacts
         with:
           name: ${{ steps.info.outputs.name }}
           path: |
@@ -83,8 +79,8 @@ jobs:
           retention-days: 30
           compression-level: 9
       
-      - name: Upload debug artifacts
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
+        name: Upload debug artifacts
         with:
           name: ${{ steps.info.outputs.name }}-debug
           path: dist/
@@ -92,20 +88,20 @@ jobs:
       
       - name: Create build summary
         run: |
-          {
-            echo "# ✅ Datapack Build Complete"
-            echo ""
-            echo "## Build Information"
-            echo ""
-            echo "| Property | Value |"
-            echo "|----------|-------|"
-            echo "| **Build Time** | ${{ steps.info.outputs.date }} |"
-            echo "| **File Size** | ${{ steps.info.outputs.size }} |"
-            echo "| **Commit** | \`${{ steps.info.outputs.sha_short }}\` |"
-            echo "| **Branch** | ${{ github.ref_name }} |"
-            echo "| **Artifact Name** | ${{ steps.info.outputs.name }} |"
-            echo "| **Datapack Name** | ${{ env.DATAPACK_NAME }} |"
-          } >> $GITHUB_STEP_SUMMARY
+          cat >> $GITHUB_STEP_SUMMARY << 'EOF'
+          # ✅ Datapack Build Complete
+          
+          ## Build Information
+          
+          | Property | Value |
+          |----------|-------|
+          | **Build Time** | ${{ steps.info.outputs.date }} |
+          | **File Size** | ${{ steps.info.outputs.size }} |
+          | **Commit** | `${{ steps.info.outputs.sha_short }}` |
+          | **Branch** | ${{ github.ref_name }} |
+          | **Artifact Name** | ${{ steps.info.outputs.name }} |
+          | **Datapack Name** | ${{ env.DATAPACK_NAME }} |
+          EOF
 
   release:
     runs-on: ubuntu-latest
@@ -120,7 +116,9 @@ jobs:
       - name: Build datapack for release
         run: |
           chmod +x .github/workflows/optimize.sh
-          ./.github/workflows/optimize.sh . dist "${{ env.DATAPACK_NAME }}" true .buildignore
+          ./.github/workflows/optimize.sh . dist "$DATAPACK_NAME" true .buildignore
+        env:
+          DATAPACK_NAME: ${{ env.DATAPACK_NAME }}
       
       - name: Determine release tag
         id: tag
@@ -137,15 +135,14 @@ jobs:
       - name: Generate changelog
         id: changelog
         run: |
-          CHANGELOG=$([ -f CHANGELOG.md ] && cat CHANGELOG.md | head -n 50 || echo "See commit history for changes.")
           {
             echo "changelog<<EOF"
-            echo "${CHANGELOG}"
+            [[ -f CHANGELOG.md ]] && head -n 50 CHANGELOG.md || echo "See commit history for changes."
             echo "EOF"
           } >> $GITHUB_OUTPUT
       
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+      - uses: softprops/action-gh-release@v1
+        name: Create Release
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
           name: "Datapack ${{ steps.tag.outputs.tag }}"
@@ -175,8 +172,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Upload release artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
+        name: Upload release artifact
         with:
           name: release-${{ steps.tag.outputs.tag }}
           path: dist/${{ env.DATAPACK_NAME }}
