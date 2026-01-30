@@ -8,7 +8,11 @@ TEMP_DIR="$OUTPUT_DIR/temp"
 REMOVE_INDENT="${4:-true}"
 EXCLUDE_FILE="${5:-.buildignore}"
 
-readonly GREEN='\033[0;32m' BLUE='\033[0;34m' YELLOW='\033[0;33m' RED='\033[0;31m' NC='\033[0m'
+readonly GREEN='\033[0;32m'
+readonly BLUE='\033[0;34m'
+readonly YELLOW='\033[0;33m'
+readonly RED='\033[0;31m'
+readonly NC='\033[0m'
 
 log() { echo -e "${2:-$NC}$1${NC}"; }
 
@@ -27,31 +31,60 @@ fi
 
 is_excluded() {
     local relative_path="${1#$SOURCE_DIR/}"
-    [[ "$relative_path" == "dist" || "$relative_path" == dist/* || "$relative_path" == ".git" || "$relative_path" == .git/* ]] && return 0
+    
+    if [[ "$relative_path" == "dist" || "$relative_path" == dist/* ]]; then
+        return 0
+    fi
+    
+    if [[ "$relative_path" == ".git" || "$relative_path" == .git/* ]]; then
+        return 0
+    fi
+    
     local basename="${1##*/}"
     for pattern in "${EXCLUDE_PATTERNS[@]}"; do
-        [[ "$relative_path" == "$pattern" || "$relative_path" == $pattern/* || "$basename" == "$pattern" ]] && return 0
+        if [[ "$relative_path" == "$pattern" || "$relative_path" == $pattern/* || "$basename" == "$pattern" ]]; then
+            return 0
+        fi
     done
     return 1
 }
 
 optimize_mcfunction() {
-    local temp_file=$(mktemp)
+    local temp_file
+    temp_file=$(mktemp)
+    
     while IFS= read -r line || [[ -n "$line" ]]; do
         [[ "$line" =~ ^[[:space:]]*# || -z "${line// }" ]] && continue
-        [[ "$line" != *'['* && "$line" == *"#"* ]] && line="${line%%#*}" && line="${line%"${line##*[![:space:]]}"}"
-        [[ "$REMOVE_INDENT" == "true" ]] && line="${line#"${line%%[![:space:]]*}"}"
+        
+        if [[ "$line" != *'['* && "$line" == *"#"* ]]; then
+            line="${line%%#*}"
+            line="${line%"${line##*[![:space:]]}"}"
+        fi
+        
+        if [[ "$REMOVE_INDENT" == "true" ]]; then
+            line="${line#"${line%%[![:space:]]*}"}"
+        fi
+        
         [[ -n "${line// }" ]] && echo "$line" >> "$temp_file"
     done < "$1"
+    
     mv "$temp_file" "$2"
 }
 
 process_directory() {
     mkdir -p "$2"
+    
     for entry in "$1"/*; do
         [[ ! -e "$entry" ]] && continue
-        is_excluded "$entry" && { log "Skipped (excluded): $entry" "$YELLOW"; continue; }
-        local basename="${entry##*/}" dest_path="$2/$basename"
+        
+        if is_excluded "$entry"; then
+            log "Skipped (excluded): $entry" "$YELLOW"
+            continue
+        fi
+        
+        local basename="${entry##*/}"
+        local dest_path="$2/$basename"
+        
         if [[ -d "$entry" ]]; then
             process_directory "$entry" "$dest_path"
         elif [[ -f "$entry" ]]; then
@@ -68,28 +101,49 @@ process_directory() {
 
 find_datapacks() {
     local -n result=$2
+    
     for entry in "$1"/*; do
-        [[ -d "$entry" && -f "$entry/pack.mcmeta" ]] && ! is_excluded "$entry" && result+=("$entry")
+        if [[ -d "$entry" && -f "$entry/pack.mcmeta" ]]; then
+            if ! is_excluded "$entry"; then
+                result+=("$entry")
+            fi
+        fi
     done
 }
 
 create_zip() {
-    local abs_path=$(cd "$(dirname "$2")" && pwd)/$(basename "$2")
-    cd "$1"
+    local source_dir="$1"
+    local output_file="$2"
+    local abs_path
+    abs_path=$(cd "$(dirname "$output_file")" && pwd)/$(basename "$output_file")
+    
+    cd "$source_dir"
     zip -r -9 -q "$abs_path" . 2>/dev/null || zip -r -9 "$abs_path" .
     cd - > /dev/null
 }
 
 process_single_datapack() {
-    log "\nProcessing datapack: $3" "$BLUE"
-    process_directory "$1" "$2"
-    log "Creating zip for $3..." "$BLUE"
-    create_zip "$2" "$4"
-    log "Created: $4 ($(du -h "$4" | cut -f1))" "$GREEN"
+    local datapack_dir="$1"
+    local temp_datapack_dir="$2"
+    local datapack_name="$3"
+    local output_path="$4"
+    
+    log "\nProcessing datapack: $datapack_name" "$BLUE"
+    process_directory "$datapack_dir" "$temp_datapack_dir"
+    
+    log "Creating zip for $datapack_name..." "$BLUE"
+    create_zip "$temp_datapack_dir" "$output_path"
+    
+    local size
+    size=$(du -h "$output_path" | cut -f1)
+    log "Created: $output_path ($size)" "$GREEN"
 }
 
 main() {
-    [[ ! -d "$SOURCE_DIR" ]] && { log "Error: Source directory not found: $SOURCE_DIR" "$RED"; exit 1; }
+    if [[ ! -d "$SOURCE_DIR" ]]; then
+        log "Error: Source directory not found: $SOURCE_DIR" "$RED"
+        exit 1
+    fi
     
     rm -rf "$TEMP_DIR"
     mkdir -p "$OUTPUT_DIR"
@@ -98,7 +152,10 @@ main() {
     find_datapacks "$SOURCE_DIR" datapacks
     
     if [[ ${#datapacks[@]} -eq 0 ]]; then
-        [[ ! -f "$SOURCE_DIR/pack.mcmeta" ]] && { log "Error: No datapacks found (no pack.mcmeta in root or subdirectories)" "$RED"; exit 1; }
+        if [[ ! -f "$SOURCE_DIR/pack.mcmeta" ]]; then
+            log "Error: No datapacks found (no pack.mcmeta in root or subdirectories)" "$RED"
+            exit 1
+        fi
         
         log "Single datapack detected at root\n" "$BLUE"
         local output_path="$OUTPUT_DIR/$OUTPUT_NAME"
@@ -109,10 +166,13 @@ main() {
         log "\nCreating zip archive..." "$BLUE"
         create_zip "$TEMP_DIR" "$output_path"
         
+        local size
+        size=$(du -h "$output_path" | cut -f1)
         log "\nZip created: $output_path" "$GREEN"
-        log "Total size: $(du -h "$output_path" | cut -f1)" "$GREEN"
+        log "Total size: $size" "$GREEN"
     else
         log "Multiple datapacks detected: ${#datapacks[@]}\n" "$BLUE"
+        
         local datapacks_dir="$OUTPUT_DIR/datapacks"
         mkdir -p "$datapacks_dir"
         
@@ -124,7 +184,9 @@ main() {
         log "\nAll datapacks created in: $datapacks_dir" "$GREEN"
         for datapack_path in "${datapacks[@]}"; do
             local datapack_name="${datapack_path##*/}"
-            log "  - ${datapack_name}.zip ($(du -h "$datapacks_dir/${datapack_name}.zip" | cut -f1))"
+            local size
+            size=$(du -h "$datapacks_dir/${datapack_name}.zip" | cut -f1)
+            log "  - ${datapack_name}.zip ($size)"
         done
     fi
     
