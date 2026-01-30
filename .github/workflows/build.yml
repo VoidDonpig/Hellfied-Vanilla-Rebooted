@@ -2,158 +2,124 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
-      - master
-      - develop
+    branches: [main, master, develop]
     paths:
       - 'data/**'
+      - '*/pack.mcmeta'
       - 'pack.mcmeta'
       - '.buildignore'
-      - '.github/workflows/build.yml'
-      - '.github/workflows/optimize.sh'
+      - '.github/workflows/**'
   pull_request:
-    branches:
-      - main
-      - master
+    branches: [main, master]
     paths:
       - 'data/**'
+      - '*/pack.mcmeta'
       - 'pack.mcmeta'
       - '.buildignore'
-      - '.github/workflows/build.yml'
-      - '.github/workflows/optimize.sh'
+      - '.github/workflows/**'
   workflow_dispatch:
     inputs:
       create_release:
         description: 'Create a release'
-        required: false
         type: boolean
         default: false
       release_tag:
         description: 'Release tag (e.g., v1.0.0)'
-        required: false
         default: ''
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
     outputs:
-      artifact_name: ${{ steps.artifact_info.outputs.name }}
-      artifact_size: ${{ steps.artifact_info.outputs.size }}
-      build_date: ${{ steps.artifact_info.outputs.date }}
+      artifact_name: ${{ steps.info.outputs.name }}
+      artifact_size: ${{ steps.info.outputs.size }}
+      build_date: ${{ steps.info.outputs.date }}
     
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      
-      - name: Setup build environment
-        run: |
-          chmod +x .github/workflows/optimize.sh
-          echo "Build started at $(date)"
-      
-      - name: Validate .buildignore
-        run: |
-          if [ -f .buildignore ]; then
-            echo "✅ .buildignore found"
-            echo "Exclusion patterns:"
-            grep -v '^#' .buildignore | grep -v '^[[:space:]]*$' || echo "  (none)"
-          else
-            echo "⚠️  .buildignore not found - all files will be processed"
-          fi
+      - uses: actions/checkout@v4
       
       - name: Build optimized datapack
         run: |
+          chmod +x .github/workflows/optimize.sh
           ./.github/workflows/optimize.sh . dist "Hellfied Vanilla Rebooted.zip" true .buildignore
       
       - name: Generate build information
-        id: artifact_info
+        id: info
         run: |
-          SIZE=$(du -h "dist/Hellfied Vanilla Rebooted.zip" | cut -f1)
+          SIZE=$(du -h "dist/datapacks/Hellfied Vanilla Rebooted.zip" 2>/dev/null | cut -f1 || echo "N/A")
           DATE=$(date +"%Y-%m-%d %H:%M:%S")
           SHA_SHORT=$(git rev-parse --short HEAD)
-          ARTIFACT_NAME="datapack-${SHA_SHORT}"
           
           echo "size=${SIZE}" >> $GITHUB_OUTPUT
           echo "date=${DATE}" >> $GITHUB_OUTPUT
-          echo "name=${ARTIFACT_NAME}" >> $GITHUB_OUTPUT
+          echo "name=datapack-${SHA_SHORT}" >> $GITHUB_OUTPUT
           echo "sha_short=${SHA_SHORT}" >> $GITHUB_OUTPUT
           
           cat > dist/BUILD_INFO.txt << EOF
           Datapack Build Information
           ==========================
-          
           Build Date: ${DATE}
           Commit: ${{ github.sha }}
           Branch: ${{ github.ref_name }}
           Short SHA: ${SHA_SHORT}
           File Size: ${SIZE}
-          
           Workflow: ${{ github.workflow }}
           Run Number: ${{ github.run_number }}
-          Run ID: ${{ github.run_id }}
-          
           Triggered by: ${{ github.event_name }}
           Actor: ${{ github.actor }}
-          
           Repository: ${{ github.repository }}
           EOF
-          
-          cat dist/BUILD_INFO.txt
       
-      - name: Upload datapack artifact
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.artifact_info.outputs.name }}
+          name: ${{ steps.info.outputs.name }}
           path: |
-            dist/Hellfied Vanilla Rebooted.zip
+            dist/datapacks/
             dist/BUILD_INFO.txt
           retention-days: 30
           compression-level: 9
       
-      - name: Upload raw build files (debugging)
+      - name: Upload debug artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.artifact_info.outputs.name }}-debug
+          name: ${{ steps.info.outputs.name }}-debug
           path: dist/
           retention-days: 7
       
       - name: Create build summary
         run: |
-          echo "# ✅ Datapack Build Complete" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## Build Information" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
-          echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| **Build Time** | ${{ steps.artifact_info.outputs.date }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| **File Size** | ${{ steps.artifact_info.outputs.size }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Commit** | \`${{ steps.artifact_info.outputs.sha_short }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Branch** | ${{ github.ref_name }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| **Artifact Name** | ${{ steps.artifact_info.outputs.name }} |" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "# ✅ Datapack Build Complete"
+            echo ""
+            echo "## Build Information"
+            echo ""
+            echo "| Property | Value |"
+            echo "|----------|-------|"
+            echo "| **Build Time** | ${{ steps.info.outputs.date }} |"
+            echo "| **File Size** | ${{ steps.info.outputs.size }} |"
+            echo "| **Commit** | \`${{ steps.info.outputs.sha_short }}\` |"
+            echo "| **Branch** | ${{ github.ref_name }} |"
+            echo "| **Artifact Name** | ${{ steps.info.outputs.name }} |"
+          } >> $GITHUB_STEP_SUMMARY
 
   release:
     runs-on: ubuntu-latest
     needs: build
-    if: |
-      startsWith(github.ref, 'refs/tags/v') || 
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.create_release == 'true')
-    
+    if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && github.event.inputs.create_release == 'true')
     permissions:
       contents: write
     
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      
-      - name: Setup build environment
-        run: chmod +x .github/workflows/optimize.sh
+      - uses: actions/checkout@v4
       
       - name: Build datapack for release
-        run: ./.github/workflows/optimize.sh . dist "Hellfied Vanilla Rebooted.zip" true .buildignore
+        run: |
+          chmod +x .github/workflows/optimize.sh
+          ./.github/workflows/optimize.sh . dist "Hellfied Vanilla Rebooted.zip" true .buildignore
       
       - name: Determine release tag
-        id: release_tag
+        id: tag
         run: |
           if [[ "${{ github.ref }}" == refs/tags/* ]]; then
             TAG=${GITHUB_REF#refs/tags/}
@@ -163,27 +129,24 @@ jobs:
             TAG="build-$(date +%Y%m%d-%H%M%S)"
           fi
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
-          echo "Release tag: ${TAG}"
       
       - name: Generate changelog
         id: changelog
         run: |
-          if [ -f CHANGELOG.md ]; then
-            CHANGELOG=$(cat CHANGELOG.md | head -n 50)
-          else
-            CHANGELOG="See commit history for changes."
-          fi
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          echo "${CHANGELOG}" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          CHANGELOG=$([ -f CHANGELOG.md ] && cat CHANGELOG.md | head -n 50 || echo "See commit history for changes.")
+          {
+            echo "changelog<<EOF"
+            echo "${CHANGELOG}"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
       
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ steps.release_tag.outputs.tag }}
-          name: "Datapack ${{ steps.release_tag.outputs.tag }}"
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: "Datapack ${{ steps.tag.outputs.tag }}"
           body: |
-            ## 🎮 Datapack Release ${{ steps.release_tag.outputs.tag }}
+            ## 🎮 Datapack Release ${{ steps.tag.outputs.tag }}
             
             **Build Date:** ${{ needs.build.outputs.build_date }}
             **Commit:** ${{ github.sha }}
@@ -191,7 +154,7 @@ jobs:
             **File Size:** ${{ needs.build.outputs.artifact_size }}
             
             ### 📥 Installation
-            1. Download `"Hellfied Vanilla Rebooted.zip"` from the assets below
+            1. Download `Hellfied Vanilla Rebooted.zip` from the assets below
             2. Place it in your world's `datapacks` folder
             3. Run `/reload` in-game
             
@@ -201,7 +164,7 @@ jobs:
             ### 🔗 Links
             - [Build Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
             - [Commit Details](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
-          files: dist/Hellfied Vanilla Rebooted.zip
+          files: dist/datapacks/*.zip
           draft: false
           prerelease: false
           generate_release_notes: true
@@ -211,6 +174,6 @@ jobs:
       - name: Upload release artifact
         uses: actions/upload-artifact@v4
         with:
-          name: release-${{ steps.release_tag.outputs.tag }}
-          path: dist/Hellfied Vanilla Rebooted.zip
+          name: release-${{ steps.tag.outputs.tag }}
+          path: dist/datapacks/
           retention-days: 90
