@@ -145,9 +145,9 @@ jobs:
         name: Create Release
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
-          name: "Datapack ${{ steps.tag.outputs.tag }}"
+          name: "${{ env.DATAPACK_NAME }} ${{ steps.tag.outputs.tag }}"
           body: |
-            ## 🎮 Datapack Release ${{ steps.tag.outputs.tag }}
+            ## ${{ steps.tag.outputs.tag }}
             
             **Build Date:** ${{ needs.build.outputs.build_date }}
             **Commit:** ${{ github.sha }}
