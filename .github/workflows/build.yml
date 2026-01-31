@@ -37,7 +37,9 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ github.token }}
           alwaysCheckAllFile: true
-
+          lintDirectory: .
+          forcePass: false
+          
   build:
     runs-on: ubuntu-latest
     needs: lint
