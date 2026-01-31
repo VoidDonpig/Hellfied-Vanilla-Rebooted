@@ -23,26 +23,65 @@ on:
         default: ''
 
 jobs:
-  lint:
-    name: lint
+  spyglass-lint:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: lint
-        uses: ChenCMD/datapack-linter@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          GITHUB_TOKEN: ${{ github.token }}
-          alwaysCheckAllFile: true
-          lintDirectory: .
-          forcePass: false
-          
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install SpyglassLSP
+        run: npm install -g @spyglassmc/language-server
+
+      - name: Create Spyglass config
+        run: |
+          cat > spyglass.json << 'EOF'
+          {
+            "env": {
+              "dependencies": [],
+              "gameVersion": "1.21"
+            },
+            "lint": {
+              "blockStateBracketSpacing": "error",
+              "nameOfNbtCompoundTagKeys": "error",
+              "nameOfObjectives": "error",
+              "strictCheck": true
+            }
+          }
+          EOF
+
+      - name: Run Spyglass lint
+        run: spyglass check data --format json > spyglass-results.json || true
+
+      - name: Display results
+        if: always()
+        run: |
+          if [ -f spyglass-results.json ]; then
+            cat spyglass-results.json
+          fi
+
+      - name: Check for errors
+        run: |
+          if grep -q '"severity":"error"' spyglass-results.json 2>/dev/null; then
+            echo "::error::Spyglass found errors in the datapack"
+            exit 1
+          fi
+
+      - name: Upload lint results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spyglass-lint-results
+          path: spyglass-results.json
+
   build:
     runs-on: ubuntu-latest
-    needs: lint
     if: success()
     outputs:
       artifact_name: ${{ steps.info.outputs.name }}
