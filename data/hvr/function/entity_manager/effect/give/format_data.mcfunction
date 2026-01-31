@@ -32,8 +32,8 @@
     execute store result storage hvr:asset/effect effect_data.level int 1 run scoreboard players get $level hvr.temporary
     data modify storage hvr:asset/effect effect_data.removed_on_using_milk set from storage hvr:asset/effect removed_on_using_milk
     data modify storage hvr:asset/effect effect_data.removed_on_death set from storage hvr:asset/effect removed_on_death
-    data modify storage hvr:asset/effect effect_data.field set from storage hvr:asset/effect field
     execute if data storage hvr:asset/effect target_effect_data.field run data modify storage hvr:asset/effect effect_data.previous_field set from storage hvr:asset/effect target_effect_data.field
+    data modify storage hvr:asset/effect effect_data.field set from storage hvr:asset/effect field
 
 # Set event queue
     execute unless data storage hvr:asset/effect target_effect_data run data modify storage hvr:asset/effect effect_data.queued_event set value "given"

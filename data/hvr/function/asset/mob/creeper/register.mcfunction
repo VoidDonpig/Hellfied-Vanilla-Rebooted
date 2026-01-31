@@ -34,7 +34,7 @@
     #data modify storage hvr:asset/mob equipment.chest set value
     #data modify storage hvr:asset/mob equipment.legs set value
     #data modify storage hvr:asset/mob equipment.feet set value
-    data modify storage hvr:asset/mob equipment.body set value {id:"purple_carpet",components:{"minecraft:enchantments":{"hvr:asset/mob/creeper/creeper_immune_to":1}}}
+    data modify storage hvr:asset/mob equipment.body set value {id:"stone_button",components:{"minecraft:enchantments":{"hvr:asset/mob/creeper/creeper_immune_to":1}}}
     #data modify storage hvr:asset/mob equipment.saddle set value
 
 # Drop chances

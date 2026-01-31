@@ -1,8 +1,0 @@
-[
-    {
-        "function": "set_enchantments",
-        "enchantments": {
-            "hvr:entity_manager/mob/sys": 1
-        }
-    }
-]
