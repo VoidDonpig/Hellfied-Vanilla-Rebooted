@@ -26,14 +26,13 @@ class SpyglassLSPClient {
       });
 
       this.process.stderr.on('data', (data) => {
-        console.error('LSP stderr:', data.toString());
+        // stderrは無視（ログが多すぎる場合）
       });
 
       this.process.on('error', (err) => {
         reject(err);
       });
 
-      // 初期化
       this.initialize().then(resolve).catch(reject);
     });
   }
@@ -41,33 +40,21 @@ class SpyglassLSPClient {
   handleData(data) {
     this.buffer += data.toString();
     
-    // 複数のメッセージを処理
     while (this.buffer.length > 0) {
-      // Content-Lengthヘッダーを探す
       const headerMatch = this.buffer.match(/Content-Length: (\d+)\r\n/);
       
-      if (!headerMatch) {
-        // ヘッダーが不完全な場合は待つ
-        break;
-      }
+      if (!headerMatch) break;
 
       const contentLength = parseInt(headerMatch[1]);
       const headerEnd = this.buffer.indexOf('\r\n\r\n');
       
-      if (headerEnd === -1) {
-        // ヘッダー終了が見つからない場合は待つ
-        break;
-      }
+      if (headerEnd === -1) break;
 
       const messageStart = headerEnd + 4;
       const messageEnd = messageStart + contentLength;
 
-      if (this.buffer.length < messageEnd) {
-        // メッセージが不完全な場合は待つ
-        break;
-      }
+      if (this.buffer.length < messageEnd) break;
 
-      // メッセージを抽出
       const messageContent = this.buffer.substring(messageStart, messageEnd);
       this.buffer = this.buffer.substring(messageEnd);
 
@@ -75,7 +62,7 @@ class SpyglassLSPClient {
         const message = JSON.parse(messageContent);
         this.handleMessage(message);
       } catch (err) {
-        // パースエラーは無視して続行
+        // パースエラーは無視
       }
     }
   }
@@ -93,7 +80,6 @@ class SpyglassLSPClient {
     } else if (message.method === 'textDocument/publishDiagnostics') {
       const uri = message.params.uri;
       this.diagnostics.set(uri, message.params.diagnostics);
-      console.log(`Diagnostics received for: ${uri} (${message.params.diagnostics.length} issues)`);
     }
   }
 
@@ -110,7 +96,6 @@ class SpyglassLSPClient {
       this.pendingRequests.set(id, { resolve, reject });
       this.sendMessage(message);
 
-      // タイムアウト設定
       setTimeout(() => {
         if (this.pendingRequests.has(id)) {
           this.pendingRequests.delete(id);
@@ -155,21 +140,21 @@ class SpyglassLSPClient {
       capabilities: {
         textDocument: {
           publishDiagnostics: {
-            relatedInformation: true,
+            relatedInformation: false,
             tagSupport: { valueSet: [1, 2] },
             versionSupport: false
           },
           synchronization: {
             didOpen: true,
-            didChange: true,
-            didSave: true,
+            didChange: false,
+            didSave: false,
             willSave: false,
             willSaveWaitUntil: false
           }
         },
         workspace: {
           workspaceFolders: true,
-          configuration: true
+          configuration: false
         }
       },
       workspaceFolders: [{
@@ -180,8 +165,8 @@ class SpyglassLSPClient {
 
     this.sendNotification('initialized', {});
     
-    // 初期化後少し待つ
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // 初期化待ち時間を短縮
+    await new Promise(resolve => setTimeout(resolve, 500));
     
     return result;
   }
@@ -198,9 +183,6 @@ class SpyglassLSPClient {
         text: content
       }
     });
-
-    // 診断結果を待つ
-    await new Promise(resolve => setTimeout(resolve, 300));
   }
 
   getLanguageId(filePath) {
@@ -216,27 +198,21 @@ class SpyglassLSPClient {
 
   async shutdown() {
     try {
-      // shutdownリクエストを送信（タイムアウトを短く設定）
       const shutdownPromise = this.sendRequest('shutdown', null);
       const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Shutdown timeout')), 3000)
+        setTimeout(() => reject(new Error('Shutdown timeout')), 2000)
       );
       
-      await Promise.race([shutdownPromise, timeoutPromise]).catch(() => {
-        // shutdownに失敗しても続行
-      });
+      await Promise.race([shutdownPromise, timeoutPromise]).catch(() => {});
       
       this.sendNotification('exit', null);
-    } catch (err) {
-      // エラーは無視して続行
-    }
+    } catch (err) {}
     
-    // プロセスを強制終了
     setTimeout(() => {
       if (this.process && !this.process.killed) {
         this.process.kill('SIGTERM');
       }
-    }, 500);
+    }, 300);
   }
 }
 
@@ -265,6 +241,7 @@ async function main() {
   const client = new SpyglassLSPClient();
   
   console.log('Starting Spyglass LSP...');
+  const startTime = Date.now();
   
   try {
     await client.start();
@@ -275,13 +252,25 @@ async function main() {
     
     console.log(`Found ${files.length} files to check`);
 
-    for (const file of files) {
-      console.log(`Checking: ${path.relative(process.cwd(), file)}`);
-      await client.openDocument(file);
+    // バッチ処理で高速化
+    const BATCH_SIZE = 50;
+    for (let i = 0; i < files.length; i += BATCH_SIZE) {
+      const batch = files.slice(i, i + BATCH_SIZE);
+      
+      // バッチ内のファイルを並行処理
+      await Promise.all(batch.map(file => client.openDocument(file)));
+      
+      // バッチごとに短い待ち時間
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      if ((i + BATCH_SIZE) % 100 === 0 || (i + BATCH_SIZE) >= files.length) {
+        console.log(`Progress: ${Math.min(i + BATCH_SIZE, files.length)}/${files.length} files`);
+      }
     }
 
-    // 全ての診断が完了するまで待つ
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    // 最後の診断結果を待つ
+    console.log('Waiting for final diagnostics...');
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     // 結果を集計
     const results = {
@@ -320,6 +309,8 @@ async function main() {
     // 結果を保存
     fs.writeFileSync('spyglass-results.json', JSON.stringify(results, null, 2));
 
+    const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+
     // コンソール出力
     console.log('\n' + '='.repeat(60));
     console.log('Spyglass LSP Lint Results');
@@ -329,26 +320,24 @@ async function main() {
     console.log(`Errors: ${results.errors}`);
     console.log(`Warnings: ${results.warnings}`);
     console.log(`Info: ${results.info}`);
+    console.log(`Duration: ${duration}s`);
 
     if (results.diagnostics.length > 0) {
       console.log('\nDiagnostics:');
-      results.diagnostics.forEach(diag => {
+      results.diagnostics.slice(0, 50).forEach(diag => {
         const icon = diag.severity === 'error' ? '❌' : diag.severity === 'warning' ? '⚠️' : 'ℹ️';
         console.log(`${icon} ${path.relative(process.cwd(), diag.file)}:${diag.line}:${diag.column}`);
         console.log(`   [${diag.severity}] ${diag.message}`);
-        if (diag.code) {
-          console.log(`   Code: ${diag.code}`);
-        }
       });
+      
+      if (results.diagnostics.length > 50) {
+        console.log(`\n... and ${results.diagnostics.length - 50} more issues`);
+      }
     }
 
-    // shutdownを試みるが、失敗しても続行
     await client.shutdown().catch(() => {});
+    await new Promise(resolve => setTimeout(resolve, 300));
 
-    // 少し待ってから終了
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    // エラーがある場合は終了コード1
     const exitCode = results.errors > 0 ? 1 : 0;
     console.log(`\nExiting with code ${exitCode}`);
     process.exit(exitCode);
@@ -356,7 +345,6 @@ async function main() {
   } catch (err) {
     console.error('Error:', err);
     
-    // エラー時もshutdownを試みる
     try {
       await client.shutdown().catch(() => {});
     } catch {}
