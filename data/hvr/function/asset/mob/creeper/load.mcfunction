@@ -2,7 +2,7 @@
 #
 # Load function
 #
-# @within function hvr:core/load_once
+# @within function hvr:core/load/once
 
 # Objective
     scoreboard objectives add hvr.mob_asset.creeper.swell dummy

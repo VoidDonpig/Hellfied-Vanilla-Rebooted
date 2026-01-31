@@ -2,13 +2,13 @@
 #
 # Asset mob tick
 #
-# @within function hvr:core/tick/mob
+# @within function hvr:core/tick/mob/
 
 # Add target tag
     execute on target run tag @s add hvr.target
 
 # Dispatch tick event
-    function hvr:entity_manager/mob/event/tick/dispatch/get_data_and_call
+    function hvr:entity_manager/mob/event/tick/dispatch/
 
 # Remove target
     tag @e[tag=hvr.target] remove hvr.target

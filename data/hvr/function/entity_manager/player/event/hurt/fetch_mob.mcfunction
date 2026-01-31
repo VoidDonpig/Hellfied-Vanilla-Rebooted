@@ -24,8 +24,8 @@
     tag @p[tag=hvr.player_killed] add hvr.killed
 
 # If asset, dispatch event
-    execute if entity @s[tag=hvr.mob_asset] at @s run function hvr:entity_manager/mob/event/attack/dispatch/get_data_and_call
-    execute if entity @s[tag=hvr.mob_asset] if entity @p[tag=hvr.player_killed] at @s run function hvr:entity_manager/mob/event/kill/dispatch/get_data_and_call
+    execute if entity @s[tag=hvr.mob_asset] at @s run function hvr:entity_manager/mob/event/attack/dispatch/
+    execute if entity @s[tag=hvr.mob_asset] if entity @p[tag=hvr.player_killed] at @s run function hvr:entity_manager/mob/event/kill/dispatch/
 
 # Call storage again
     function hvr:entity_manager/storage/access

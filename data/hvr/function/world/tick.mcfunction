@@ -14,8 +14,8 @@
     execute as @e[type=item] if items entity @s container.0 *[enchantments~[{enchantments:["hvr:entity_manager/mob/sys"]}]] run kill @s
 
 # Weather
-    execute if predicate hvr:weather/is_raining run function hvr:world/weather/rain/tick
-    execute if predicate hvr:weather/is_lightning run function hvr:world/weather/thunderstorm/tick
+    execute if predicate hvr:weather/is_raining run function hvr:world_manager/weather/rain/
+    execute if predicate hvr:weather/is_lightning run function hvr:world_manager/weather/thunderstorm/
 
 # Autokill
-    execute as @e[tag=hvr.autokill] run function hvr:world/autokill/tick
+    execute as @e[tag=hvr.autokill] run function hvr:world_manager/autokill/

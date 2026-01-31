@@ -2,7 +2,7 @@
 #
 # Check if have the same effect and proceed
 #
-# @within function hvr:entity_manager/effect/give/exec
+# @within function hvr:entity_manager/effect/give/
 
 # Get storage
     function hvr:entity_manager/storage/access

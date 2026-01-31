@@ -8,11 +8,11 @@
 # @output storage hvr:lib __output__.horizonal_distance
 # @api
 
-# 実行者位置Pos取得
+# Get executor Pos
     execute positioned as @s summon marker run function hvr:lib/horizonal_distance/core/get_pos
 
-# 実行位置と実行者位置の差分取得
+# Get Pos difference
     execute rotated 180 90 summon marker run function hvr:lib/horizonal_distance/core/get_delta.m with storage hvr.__temp__:lib __temp__
 
-# ストレージ掃除
+# Reset
     data remove storage hvr.__temp__:lib __temp__

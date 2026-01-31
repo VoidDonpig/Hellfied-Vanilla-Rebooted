@@ -8,7 +8,7 @@
     tag @s add hvr.player_death
 
 # Remove effects on death
-    execute if entity @s[tag=hvr.have_asset_effect] run function hvr:entity_manager/effect/on_death/get_data_and_proceed
+    execute if entity @s[tag=hvr.have_asset_effect] run function hvr:entity_manager/effect/on_death/
 
 # Reset
     scoreboard players reset @s hvr.death_event

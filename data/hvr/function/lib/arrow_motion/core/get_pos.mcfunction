@@ -2,7 +2,7 @@
 #
 # Get arrow pos
 #
-# @within function hvr:lib/arrow_motion/core/exec
+# @within function hvr:lib/arrow_motion/core/
 
 # Get pos
     data modify storage hvr.__temp__:lib __temp__.pos set from entity @s Pos

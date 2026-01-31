@@ -3,7 +3,7 @@
 # Remove effects until all effects checked
 #
 # @within function
-#   hvr:entity_manager/effect/on_death/get_data_and_proceed
+#   hvr:entity_manager/effect/on_death/
 #   hvr:entity_manager/effect/on_death/foreach
 
 # Get target effect

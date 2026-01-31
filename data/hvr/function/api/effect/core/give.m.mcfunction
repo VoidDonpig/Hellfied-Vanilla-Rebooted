@@ -28,7 +28,7 @@
     execute if data storage hvr:api __input__.field_override run data modify storage hvr:asset/effect field merge from storage hvr:api __input__.field_override
 
 # Give effect
-    function hvr:entity_manager/effect/give/exec
+    function hvr:entity_manager/effect/give/
 
 # Reset
     data remove storage hvr:asset/effect id

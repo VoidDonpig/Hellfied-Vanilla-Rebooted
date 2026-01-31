@@ -2,7 +2,7 @@
 #
 # Double check process
 #
-# @within function hvr:asset/mob/warden/in_hostile
+# @within function hvr:asset/mob/warden/tick/in_hostile
 
 # Add passed tag
     tag @s add hvr.mob_asset.warden.sonic_boom_check_passed
@@ -13,7 +13,7 @@
     execute if data entity @n[type=#hvr:living,tag=hvr.target] {Invulnerable:1b} run tag @s remove hvr.mob_asset.warden.sonic_boom_check_passed
 
 # Proc
-    execute if entity @s[tag=hvr.mob_asset.warden.sonic_boom_check_passed] run function hvr:asset/mob/warden/sonic_boom/proc
+    execute if entity @s[tag=hvr.mob_asset.warden.sonic_boom_check_passed] run function hvr:asset/mob/warden/sonic_boom/
 
 # Reset
     tag @s remove hvr.mob_asset.warden.sonic_boom_check_passed

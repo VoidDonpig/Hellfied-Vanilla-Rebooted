@@ -17,7 +17,7 @@
     function hvr:entity_manager/mob/init/set_data_from_register
 
 # Init process
-    function hvr:entity_manager/mob/event/init/dispatch/dispatcher.m with storage hvr:api __input__
+    function hvr:entity_manager/mob/event/init/dispatch/m with storage hvr:api __input__
 
 # Set field
     function hvr:entity_manager/storage/access

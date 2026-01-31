@@ -2,7 +2,7 @@
 #
 # Define common tellraw prefix
 #
-# @within function hvr:core/load_once
+# @within function hvr:core/load/once
 
 # Set prefix data
     data modify storage hvr:global prefix.info set value "§r§a[Hvr] Info>> §r"

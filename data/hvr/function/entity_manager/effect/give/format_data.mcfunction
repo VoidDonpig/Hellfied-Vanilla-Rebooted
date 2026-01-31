@@ -2,7 +2,7 @@
 #
 # Format data
 #
-# @within function hvr:entity_manager/effect/give/exec
+# @within function hvr:entity_manager/effect/give/
 
 # Get score
     execute store result score $origin_duration hvr.temporary run data get storage hvr:asset/effect target_effect_data.duration

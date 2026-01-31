@@ -26,11 +26,11 @@
     data modify storage hvr:asset/context previous_field set from storage hvr:asset/effect target_effect.previous_field
 
 # Event tick
-    execute if data storage hvr:asset/effect target_effect{queued_event:given} run function hvr:entity_manager/effect/event/given/dispatch/dispatcher.m with storage hvr:asset/effect target_effect
-    execute if data storage hvr:asset/effect target_effect{queued_event:regiven} run function hvr:entity_manager/effect/event/regiven/dispatch/dispatcher.m with storage hvr:asset/effect target_effect
-    execute unless data storage hvr:asset/effect target_effect{queued_event:given} unless data storage hvr:asset/effect target_effect{queued_event:regiven} unless data storage hvr:asset/effect target_effect{duration:-1} run function hvr:entity_manager/effect/event/tick/dispatch/dispatcher.m with storage hvr:asset/effect target_effect
-    execute if data storage hvr:asset/effect target_effect{duration:0} run function hvr:entity_manager/effect/event/end/dispatch/dispatcher.m with storage hvr:asset/effect target_effect
-    execute if data storage hvr:asset/effect target_effect{duration:-1} run function hvr:entity_manager/effect/event/remove/dispatch/dispatcher.m with storage hvr:asset/effect target_effect
+    execute if data storage hvr:asset/effect target_effect{queued_event:given} run function hvr:entity_manager/effect/event/given/dispatch/m with storage hvr:asset/effect target_effect
+    execute if data storage hvr:asset/effect target_effect{queued_event:regiven} run function hvr:entity_manager/effect/event/regiven/dispatch/m with storage hvr:asset/effect target_effect
+    execute unless data storage hvr:asset/effect target_effect{queued_event:given} unless data storage hvr:asset/effect target_effect{queued_event:regiven} unless data storage hvr:asset/effect target_effect{duration:-1} run function hvr:entity_manager/effect/event/tick/dispatch/m with storage hvr:asset/effect target_effect
+    execute if data storage hvr:asset/effect target_effect{duration:0} run function hvr:entity_manager/effect/event/end/dispatch/m with storage hvr:asset/effect target_effect
+    execute if data storage hvr:asset/effect target_effect{duration:-1} run function hvr:entity_manager/effect/event/remove/dispatch/m with storage hvr:asset/effect target_effect
 
 # Remove no needed data
     data remove storage hvr:asset/effect target_effect.queued_event

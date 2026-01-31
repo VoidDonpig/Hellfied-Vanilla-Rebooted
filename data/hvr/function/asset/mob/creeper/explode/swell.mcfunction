@@ -2,7 +2,7 @@
 #
 # Sync swell
 #
-# @within function hvr:asset/mob/creeper/tick
+# @within function hvr:asset/mob/creeper/tick/
 
 # Swelling start SFX
     execute if score $swell_dir hvr.temporary matches 1.. if score @s hvr.mob_asset.creeper.swell matches 0 run function hvr:asset/mob/creeper/explode/swelling_start_sfx

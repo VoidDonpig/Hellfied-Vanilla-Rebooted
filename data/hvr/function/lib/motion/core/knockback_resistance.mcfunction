@@ -2,7 +2,7 @@
 #
 # Calculate knockback including resistance
 #
-# @within function hvr:lib/motion/exec
+# @within function hvr:lib/motion/
 
 # Calc
     scoreboard players set $calc hvr.temporary 100

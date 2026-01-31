@@ -2,7 +2,7 @@
 #
 # Provide id to player
 #
-# @within function hvr:core/tick/player
+# @within function hvr:core/tick/player/
 
 # Add global index
     scoreboard players add $player_id_index hvr.global 1

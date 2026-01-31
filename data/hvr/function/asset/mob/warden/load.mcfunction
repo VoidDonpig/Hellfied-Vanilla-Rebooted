@@ -2,4 +2,4 @@
 #
 # Load function
 #
-# @within function hvr:core/load_once
+# @within function hvr:core/load/once

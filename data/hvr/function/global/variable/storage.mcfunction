@@ -2,7 +2,7 @@
 #
 # Set common storage data
 #
-# @within function hvr:core/load_once
+# @within function hvr:core/load/once
 
 # data for storage shifter
     data modify storage hvr:global two_empty_maps set value [{},{}]

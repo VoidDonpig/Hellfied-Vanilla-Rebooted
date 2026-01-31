@@ -2,7 +2,7 @@
 #
 # Apply motion
 #
-# @within function hvr:lib/motion/core/exec
+# @within function hvr:lib/motion/core/
 
 # Get base value
     execute in overworld positioned 0.0 0.0 0.0 run tp 1db9-0-0-0-0 ^ ^ ^1
