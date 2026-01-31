@@ -34,6 +34,9 @@ jobs:
 
       - name: lint
         uses: ChenCMD/datapack-linter@v2
+        with:
+          GITHUB_TOKEN: ${{ github.token }}
+          configPath: "spyglass.json"
 
   build:
     runs-on: ubuntu-latest
