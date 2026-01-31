@@ -8,7 +8,6 @@ class SpyglassLSPClient {
     this.pendingRequests = new Map();
     this.diagnostics = new Map();
     this.buffer = '';
-    this.messageLog = [];
   }
 
   async start() {
@@ -27,7 +26,7 @@ class SpyglassLSPClient {
       });
 
       this.process.stderr.on('data', (data) => {
-        console.error('LSP stderr:', data.toString());
+        // stderrは無視（冗長なログを避けるため）
       });
 
       this.process.on('error', (err) => {
@@ -63,43 +62,24 @@ class SpyglassLSPClient {
         const message = JSON.parse(messageContent);
         this.handleMessage(message);
       } catch (err) {
-        console.error('Parse error:', err.message);
-        console.error('Content:', messageContent.substring(0, 200));
+        // パースエラーは無視
       }
     }
   }
 
   handleMessage(message) {
-    // すべてのメッセージをログ
-    if (message.method) {
-      this.messageLog.push({ method: message.method, hasParams: !!message.params });
-    }
-
     if (message.id !== undefined && this.pendingRequests.has(message.id)) {
       const { resolve, reject } = this.pendingRequests.get(message.id);
       this.pendingRequests.delete(message.id);
       
       if (message.error) {
-        console.error('LSP Error Response:', message.error);
         reject(message.error);
       } else {
         resolve(message.result);
       }
     } else if (message.method === 'textDocument/publishDiagnostics') {
       const uri = message.params.uri;
-      const diagCount = message.params.diagnostics.length;
-      
-      console.log(`📋 Diagnostics for ${path.basename(uri)}: ${diagCount} issues`);
-      
-      if (diagCount > 0) {
-        message.params.diagnostics.forEach(diag => {
-          console.log(`  - Line ${diag.range.start.line + 1}: ${diag.message}`);
-        });
-      }
-      
       this.diagnostics.set(uri, message.params.diagnostics);
-    } else if (message.method && message.method.startsWith('window/')) {
-      console.log(`Window message: ${message.method}`);
     }
   }
 
@@ -150,7 +130,6 @@ class SpyglassLSPClient {
   async initialize() {
     const workspaceFolder = process.cwd();
     
-    console.log('Initializing LSP...');
     const result = await this.sendRequest('initialize', {
       processId: process.pid,
       clientInfo: {
@@ -182,10 +161,9 @@ class SpyglassLSPClient {
       }]
     });
 
-    console.log('Server capabilities:', JSON.stringify(result.capabilities, null, 2));
-
     this.sendNotification('initialized', {});
     
+    // 初期化完了を待つ
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     return result;
@@ -204,8 +182,8 @@ class SpyglassLSPClient {
       }
     });
     
-    // 各ファイルごとに診断を待つ
-    await new Promise(resolve => setTimeout(resolve, 200));
+    // 各ファイルごとに十分な時間を待つ
+    await new Promise(resolve => setTimeout(resolve, 500));
   }
 
   getLanguageId(filePath) {
@@ -229,7 +207,7 @@ class SpyglassLSPClient {
       if (this.process && !this.process.killed) {
         this.process.kill('SIGTERM');
       }
-    }, 300);
+    }, 500);
   }
 }
 
@@ -262,36 +240,34 @@ async function main() {
   
   try {
     await client.start();
-    console.log('LSP initialized successfully\n');
+    console.log('LSP initialized successfully');
 
     const dataDir = path.join(process.cwd(), 'data');
     const files = findDatapackFiles(dataDir);
     
-    console.log(`Found ${files.length} files to check\n`);
+    console.log(`Found ${files.length} files to check`);
+    console.log('This will take a while - processing each file carefully...\n');
 
-    // テストとして最初の10ファイルだけ処理
-    const testFiles = files.slice(0, 20);
-    
-    for (let i = 0; i < testFiles.length; i++) {
-      const file = testFiles[i];
-      console.log(`[${i + 1}/${testFiles.length}] Checking: ${path.relative(process.cwd(), file)}`);
+    // 全ファイルを1つずつ処理
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
       await client.openDocument(file);
+      
+      // 進捗を定期的に表示
+      if ((i + 1) % 50 === 0 || (i + 1) === files.length) {
+        const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+        const rate = ((i + 1) / (Date.now() - startTime) * 1000).toFixed(1);
+        console.log(`Progress: ${i + 1}/${files.length} files (${elapsed}s elapsed, ${rate} files/s)`);
+      }
     }
 
-    // 最終的な診断を待つ
-    console.log('\nWaiting for final diagnostics...');
-    await new Promise(resolve => setTimeout(resolve, 3000));
-
-    console.log('\nMessage log summary:');
-    const methodCounts = {};
-    client.messageLog.forEach(log => {
-      methodCounts[log.method] = (methodCounts[log.method] || 0) + 1;
-    });
-    console.log(methodCounts);
+    // すべての診断が完了するまで十分に待つ
+    console.log('\nWaiting for all diagnostics to complete...');
+    await new Promise(resolve => setTimeout(resolve, 5000));
 
     // 結果を集計
     const results = {
-      totalFiles: testFiles.length,
+      totalFiles: files.length,
       filesWithIssues: 0,
       errors: 0,
       warnings: 0,
@@ -330,7 +306,7 @@ async function main() {
 
     // コンソール出力
     console.log('\n' + '='.repeat(60));
-    console.log('Spyglass LSP Lint Results (Test Run - First 20 Files)');
+    console.log('Spyglass LSP Lint Results');
     console.log('='.repeat(60));
     console.log(`Total files checked: ${results.totalFiles}`);
     console.log(`Files with issues: ${results.filesWithIssues}`);
@@ -340,18 +316,39 @@ async function main() {
     console.log(`Duration: ${duration}s`);
 
     if (results.diagnostics.length > 0) {
-      console.log('\nAll Diagnostics:');
-      results.diagnostics.forEach(diag => {
-        const icon = diag.severity === 'error' ? '❌' : diag.severity === 'warning' ? '⚠️' : 'ℹ️';
-        console.log(`${icon} ${path.relative(process.cwd(), diag.file)}:${diag.line}:${diag.column}`);
-        console.log(`   [${diag.severity}] ${diag.message}`);
-      });
-    } else {
-      console.log('\n⚠️  No diagnostics received - LSP may not be working correctly');
+      console.log('\nDiagnostics:');
+      
+      // エラーを優先して表示
+      const errorDiags = results.diagnostics.filter(d => d.severity === 'error');
+      const warningDiags = results.diagnostics.filter(d => d.severity === 'warning');
+      const infoDiags = results.diagnostics.filter(d => d.severity === 'info');
+      
+      if (errorDiags.length > 0) {
+        console.log('\n❌ ERRORS:');
+        errorDiags.forEach(diag => {
+          console.log(`  ${path.relative(process.cwd(), diag.file)}:${diag.line}:${diag.column}`);
+          console.log(`    ${diag.message}`);
+        });
+      }
+      
+      if (warningDiags.length > 0) {
+        console.log('\n⚠️  WARNINGS:');
+        warningDiags.slice(0, 20).forEach(diag => {
+          console.log(`  ${path.relative(process.cwd(), diag.file)}:${diag.line}:${diag.column}`);
+          console.log(`    ${diag.message}`);
+        });
+        if (warningDiags.length > 20) {
+          console.log(`  ... and ${warningDiags.length - 20} more warnings`);
+        }
+      }
+      
+      if (infoDiags.length > 0) {
+        console.log(`\nℹ️  INFO: ${infoDiags.length} informational messages (see spyglass-results.json)`);
+      }
     }
 
     await client.shutdown().catch(() => {});
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     const exitCode = results.errors > 0 ? 1 : 0;
     console.log(`\nExiting with code ${exitCode}`);
