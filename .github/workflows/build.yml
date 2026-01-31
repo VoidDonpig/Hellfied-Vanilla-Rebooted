@@ -35,12 +35,21 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install SpyglassLSP
-        run: npm install -g @spyglassmc/language-server
+      - name: Install Spyglass
+        run: |
+          npm install -g @spyglassmc/language-server
+          echo "Installed packages:"
+          npm list -g --depth=0
+          which spyglass || echo "spyglass not in PATH"
+
+      - name: Verify Spyglass installation
+        run: |
+          export PATH="$(npm config get prefix)/bin:$PATH"
+          spyglass --version
 
       - name: Create Spyglass config
         run: |
-          cat > spyglass.json << 'EOF'
+          cat > .spyglassrc.json << 'EOF'
           {
             "env": {
               "dependencies": [],
@@ -56,7 +65,9 @@ jobs:
           EOF
 
       - name: Run Spyglass lint
-        run: spyglass check data --format json > spyglass-results.json || true
+        run: |
+          export PATH="$(npm config get prefix)/bin:$PATH"
+          spyglass check data --format json > spyglass-results.json || true
 
       - name: Display results
         if: always()
