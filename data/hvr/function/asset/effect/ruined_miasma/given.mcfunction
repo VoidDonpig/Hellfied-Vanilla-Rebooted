@@ -12,5 +12,4 @@
 
 # Set attribute
     function hvr:asset/effect/ruined_miasma/set_attribut
-
-ex
+    ex

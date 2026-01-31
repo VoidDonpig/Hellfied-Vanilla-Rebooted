@@ -23,54 +23,21 @@ on:
         default: ''
 
 jobs:
-  spyglass-lint:
+  lint:
+    name: lint
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: checkout repository
+        uses: actions/checkout@v3
         with:
-          node-version: '20'
+          fetch-depth: 0
 
-      - name: Install Spyglass LSP
-        run: |
-          npm init -y
-          npm install @spyglassmc/language-server
-
-      - name: Create Spyglass config
-        run: |
-          cat > .spyglassrc.json << 'EOF'
-          {
-            "env": {
-              "dependencies": [],
-              "gameVersion": "1.21",
-              "dataSource": "file",
-              "dataVersion": "1.21"
-            },
-            "lint": {
-              "blockStateBracketSpacing": ["error", "disallow"],
-              "nameOfNbtCompoundTagKeys": "error",
-              "nameOfObjectives": "error",
-              "strictCheck": true
-            }
-          }
-          EOF
-
-      - name: Run Spyglass LSP Lint
-        run: node .github/workflows/lint.js
-
-      - name: Upload lint results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: spyglass-lint-results
-          path: spyglass-results.json
+      - name: lint
+        uses: ChenCMD/datapack-linter@v2
 
   build:
     runs-on: ubuntu-latest
+    needs: lint
     if: success()
     outputs:
       artifact_name: ${{ steps.info.outputs.name }}
