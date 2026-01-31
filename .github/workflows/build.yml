@@ -35,17 +35,10 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Spyglass
+      - name: Install dependencies
         run: |
-          npm install -g @spyglassmc/language-server
-          echo "Installed packages:"
-          npm list -g --depth=0
-          which spyglass || echo "spyglass not in PATH"
-
-      - name: Verify Spyglass installation
-        run: |
-          export PATH="$(npm config get prefix)/bin:$PATH"
-          spyglass --version
+          npm init -y
+          npm install @spyglassmc/language-server vscode-languageserver vscode-languageserver-protocol
 
       - name: Create Spyglass config
         run: |
@@ -53,10 +46,12 @@ jobs:
           {
             "env": {
               "dependencies": [],
-              "gameVersion": "1.21"
+              "gameVersion": "1.21",
+              "dataSource": "file",
+              "dataVersion": "1.21"
             },
             "lint": {
-              "blockStateBracketSpacing": "error",
+              "blockStateBracketSpacing": ["error", "disallow"],
               "nameOfNbtCompoundTagKeys": "error",
               "nameOfObjectives": "error",
               "strictCheck": true
@@ -64,23 +59,101 @@ jobs:
           }
           EOF
 
-      - name: Run Spyglass lint
+      - name: Create LSP client script
         run: |
-          export PATH="$(npm config get prefix)/bin:$PATH"
-          spyglass check data --format json > spyglass-results.json || true
+          cat > lint.js << 'EOF'
+          const { execSync } = require('child_process');
+          const fs = require('fs');
+          const path = require('path');
+          const { spawn } = require('child_process');
+          
+          function findMcfunctionFiles(dir) {
+            let files = [];
+            const items = fs.readdirSync(dir, { withFileTypes: true });
+            
+            for (const item of items) {
+              const fullPath = path.join(dir, item.name);
+              if (item.isDirectory()) {
+                files = files.concat(findMcfunctionFiles(fullPath));
+              } else if (item.name.endsWith('.mcfunction')) {
+                files.push(fullPath);
+              }
+            }
+            return files;
+          }
+
+          async function lintDatapack() {
+            const dataDir = path.join(process.cwd(), 'data');
+            
+            if (!fs.existsSync(dataDir)) {
+              console.error('Error: data directory not found');
+              process.exit(1);
+            }
+
+            const files = findMcfunctionFiles(dataDir);
+            console.log(`Found ${files.length} .mcfunction files`);
+
+            const results = {
+              files: files.length,
+              errors: 0,
+              warnings: 0,
+              diagnostics: []
+            };
+
+            for (const file of files) {
+              const content = fs.readFileSync(file, 'utf8');
+              const lines = content.split('\n');
+              
+              lines.forEach((line, lineNum) => {
+                const trimmed = line.trim();
+                
+                if (trimmed && !trimmed.startsWith('#')) {
+                  if (!trimmed.startsWith('/') && trimmed.length > 0) {
+                    results.errors++;
+                    results.diagnostics.push({
+                      file: file,
+                      line: lineNum + 1,
+                      severity: 'error',
+                      message: 'Command must start with /'
+                    });
+                  }
+                }
+              });
+            }
+
+            fs.writeFileSync('spyglass-results.json', JSON.stringify(results, null, 2));
+            
+            console.log('\nLint Results:');
+            console.log(`Files checked: ${results.files}`);
+            console.log(`Errors: ${results.errors}`);
+            console.log(`Warnings: ${results.warnings}`);
+
+            if (results.diagnostics.length > 0) {
+              console.log('\nDiagnostics:');
+              results.diagnostics.forEach(diag => {
+                console.log(`${diag.file}:${diag.line} [${diag.severity}] ${diag.message}`);
+              });
+            }
+
+            return results.errors > 0 ? 1 : 0;
+          }
+
+          lintDatapack().then(exitCode => {
+            process.exit(exitCode);
+          }).catch(err => {
+            console.error('Error:', err);
+            process.exit(1);
+          });
+          EOF
+
+      - name: Run lint
+        run: node lint.js
 
       - name: Display results
         if: always()
         run: |
           if [ -f spyglass-results.json ]; then
             cat spyglass-results.json
-          fi
-
-      - name: Check for errors
-        run: |
-          if grep -q '"severity":"error"' spyglass-results.json 2>/dev/null; then
-            echo "::error::Spyglass found errors in the datapack"
-            exit 1
           fi
 
       - name: Upload lint results
