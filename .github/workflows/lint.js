@@ -8,6 +8,7 @@ class SpyglassLSPClient {
     this.pendingRequests = new Map();
     this.diagnostics = new Map();
     this.buffer = '';
+    this.pendingDiagnostics = new Set();
   }
 
   async start() {
@@ -26,7 +27,7 @@ class SpyglassLSPClient {
       });
 
       this.process.stderr.on('data', (data) => {
-        // stderrは無視（ログが多すぎる場合）
+        // stderrは無視
       });
 
       this.process.on('error', (err) => {
@@ -80,6 +81,7 @@ class SpyglassLSPClient {
     } else if (message.method === 'textDocument/publishDiagnostics') {
       const uri = message.params.uri;
       this.diagnostics.set(uri, message.params.diagnostics);
+      this.pendingDiagnostics.delete(uri);
     }
   }
 
@@ -140,7 +142,7 @@ class SpyglassLSPClient {
       capabilities: {
         textDocument: {
           publishDiagnostics: {
-            relatedInformation: false,
+            relatedInformation: true,
             tagSupport: { valueSet: [1, 2] },
             versionSupport: false
           },
@@ -154,7 +156,7 @@ class SpyglassLSPClient {
         },
         workspace: {
           workspaceFolders: true,
-          configuration: false
+          configuration: true
         }
       },
       workspaceFolders: [{
@@ -165,7 +167,6 @@ class SpyglassLSPClient {
 
     this.sendNotification('initialized', {});
     
-    // 初期化待ち時間を短縮
     await new Promise(resolve => setTimeout(resolve, 500));
     
     return result;
@@ -175,6 +176,8 @@ class SpyglassLSPClient {
     const content = fs.readFileSync(filePath, 'utf8');
     const uri = `file://${filePath}`;
     
+    this.pendingDiagnostics.add(uri);
+    
     this.sendNotification('textDocument/didOpen', {
       textDocument: {
         uri,
@@ -183,6 +186,18 @@ class SpyglassLSPClient {
         text: content
       }
     });
+  }
+
+  async waitForDiagnostics(timeout = 10000) {
+    const startTime = Date.now();
+    
+    while (this.pendingDiagnostics.size > 0 && (Date.now() - startTime) < timeout) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
+    if (this.pendingDiagnostics.size > 0) {
+      console.log(`Warning: ${this.pendingDiagnostics.size} files did not receive diagnostics`);
+    }
   }
 
   getLanguageId(filePath) {
@@ -252,25 +267,27 @@ async function main() {
     
     console.log(`Found ${files.length} files to check`);
 
-    // バッチ処理で高速化
-    const BATCH_SIZE = 50;
+    // バッチ処理で高速化（診断を待つように修正）
+    const BATCH_SIZE = 20;
     for (let i = 0; i < files.length; i += BATCH_SIZE) {
       const batch = files.slice(i, i + BATCH_SIZE);
       
-      // バッチ内のファイルを並行処理
-      await Promise.all(batch.map(file => client.openDocument(file)));
+      // バッチ内のファイルを開く
+      for (const file of batch) {
+        await client.openDocument(file);
+      }
       
-      // バッチごとに短い待ち時間
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // このバッチの診断結果を待つ
+      await client.waitForDiagnostics(5000);
       
       if ((i + BATCH_SIZE) % 100 === 0 || (i + BATCH_SIZE) >= files.length) {
         console.log(`Progress: ${Math.min(i + BATCH_SIZE, files.length)}/${files.length} files`);
       }
     }
 
-    // 最後の診断結果を待つ
-    console.log('Waiting for final diagnostics...');
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // 念のため最後にもう一度待つ
+    console.log('Waiting for any remaining diagnostics...');
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     // 結果を集計
     const results = {
