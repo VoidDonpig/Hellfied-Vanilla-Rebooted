@@ -28,14 +28,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
 
       - name: lint
-        uses: ChenCMD/datapack-linter@v2
+        uses: ChenCMD/datapack-linter@v2.0.10
         with:
           GITHUB_TOKEN: ${{ github.token }}
+          muteSuccessResult: true
           configPath: "spyglass.json"
 
   build:
@@ -48,7 +49,7 @@ jobs:
       build_date: ${{ steps.info.outputs.date }}
     
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.2
       
       - name: Build optimized datapack
         run: |
@@ -84,7 +85,7 @@ jobs:
           Repository: ${{ github.repository }}
           EOF
       
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6.0.0
         name: Upload artifacts
         with:
           name: ${{ steps.info.outputs.name }}
@@ -94,7 +95,7 @@ jobs:
           retention-days: 30
           compression-level: 9
       
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6.0.0
         name: Upload debug artifacts
         with:
           name: ${{ steps.info.outputs.name }}-debug
@@ -126,7 +127,7 @@ jobs:
       contents: write
     
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.2
       
       - name: Build datapack for release
         run: |
@@ -154,7 +155,7 @@ jobs:
             echo "EOF"
           } >> $GITHUB_OUTPUT
       
-      - uses: softprops/action-gh-release@v1
+      - uses: softprops/action-gh-release@v2.5.0
         name: Create Release
         with:
           tag_name: ${{ steps.tag.outputs.tag }}
@@ -191,7 +192,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6.0.0
         name: Upload release artifact
         with:
           name: release-${{ steps.tag.outputs.tag }}
