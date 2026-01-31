@@ -67,6 +67,7 @@
 # Load asset function
     function hvr:asset/mob/zombie/load
     function hvr:asset/mob/creeper/load
+    function hvr:asset/mob/spider/load
     function hvr:asset/mob/warden/load
 
 # Declare this function is loaded

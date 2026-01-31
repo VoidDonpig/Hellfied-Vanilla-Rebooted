@@ -17,7 +17,7 @@
     #data modify storage hvr:asset/mob movement_speed set value
     #data modify storage hvr:asset/mob movement_efficiency set value 1d
     #data modify storage hvr:asset/mob water_movement_efficiency set value 1d
-    #data modify storage hvr:asset/mob follow_range set value
+    data modify storage hvr:asset/mob follow_range set value 64
     #data modify storage hvr:asset/mob knockback_resistance set value 1d
     #data modify storage hvr:asset/mob explosion_knockback_resistance set value 1d
     #data modify storage hvr:asset/mob spawn_reinforcements set value
