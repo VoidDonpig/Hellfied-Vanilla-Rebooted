@@ -11,4 +11,6 @@
     execute anchored eyes positioned ^ ^ ^ run playsound block.sculk_shrieker.shriek hostile @a[distance=..16] ~ ~ ~ 1 2
 
 # Set attribute
-    function hvr:asset/effect/ruined_miasma/set_attribut
+    function hvr:asset/effect/ruined_miasma/set_attribute
+
+ex
