@@ -179,16 +179,6 @@
                                     "nbt": "{Tags:[\"hvr.death\"]}"
                                 }
                             }
-                        },
-                        {
-                            "condition": "inverted",
-                            "term": {
-                                "condition": "entity_properties",
-                                "entity": "this",
-                                "predicate": {
-                                    "nbt": "{Tags:[\"hvr.asset.mob\"]}"
-                                }
-                            }
                         }
                     ]
                 }

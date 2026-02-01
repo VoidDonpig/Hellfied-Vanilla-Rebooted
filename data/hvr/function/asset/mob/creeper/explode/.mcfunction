@@ -1,4 +1,4 @@
-#> hvr:asset/mob/creeper/explode/exec
+#> hvr:asset/mob/creeper/explode/
 #
 # Execute explosion
 #

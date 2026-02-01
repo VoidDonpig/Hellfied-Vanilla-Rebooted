@@ -26,7 +26,7 @@
     execute as @e[tag=hvr.asset.object,tag=!hvr.no_process] at @s run function hvr:core/tick/object/
 
 # World tick
-    function hvr:world/tick
+    function hvr:core/tick/world/
 
 # Asset effect tick
     execute as @e[type=#hvr:living,tag=hvr.have_asset_effect] at @s run function hvr:entity_manager/effect/tick
@@ -36,3 +36,6 @@
 
 # Mob post tick
     execute as @e[type=#hvr:mob,tag=hvr.mob_already_init,tag=!hvr.no_process] at @s run function hvr:core/tick/mob/post
+
+# World post tick
+    function hvr:core/tick/world/post

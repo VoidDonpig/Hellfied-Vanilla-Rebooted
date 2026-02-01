@@ -11,4 +11,4 @@
     data modify storage hvr.__temp__:asset/mob __temp__.z set from storage hvr.__temp__:asset/mob __temp__.pos[2]
 
 # Remove marker
-    kill @s
+    tag @s add hvr.vanish

@@ -55,6 +55,9 @@
 # Api objective
     scoreboard objectives add hvr.api dummy
 
+# Generic asset objective
+    scoreboard objectives add hvr.asset.generic dummy
+
 # Initialize entity storage
     execute unless data storage hvr:entity_manager/storage _ unless data storage hvr:core/rom _ run function hvr:core/load/initialize_storage
 

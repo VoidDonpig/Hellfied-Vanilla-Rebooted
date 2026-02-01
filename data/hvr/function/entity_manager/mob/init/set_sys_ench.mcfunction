@@ -9,9 +9,9 @@
     execute if entity @s[type=#hvr:have_natural_body_slot] unless items entity @s armor.feet * run data modify entity @s equipment.feet set value {id:stone_button}
 
 # Provide ench
-    data modify storage hvr.__temp__:core sys_ench set value {components:{enchantments:{"hvr:entity_manager/mob/sys":1}}}
-    execute if entity @s[type=!#hvr:have_natural_body_slot] run data modify entity @s equipment.body merge from storage hvr.__temp__:core sys_ench 
-    execute if entity @s[type=#hvr:have_natural_body_slot] run data modify entity @s equipment.feet merge from storage hvr.__temp__:core sys_ench 
+    data modify storage hvr.__temp__:core sys_ench set value {"hvr:entity_manager/mob/sys":1}
+    execute if entity @s[type=!#hvr:have_natural_body_slot] run data modify entity @s equipment.body.components."minecraft:enchantments" merge from storage hvr.__temp__:core sys_ench 
+    execute if entity @s[type=#hvr:have_natural_body_slot] run data modify entity @s equipment.feetcomponents."minecraft:enchantments" merge from storage hvr.__temp__:core sys_ench 
 
 # Override drop chance
     execute if entity @s[type=!#hvr:have_natural_body_slot] run data modify entity @s drop_chances.body set value 0f

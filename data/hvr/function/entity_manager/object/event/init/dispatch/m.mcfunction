@@ -2,6 +2,6 @@
 #
 # Dispatch init event
 #
-# @within function hvr:entity_manager/object/summon/init_asset_mob
+# @within function hvr:entity_manager/object/summon/init
 
 $function hvr:asset/object/$(id)/init/

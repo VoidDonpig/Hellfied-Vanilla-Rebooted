@@ -19,6 +19,7 @@
     execute if entity @s[type=spider] run data modify storage hvr:api __input__.id set value "spider"
     execute if entity @s[type=cave_spider] run data modify storage hvr:api __input__.id set value "cave_spider"
     execute if entity @s[type=enderman] run data modify storage hvr:api __input__.id set value "enderman"
+    execute if entity @s[type=blaze] run data modify storage hvr:api __input__.id set value "blaze"
     execute if entity @s[type=warden] run data modify storage hvr:api __input__.id set value "warden"
 
 # Declare skip summon entity

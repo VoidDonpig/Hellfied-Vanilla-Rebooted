@@ -1,24 +1,24 @@
-#> hvr:asset/mob/wither_skeleton/register
+#> hvr:asset/mob/blaze/register
 #
 # Register function
 #
 # @within function hvr:api/mob/core/summon
 
 # ID
-    data modify storage hvr:asset/mob id set value "wither_skeleton"
+    data modify storage hvr:asset/mob id set value "blaze"
 
 # Attribute
-    data modify storage hvr:asset/mob max_health set value 30d
+    #data modify storage hvr:asset/mob max_health set value 1024d
     #data modify storage hvr:asset/mob max_absorption set value 2048d
     #data modify storage hvr:asset/mob attack_damage set value 1024d
-    data modify storage hvr:asset/mob attack_knockback set value 1d
-    data modify storage hvr:asset/mob armor set value 6d
-    data modify storage hvr:asset/mob armor_toughness set value 4d
+    #data modify storage hvr:asset/mob attack_knockback set value 4d
+    #data modify storage hvr:asset/mob armor set value 30d
+    #data modify storage hvr:asset/mob armor_toughness set value 20d
     #data modify storage hvr:asset/mob movement_speed set value
     #data modify storage hvr:asset/mob movement_efficiency set value 1d
     #data modify storage hvr:asset/mob water_movement_efficiency set value 1d
     #data modify storage hvr:asset/mob follow_range set value
-    data modify storage hvr:asset/mob knockback_resistance set value 0.4d
+    data modify storage hvr:asset/mob knockback_resistance set value 0.8d
     #data modify storage hvr:asset/mob explosion_knockback_resistance set value 1d
     #data modify storage hvr:asset/mob spawn_reinforcements set value
     #data modify storage hvr:asset/mob scale set value
@@ -28,7 +28,7 @@
     #data modify storage hvr:asset/mob custom_name_visible set value
 
 # Equipment
-    data modify storage hvr:asset/mob equipment.mainhand set value {id:"bow"}
+    #data modify storage hvr:asset/mob equipment.mainhand set value
     #data modify storage hvr:asset/mob equipment.offhand set value
     #data modify storage hvr:asset/mob equipment.head set value
     #data modify storage hvr:asset/mob equipment.chest set value
