@@ -16,7 +16,7 @@
 
 # Mount origin passengers
     tag @s add hvr.enemy_searching_ai.this
-    execute as @e[tag=hvr.temporary_dismounted] run ride @s mount @n[type=#hvr:enemy/all_without_boss,tag=hvr.enemy_searching_ai.this]
+    execute as @e[tag=hvr.temporary_dismounted] run ride @s mount @n[tag=hvr.enemy_searching_ai.this]
     execute on passengers run tag @s remove hvr.temporary_dismounted
     tag @s remove hvr.enemy_searching_ai.this
 

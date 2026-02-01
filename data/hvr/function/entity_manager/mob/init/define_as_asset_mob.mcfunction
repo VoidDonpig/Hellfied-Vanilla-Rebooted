@@ -14,6 +14,7 @@
     execute if entity @s[type=stray] run data modify storage hvr:api __input__.id set value "stray"
     execute if entity @s[type=bogged] run data modify storage hvr:api __input__.id set value "bogged"
     execute if entity @s[type=parched] run data modify storage hvr:api __input__.id set value "parched"
+    execute if entity @s[type=wither_skeleton] run data modify storage hvr:api __input__.id set value "wither_skeleton"
     execute if entity @s[type=creeper] run data modify storage hvr:api __input__.id set value "creeper"
     execute if entity @s[type=spider] run data modify storage hvr:api __input__.id set value "spider"
     execute if entity @s[type=cave_spider] run data modify storage hvr:api __input__.id set value "cave_spider"
@@ -35,8 +36,13 @@
     execute if data entity @s equipment.legs run data modify storage hvr:asset/mob equipment_exist.legs set value true
     execute if data entity @s equipment.feet run data modify storage hvr:asset/mob equipment_exist.feet set value true
 
+# Lefthanded
+    data modify storage hvr:asset/mob left_handed set value false
+    execute if data entity @s {LeftHanded:true} run data modify storage hvr:asset/mob left_handed set value true
+
 # Set data via mob summon api
     function hvr:api/mob/summon
 
 # Reset
     data remove storage hvr:asset/mob equipment_exist
+    data remove storage hvr:asset/mob left_handed
