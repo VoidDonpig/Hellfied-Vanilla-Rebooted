@@ -12,7 +12,7 @@
     playsound entity.witch.throw hostile @a[distance=..16] ~ ~ ~ 1 1.2
 
 # Add leaping tag
-    tag @s add hvr.mob_asset.spider.leaping
+    tag @s add hvr.asset.mob.spider.leaping
 
 # Reset score
-    scoreboard players reset @s hvr.mob_asset.spider.super_leap.charging_time
+    scoreboard players reset @s hvr.asset.mob.spider.super_leap.charging_time

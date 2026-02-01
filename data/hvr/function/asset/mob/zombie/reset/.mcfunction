@@ -5,4 +5,4 @@
 # @within function hvr:asset/mob/zombie/tick/
 
 # Reset timer
-    scoreboard players reset @s hvr.mob_asset.zombie.boost_buff_activate_timer
+    scoreboard players reset @s hvr.asset.mob.zombie.boost_buff_activate_timer

@@ -9,4 +9,4 @@
     attribute @s attack_damage modifier add hvr:asset/mob/zombie.boost_buff_rebound.attack_damage -6 add_value
 
 # Add tag
-    tag @s add hvr.mob_asset.zombie.boosting_rebound
+    tag @s add hvr.asset.mob.zombie.boosting_rebound

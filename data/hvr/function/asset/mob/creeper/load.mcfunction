@@ -5,6 +5,6 @@
 # @within function hvr:core/load/once
 
 # Objective
-    scoreboard objectives add hvr.mob_asset.creeper.swell dummy
-    scoreboard objectives add hvr.mob_asset.creeper.max_swell dummy
-    scoreboard objectives add hvr.mob_asset.creeper.old_swell_dir dummy
+    scoreboard objectives add hvr.asset.mob.creeper.swell dummy
+    scoreboard objectives add hvr.asset.mob.creeper.max_swell dummy
+    scoreboard objectives add hvr.asset.mob.creeper.old_swell_dir dummy

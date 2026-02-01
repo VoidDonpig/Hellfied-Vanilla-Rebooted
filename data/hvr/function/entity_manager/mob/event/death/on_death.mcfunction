@@ -28,8 +28,8 @@
     execute if entity @s[tag=hvr.killed] on attacker if entity @s[type=player] run tag @s add hvr.killer
 
 # Dispatch event
-    execute if entity @s[tag=hvr.mob_asset,tag=!hvr.killed] run function hvr:entity_manager/mob/event/death/dispatch/
-    execute if entity @s[tag=hvr.mob_asset,tag=hvr.killed] run function hvr:entity_manager/mob/event/killed/dispatch/
+    execute if entity @s[tag=hvr.asset.mob,tag=!hvr.killed] run function hvr:entity_manager/mob/event/death/dispatch/
+    execute if entity @s[tag=hvr.asset.mob,tag=hvr.killed] run function hvr:entity_manager/mob/event/killed/dispatch/
 
 # Add death tag
     tag @s add hvr.death

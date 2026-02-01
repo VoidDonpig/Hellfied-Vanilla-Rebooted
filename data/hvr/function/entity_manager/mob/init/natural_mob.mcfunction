@@ -8,4 +8,4 @@
     execute if entity @s[type=#hvr:process_target] run function hvr:entity_manager/mob/init/define_as_asset_mob
 
 # Init mob
-    execute unless entity @s[tag=hvr.mob_asset] run function hvr:entity_manager/mob/init/common
+    execute unless entity @s[tag=hvr.asset.mob] run function hvr:entity_manager/mob/init/common

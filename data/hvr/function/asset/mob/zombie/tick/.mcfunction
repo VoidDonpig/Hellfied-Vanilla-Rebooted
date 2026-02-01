@@ -8,10 +8,10 @@
     execute unless predicate hvr:in_hostile run function hvr:asset/mob/zombie/reset/
 
 # Rebound timer
-    execute if entity @s[tag=hvr.mob_asset.zombie.boosting_rebound] run function hvr:asset/mob/zombie/tick/boost_buff/increment_refreshing_timer
+    execute if entity @s[tag=hvr.asset.mob.zombie.boosting_rebound] run function hvr:asset/mob/zombie/tick/boost_buff/increment_refreshing_timer
 
 # Boost timer
-    execute if entity @s[tag=hvr.mob_asset.zombie.boosting] run function hvr:asset/mob/zombie/tick/boost_buff/increment_timer
+    execute if entity @s[tag=hvr.asset.mob.zombie.boosting] run function hvr:asset/mob/zombie/tick/boost_buff/increment_timer
 
 # Hostile action
     execute if predicate hvr:in_hostile run function hvr:asset/mob/zombie/tick/in_hostile

@@ -8,7 +8,7 @@
     data modify entity @s Motion set value [0d,0d,0d]
 
 # Add tag
-    tag @s add hvr.mob_asset.spider.leaping.motion_canceled
+    tag @s add hvr.asset.mob.spider.leaping.motion_canceled
 
 # SFX
     particle poof ~ ~ ~ 0.6 0.3 0.6 0.04 8

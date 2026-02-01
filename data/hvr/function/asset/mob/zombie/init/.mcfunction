@@ -5,7 +5,7 @@
 # @within function hvr:entity_manager/mob/event/init/dispatch/m
 
 # Remove husk modifier
-    tag @s remove hvr.mob_asset.husk
+    tag @s remove hvr.asset.mob.husk
     attribute @s movement_speed modifier remove hvr:asset/mob/husk.spawn_modifier.movement_speed
 
 # Equipment

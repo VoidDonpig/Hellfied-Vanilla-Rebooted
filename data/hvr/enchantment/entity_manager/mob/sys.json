@@ -186,7 +186,7 @@
                                 "condition": "entity_properties",
                                 "entity": "this",
                                 "predicate": {
-                                    "nbt": "{Tags:[\"hvr.mob_asset\"]}"
+                                    "nbt": "{Tags:[\"hvr.asset.mob\"]}"
                                 }
                             }
                         }

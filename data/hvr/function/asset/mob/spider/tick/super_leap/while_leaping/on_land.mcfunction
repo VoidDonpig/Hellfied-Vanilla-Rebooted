@@ -9,9 +9,9 @@
     playsound entity.player.big_fall hostile @a[distance=..16] ~ ~ ~ 1 0.8
 
 # Remove leaping tag
-    tag @s remove hvr.mob_asset.spider.leaping
-    tag @s remove hvr.mob_asset.spider.leaping.endable
-    tag @s remove hvr.mob_asset.spider.leaping.motion_canceled
+    tag @s remove hvr.asset.mob.spider.leaping
+    tag @s remove hvr.asset.mob.spider.leaping.endable
+    tag @s remove hvr.asset.mob.spider.leaping.motion_canceled
 
 # Set cooldown
-    scoreboard players set @s hvr.mob_asset.spider.super_leap.cooldown 100
+    scoreboard players set @s hvr.asset.mob.spider.super_leap.cooldown 100

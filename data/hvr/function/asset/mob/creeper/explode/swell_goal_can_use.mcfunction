@@ -5,7 +5,7 @@
 # @within function hvr:asset/mob/creeper/tick
 
 # SwellDir > 0?
-    execute if score @s hvr.mob_asset.creeper.swell matches 1.. run return run function hvr:asset/mob/creeper/explode/swell_goal
+    execute if score @s hvr.asset.mob.creeper.swell matches 1.. run return run function hvr:asset/mob/creeper/explode/swell_goal
 
 # target != null?
     execute unless entity @n[type=#hvr:living,tag=hvr.target] run return fail

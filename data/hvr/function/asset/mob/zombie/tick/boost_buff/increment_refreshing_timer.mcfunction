@@ -5,7 +5,7 @@
 # @within function hvr:asset/mob/warden/tick
 
 # Increment timer
-    scoreboard players add @s hvr.mob_asset.zombie.boost_buff_rebound_refresh_timer 1
+    scoreboard players add @s hvr.asset.mob.zombie.boost_buff_rebound_refresh_timer 1
 
 # Reset rebound
-    execute if score @s hvr.mob_asset.zombie.boost_buff_rebound_refresh_timer matches 60.. run function hvr:asset/mob/zombie/tick/boost_buff/refresh_rebound
+    execute if score @s hvr.asset.mob.zombie.boost_buff_rebound_refresh_timer matches 60.. run function hvr:asset/mob/zombie/tick/boost_buff/refresh_rebound

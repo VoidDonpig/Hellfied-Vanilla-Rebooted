@@ -8,10 +8,10 @@
     tag @s remove hvr.mob_need_init
 
 # Add asset mob tag
-    tag @s add hvr.mob_asset
+    tag @s add hvr.asset.mob
 
 # Add id tag
-    $tag @s add hvr.mob_asset.$(id)
+    $tag @s add hvr.asset.mob.$(id)
 
 # Set data
     function hvr:entity_manager/mob/init/set_data_from_register

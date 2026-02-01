@@ -34,10 +34,10 @@
     data modify storage hvr:asset/context damage_type set from storage hvr:entity_manager/mob damage_type
 
 # If asset, dispatch event
-    execute as @n[type=#hvr:mob,tag=hvr.mob_attacker,tag=hvr.mob_asset] at @s run function hvr:entity_manager/mob/event/attack/dispatch/
-    execute as @n[type=#hvr:mob,tag=hvr.mob_killer,tag=hvr.mob_asset] at @s run function hvr:entity_manager/mob/event/kill/dispatch/
-    execute if entity @s[tag=hvr.mob_asset,tag=!hvr.killed] run function hvr:entity_manager/mob/event/hurt/dispatch/
-    execute if entity @s[tag=hvr.mob_asset,tag=hvr.killed] run function hvr:entity_manager/mob/event/killed/dispatch/
+    execute as @n[type=#hvr:mob,tag=hvr.mob_attacker,tag=hvr.asset.mob] at @s run function hvr:entity_manager/mob/event/attack/dispatch/
+    execute as @n[type=#hvr:mob,tag=hvr.mob_killer,tag=hvr.asset.mob] at @s run function hvr:entity_manager/mob/event/kill/dispatch/
+    execute if entity @s[tag=hvr.asset.mob,tag=!hvr.killed] run function hvr:entity_manager/mob/event/hurt/dispatch/
+    execute if entity @s[tag=hvr.asset.mob,tag=hvr.killed] run function hvr:entity_manager/mob/event/killed/dispatch/
 
 # Call storage again
     function hvr:entity_manager/storage/access

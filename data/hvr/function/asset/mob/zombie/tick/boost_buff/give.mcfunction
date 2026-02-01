@@ -9,11 +9,11 @@
     attribute @s attack_damage modifier add hvr:asset/mob/zombie.boost_buff.attack_damage 3 add_value
 
 # Give tag
-    tag @s add hvr.mob_asset.zombie.boosting
+    tag @s add hvr.asset.mob.zombie.boosting
 
 # SFX
     execute anchored eyes positioned ^ ^ ^ run particle trial_spawner_detection ~ ~ ~ 0.4 0.4 0.4 0 16
     execute anchored eyes positioned ^ ^ ^ run playsound entity.ender_dragon.growl hostile @a[distance=..16] ~ ~ ~ 1 2
 
 # Reset timer
-    scoreboard players reset @s hvr.mob_asset.zombie.boost_buff_activate_timer
+    scoreboard players reset @s hvr.asset.mob.zombie.boost_buff_activate_timer

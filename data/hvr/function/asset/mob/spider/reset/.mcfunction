@@ -5,4 +5,4 @@
 # @within function hvr:asset/mob/spider/tick/
 
 # Reset charging timer
-    scoreboard players reset @s hvr.mob_asset.spider.super_leap.charging_time
+    scoreboard players reset @s hvr.asset.mob.spider.super_leap.charging_time

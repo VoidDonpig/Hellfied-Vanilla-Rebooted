@@ -14,7 +14,7 @@
     execute positioned ~ ~1024 ~ summon creeper run function hvr:asset/mob/creeper/explode/summon_explosion
 
 # Set swell
-    scoreboard players set @s hvr.mob_asset.creeper.swell 1
+    scoreboard players set @s hvr.asset.mob.creeper.swell 1
 
 # Flash
     particle flash{color:[1,1,1,1]} ~ ~ ~ 0.0 0.0 0.0 0 1
