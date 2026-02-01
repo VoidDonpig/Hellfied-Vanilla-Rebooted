@@ -1,4 +1,4 @@
-#> hvr:asset/mob/spider/tick/super_leap/on_land
+#> hvr:asset/mob/spider/tick/super_leap/while_leaping/on_land
 #
 # On land process
 #

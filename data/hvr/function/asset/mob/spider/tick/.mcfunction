@@ -19,6 +19,6 @@
 # Add endable tag
     execute if entity @s[tag=hvr.mob_asset.spider.leaping,tag=!hvr.is_on_ground] run tag @s add hvr.mob_asset.spider.leaping.endable
 
-# When on land
-    execute if entity @s[tag=hvr.mob_asset.spider.leaping.endable,tag=hvr.is_on_ground] run function hvr:asset/mob/spider/tick/super_leap/on_land
-    execute if entity @s[tag=hvr.mob_asset.spider.leaping.endable,tag=!hvr.is_on_ground,predicate=hvr:is_in_water] run function hvr:asset/mob/spider/tick/super_leap/on_land
+# When on land while leaping
+    execute if entity @s[tag=hvr.mob_asset.spider.leaping.endable,tag=hvr.is_on_ground] run function hvr:asset/mob/spider/tick/super_leap/while_leaping/on_land
+    execute if entity @s[tag=hvr.mob_asset.spider.leaping.endable,tag=!hvr.is_on_ground,predicate=hvr:is_in_water] run function hvr:asset/mob/spider/tick/super_leap/while_leaping/on_land
