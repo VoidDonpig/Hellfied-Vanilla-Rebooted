@@ -5,7 +5,7 @@
 # @within function hvr:entity_manager/mob/enemy/searching_ai/tick
 
 # Summon AI
-    summon zombified_piglin ~ ~ ~ {Invulnerable:true,Silent:true,PersistenceRequired:true,Tags:[hvr.enemy_searching_ai,hvr.enemy_searching_ai.need_init,hvr.no_process_mob,hvr.autokill,hvr.no_vehicle_kill],attributes:[{id:"scale",base:0.0625d,modifiers:[{id:"hvr:entity_manager/mob/enemy/searching_ai.scale",operation:"add_multiplied_total",amount:-1d}]},{id:"follow_range",base:64d},{id:"attack_damage",base:0d}],active_effects:[{id:"invisibility",amplifier:255,duration:-1,show_particles:false},{id:"resistance",amplifier:255,duration:-1,show_particles:false}]}
+    summon zombified_piglin ~ ~ ~ {Invulnerable:true,Silent:true,PersistenceRequired:true,Tags:[hvr.enemy_searching_ai,hvr.enemy_searching_ai.need_init,hvr.no_process,hvr.autokill,hvr.no_vehicle_kill],attributes:[{id:"scale",base:0.0625d,modifiers:[{id:"hvr:entity_manager/mob/enemy/searching_ai.scale",operation:"add_multiplied_total",amount:-1d}]},{id:"follow_range",base:64d},{id:"attack_damage",base:0d}],active_effects:[{id:"invisibility",amplifier:255,duration:-1,show_particles:false},{id:"resistance",amplifier:255,duration:-1,show_particles:false}]}
 
 # Make dismount current passengers
     execute on passengers run tag @s add hvr.temporary_dismounted

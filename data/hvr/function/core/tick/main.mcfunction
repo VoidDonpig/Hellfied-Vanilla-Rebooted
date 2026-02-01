@@ -11,16 +11,19 @@
     execute as @a at @s run function hvr:core/tick/player/pre
 
 # Mob pre tick
-    execute as @e[type=#hvr:mob,tag=!hvr.no_process_mob] at @s run function hvr:core/tick/mob/pre
+    execute as @e[type=#hvr:mob,tag=hvr.mob_already_init,tag=!hvr.no_process] at @s run function hvr:core/tick/mob/pre
 
 # Player tick
     execute as @a at @s run function hvr:core/tick/player/
 
 # Mob initialization
-    execute as @e[type=#hvr:mob,tag=!hvr.mob_already_init,tag=!hvr.no_process_mob] at @s run function hvr:entity_manager/mob/init/natural_mob
+    execute as @e[type=#hvr:mob,tag=!hvr.mob_already_init,tag=!hvr.no_process] at @s run function hvr:entity_manager/mob/init/natural_mob
 
 # Mob tick
-    execute as @e[type=#hvr:mob,tag=!hvr.no_process_mob] at @s run function hvr:core/tick/mob/
+    execute as @e[type=#hvr:mob,tag=hvr.mob_already_init,tag=!hvr.no_process] at @s run function hvr:core/tick/mob/
+
+# Object tick
+    execute as @e[tag=hvr.asset.object,tag=!hvr.no_process] at @s run function hvr:core/tick/object/
 
 # World tick
     function hvr:world/tick
@@ -32,4 +35,4 @@
     execute as @a at @s run function hvr:core/tick/player/post
 
 # Mob post tick
-    execute as @e[type=#hvr:mob,tag=!hvr.no_process_mob] at @s run function hvr:core/tick/mob/post
+    execute as @e[type=#hvr:mob,tag=hvr.mob_already_init,tag=!hvr.no_process] at @s run function hvr:core/tick/mob/post

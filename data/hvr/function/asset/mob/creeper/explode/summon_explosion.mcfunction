@@ -15,7 +15,7 @@
     execute if data storage hvr.__temp__:asset/mob __temp__.active_effects run data modify entity @s active_effects set from storage hvr.__temp__:asset/mob __temp__.active_effects
 
 # Declare no process mob
-    tag @s add hvr.no_process_mob
+    tag @s add hvr.no_process
 
 # Tp to origin location
     tp @s ~ ~-1024 ~
