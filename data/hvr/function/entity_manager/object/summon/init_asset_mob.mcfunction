@@ -18,7 +18,7 @@
 
 # Set field
     function hvr:entity_manager/storage/access
-    data modify storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].mob_field set from storage hvr:asset/context this
+    data modify storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].object_field set from storage hvr:asset/context this
 
 # Reset
     data remove storage hvr:asset/context this
