@@ -1,4 +1,4 @@
-#> hvr:entity_manager/mob/init/init_asset_mob
+#> hvr:entity_manager/mob/summon/init_asset_mob
 #
 # Initialize mob
 #

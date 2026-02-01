@@ -2,7 +2,7 @@
 #
 # Set data using register data
 #
-# @within function hvr:entity_manager/mob/init/init_asset_mob
+# @within function hvr:entity_manager/mob/summon/init_asset_mob
 
 # Validation
     # equipment
