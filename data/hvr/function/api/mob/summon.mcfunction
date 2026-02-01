@@ -16,7 +16,7 @@
     execute unless data storage hvr:api __input__.id run tellraw @a [{storage:"hvr:global",nbt:"prefix.error"},{text:"Missing argument: "},{text:"id",color:"red"}]
 
 # Summon
-    execute if data storage hvr:api __input__.id run function hvr:api/mob/core/summon.m with storage hvr:api __input__
+    execute if data storage hvr:api __input__.id run function hvr:api/mob/core/summon
 
 # Reset
     data remove storage hvr:api __input__.id

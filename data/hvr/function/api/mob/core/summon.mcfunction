@@ -1,11 +1,11 @@
-#> hvr:api/mob/core/summon.m
+#> hvr:api/mob/core/summon
 #
 # Summon declared mob
 #
 # @within function hvr:api/mob/summon
 
 # Register
-    $function hvr:asset/mob/$(id)/register
+    function hvr:entity_manager/mob/summon/register.m with storage hvr:api __input__
 
 # Validation
     execute unless data storage hvr:asset/mob id run return run tellraw @a [{storage:"hvr:global",nbt:"prefix.error"},{text:"This id mob is not registed: "},{storage:"hvr:api",nbt:"__input__.id"}]

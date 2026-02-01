@@ -1,4 +1,4 @@
-#> hvr:entity_manager/mob/init/set_data_from_register
+#> hvr:entity_manager/mob/summon/set_data_from_register
 #
 # Set data using register data
 #

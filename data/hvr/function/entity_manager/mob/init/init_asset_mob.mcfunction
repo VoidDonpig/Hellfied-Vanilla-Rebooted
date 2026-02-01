@@ -14,7 +14,7 @@
     $tag @s add hvr.asset.mob.$(id)
 
 # Set data
-    function hvr:entity_manager/mob/init/set_data_from_register
+    function hvr:entity_manager/mob/summon/set_data_from_register
 
 # Init process
     function hvr:entity_manager/mob/event/init/dispatch/m with storage hvr:api __input__

@@ -17,7 +17,7 @@
     execute unless data storage hvr:api __input__.id run tellraw @a [{storage:"hvr:global",nbt:"prefix.error"},{text:"Missing argument: "},{text:"id",color:"red"}]
 
 # Exec
-    execute if entity @s[type=#hvr:living] if data storage hvr:api __input__.id run function hvr:api/effect/core/give.m with storage hvr:api __input__
+    execute if entity @s[type=#hvr:living] if data storage hvr:api __input__.id run function hvr:api/effect/core/give
 
 # Reset
     data remove storage hvr:api __input__.id

@@ -1,11 +1,11 @@
-#> hvr:api/effect/core/give.m
+#> hvr:api/effect/core/give
 #
 # Give declared effect
 #
 # @within function hvr:api/effect/give
 
 # Register
-    $function hvr:asset/effect/$(id)/register
+    function hvr:entity_manager/effect/give/register.m with storage hvr:api __input__
 
 # Validation
     execute unless data storage hvr:asset/effect id run return run tellraw @a [{storage:"hvr:global",nbt:"prefix.error"},{text:"This id effect is not registed: "},{storage:"hvr:api",nbt:"__input__.id"}]
