@@ -1,0 +1,28 @@
+{
+    "anvil_cost": 255,
+    "description": "",
+    "max_cost": {
+        "base": 1,
+        "per_level_above_first": 1
+    },
+    "max_level": 1,
+    "min_cost": {
+        "base": 1,
+        "per_level_above_first": 1
+    },
+    "slots": [
+        "mainhand"
+    ],
+    "supported_items": "#axes",
+    "weight": 1,
+    "effects": {
+        "armor_effectiveness": [
+            {
+                "effect": {
+                    "type": "add",
+                    "value": -0.3
+                }
+            }
+        ]
+    }
+}

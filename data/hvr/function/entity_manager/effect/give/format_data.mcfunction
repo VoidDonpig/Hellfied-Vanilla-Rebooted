@@ -15,8 +15,8 @@
     execute if data storage hvr:asset/effect {duration_operation:"replace"} if score $level hvr.temporary >= $origin_Level hvr.temporary run scoreboard players operation $duration hvr.temporary > $origin_duration hvr.temporary
     execute if data storage hvr:asset/effect {level_operation:"add"} run scoreboard players operation $level hvr.temporary += $origin_Level hvr.temporary
     execute if data storage hvr:asset/effect {duration_operation:"add"} run scoreboard players operation $duration hvr.temporary += $origin_duration hvr.temporary
-    execute if data storage hvr:asset/effect {level_operation:"force"} run scoreboard players operation $level hvr.temporary = $origin_Level hvr.temporary
-    execute if data storage hvr:asset/effect {duration_operation:"force"} run scoreboard players operation $duration hvr.temporary = $origin_duration hvr.temporary
+    #execute if data storage hvr:asset/effect {level_operation:"force"} run scoreboard players operation $level hvr.temporary = $origin_Level hvr.temporary
+    #execute if data storage hvr:asset/effect {duration_operation:"force"} run scoreboard players operation $duration hvr.temporary = $origin_duration hvr.temporary
 
 # Clamp
     scoreboard players operation $level hvr.temporary > $1 hvr.constant
