@@ -68,10 +68,10 @@
         function hvr:global/variable/storage
 
 # Load asset function
-    function hvr:asset/mob/zombie/load
-    function hvr:asset/mob/creeper/load
-    function hvr:asset/mob/spider/load
-    function hvr:asset/mob/warden/load
+    function hvr:asset/mob/enemy.zombie/load
+    function hvr:asset/mob/enemy.creeper/load
+    function hvr:asset/mob/enemy.spider/load
+    function hvr:asset/mob/enemy.warden/load
 
 # Declare this function is loaded
     execute if data storage hvr:core {is_production:true} run data modify storage hvr:core loaded_once set value true

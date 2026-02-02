@@ -1,0 +1,56 @@
+{
+    "anvil_cost": 1,
+    "description": "",
+    "max_cost": {
+        "base": 0,
+        "per_level_above_first": 0
+    },
+    "max_level": 1,
+    "min_cost": {
+        "base": 0,
+        "per_level_above_first": 0
+    },
+    "slots": [
+        "any"
+    ],
+    "supported_items": "#hvr:all",
+    "weight": 1,
+    "effects": {
+        "tick": [
+            {
+                "effect": {
+                    "type": "explode",
+                    "block_interaction": "mob",
+                    "large_particle": {
+                        "type": "explosion_emitter"
+                    },
+                    "radius": 3,
+                    "small_particle": {
+                        "type": "poof"
+                    },
+                    "sound": "entity.generic.explode",
+                    "attribute_to_user": false,
+                    "block_particles": [
+                        {
+                            "particle": {
+                                "type": "ash"
+                            },
+                            "weight": 1,
+                            "scaling": 2,
+                            "speed": 1
+                        }
+                    ],
+                    "create_fire": true,
+                    "damage_type": "explosion",
+                    "knockback_multiplier": 1
+                }
+            },
+            {
+                "effect": {
+                    "type": "run_function",
+                    "function": "hvr:asset/object/enemy.explosive_fireball/kill_armor_stand"
+                }
+            }
+        ]
+    }
+}

@@ -5,22 +5,22 @@
 # @within function hvr:entity_manager/mob/init/natural_mob
 
 # Declare id
-    execute if entity @s[type=zombie] run data modify storage hvr:api __input__.id set value "zombie"
-    execute if entity @s[type=husk] run data modify storage hvr:api __input__.id set value "husk"
-    execute if entity @s[type=drowned] run data modify storage hvr:api __input__.id set value "drowned"
-    execute if entity @s[type=zombified_piglin] run data modify storage hvr:api __input__.id set value "zombified_piglin"
-    execute if entity @s[type=zombie_villager] run data modify storage hvr:api __input__.id set value "zombie_villager"
-    execute if entity @s[type=skeleton] run data modify storage hvr:api __input__.id set value "skeleton"
-    execute if entity @s[type=stray] run data modify storage hvr:api __input__.id set value "stray"
-    execute if entity @s[type=bogged] run data modify storage hvr:api __input__.id set value "bogged"
-    execute if entity @s[type=parched] run data modify storage hvr:api __input__.id set value "parched"
-    execute if entity @s[type=wither_skeleton] run data modify storage hvr:api __input__.id set value "wither_skeleton"
-    execute if entity @s[type=creeper] run data modify storage hvr:api __input__.id set value "creeper"
-    execute if entity @s[type=spider] run data modify storage hvr:api __input__.id set value "spider"
-    execute if entity @s[type=cave_spider] run data modify storage hvr:api __input__.id set value "cave_spider"
-    execute if entity @s[type=enderman] run data modify storage hvr:api __input__.id set value "enderman"
-    execute if entity @s[type=blaze] run data modify storage hvr:api __input__.id set value "blaze"
-    execute if entity @s[type=warden] run data modify storage hvr:api __input__.id set value "warden"
+    execute if entity @s[type=zombie] run data modify storage hvr:api __input__.id set value "enemy.zombie"
+    execute if entity @s[type=husk] run data modify storage hvr:api __input__.id set value "enemy.husk"
+    execute if entity @s[type=drowned] run data modify storage hvr:api __input__.id set value "enemy.drowned"
+    execute if entity @s[type=zombified_piglin] run data modify storage hvr:api __input__.id set value "enemy.zombified_piglin"
+    execute if entity @s[type=zombie_villager] run data modify storage hvr:api __input__.id set value "enemy.zombie_villager"
+    execute if entity @s[type=skeleton] run data modify storage hvr:api __input__.id set value "enemy.skeleton"
+    execute if entity @s[type=stray] run data modify storage hvr:api __input__.id set value "enemy.stray"
+    execute if entity @s[type=bogged] run data modify storage hvr:api __input__.id set value "enemy.bogged"
+    execute if entity @s[type=parched] run data modify storage hvr:api __input__.id set value "enemy.parched"
+    execute if entity @s[type=wither_skeleton] run data modify storage hvr:api __input__.id set value "enemy.wither_skeleton"
+    execute if entity @s[type=creeper] run data modify storage hvr:api __input__.id set value "enemy.creeper"
+    execute if entity @s[type=spider] run data modify storage hvr:api __input__.id set value "enemy.spider"
+    execute if entity @s[type=cave_spider] run data modify storage hvr:api __input__.id set value "enemy.cave_spider"
+    execute if entity @s[type=enderman] run data modify storage hvr:api __input__.id set value "enemy.enderman"
+    execute if entity @s[type=blaze] run data modify storage hvr:api __input__.id set value "enemy.blaze"
+    execute if entity @s[type=warden] run data modify storage hvr:api __input__.id set value "enemy.warden"
 
 # Declare skip summon entity
     data modify storage hvr:api __input__.skip_summon set value true
