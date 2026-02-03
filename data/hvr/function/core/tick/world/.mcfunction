@@ -14,5 +14,5 @@
     execute if predicate hvr:weather/is_raining run function hvr:world_manager/weather/rain/
     execute if predicate hvr:weather/is_lightning run function hvr:world_manager/weather/thunderstorm/
 
-# Add item spawned tag
-    tag @e[type=item,tag=!hvr.item_ticked] add hvr.item_ticked
+# Random phenomenon
+    function hvr:world_manager/phenomenon/

@@ -5,7 +5,7 @@
 # @within function
 #   hvr:asset/effect/ominous_bloodlust/given
 
-# Remove Old attribute
+# Remove old attribute
     attribute @s max_health modifier remove hvr:asset/effect/ominous_bloodlust.max_health
     attribute @s armor modifier remove hvr:asset/effect/ominous_bloodlust.armor
     attribute @s armor_toughness modifier remove hvr:asset/effect/ominous_bloodlust.armor_toughness

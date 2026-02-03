@@ -1,0 +1,13 @@
+{
+    "condition": "any_of",
+    "terms": [
+        {
+            "condition": "reference",
+            "name": "hvr:time/night"
+        },
+        {
+            "condition": "reference",
+            "name": "hvr:time/midnight"
+        }
+    ]
+}

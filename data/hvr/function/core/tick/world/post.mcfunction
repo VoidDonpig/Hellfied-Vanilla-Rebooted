@@ -4,6 +4,9 @@
 #
 # @within function hvr:core/tick/main
 
+# Add item ticked tag
+    tag @e[type=item,tag=!hvr.item_ticked] add hvr.item_ticked
+
 # Autokill
     execute as @e[tag=hvr.autokill] run function hvr:world_manager/autokill/
 

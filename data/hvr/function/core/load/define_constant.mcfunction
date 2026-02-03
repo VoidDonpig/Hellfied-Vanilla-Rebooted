@@ -478,8 +478,6 @@
     scoreboard players set $32767 hvr.constant 32767
     scoreboard players set $-2147483648 hvr.constant -2147483648
     scoreboard players set $2147483647 hvr.constant 2147483647
-    scoreboard players set $-2147483648 hvr.constant -2147483648
-    scoreboard players set $2147483647 hvr.constant 2147483647
 
     scoreboard players set $120 hvr.constant 120
     scoreboard players set $130 hvr.constant 130
