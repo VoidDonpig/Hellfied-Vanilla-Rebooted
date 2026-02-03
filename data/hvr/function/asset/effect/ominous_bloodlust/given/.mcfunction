@@ -12,9 +12,9 @@
 
 # Calculate status increase
     execute store result score $ hvr.temporary run data get storage hvr:asset/context level
-    scoreboard players set $_ hvr.temporary 25
+    scoreboard players set $_ hvr.temporary 10
     scoreboard players operation $ hvr.temporary *= $_ hvr.temporary
-    scoreboard players set $__ hvr.temporary 125
+    scoreboard players set $__ hvr.temporary 50
     scoreboard players operation $ hvr.temporary < $__ hvr.temporary
     execute store result storage hvr.__temp__:asset/effect increase double 0.01 run scoreboard players get $ hvr.temporary
 
