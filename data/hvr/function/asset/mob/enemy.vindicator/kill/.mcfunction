@@ -14,3 +14,8 @@
 
 # Get regen
     effect give @s regeneration 3 2
+
+# SFX
+    execute anchored eyes positioned ^ ^ ^ run particle angry_villager ~ ~ ~ 0.0 0.0 0.0 0 1
+    execute anchored eyes positioned ^ ^ ^ run particle trial_spawner_detection ~ ~ ~ 0.3 0.3 0.3 0 10
+    execute anchored eyes positioned ^ ^ ^ run playsound entity.ender_dragon.growl hostile @a[distance=..16] ~ ~ ~ 1 2
