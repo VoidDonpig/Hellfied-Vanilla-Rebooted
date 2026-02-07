@@ -1,7 +1,11 @@
 {
     "pack": {
         "description": "The datapack gives you hellish challenges by VoidDonpig.",
-        "min_format": 94,
-        "max_format": 94
+        "min_format": [
+            94,
+            1
+        ],
+        "max_format": 94,
+        "pack_format": 94
     }
 }

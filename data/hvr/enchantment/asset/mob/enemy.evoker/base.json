@@ -25,11 +25,30 @@
                     "predicate": {
                         "tags": [
                             {
-                                "id": "hvr:asset/mob/enemy.creeper/creeper_immune_to",
+                                "id": "hvr:asset/mob/enemy.evoker/evoker_immune_to",
                                 "expected": true
                             }
                         ]
                     }
+                }
+            },
+            {
+                "effect": {},
+                "requirements": {
+                    "condition": "damage_source_properties",
+                    "predicate": {
+                        "source_entity": {
+                            "type": "#hvr:enemy/all_without_boss"
+                        }
+                    }
+                }
+            }
+        ],
+        "damage_protection": [
+            {
+                "effect": {
+                    "type": "add",
+                    "value": 20
                 }
             }
         ]

@@ -71,6 +71,7 @@
     function hvr:asset/mob/enemy.zombie/load
     function hvr:asset/mob/enemy.creeper/load
     function hvr:asset/mob/enemy.spider/load
+    function hvr:asset/mob/enemy.evoker/load
     function hvr:asset/mob/enemy.warden/load
 
 # Declare this function is loaded

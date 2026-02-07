@@ -21,6 +21,8 @@
     execute if entity @s[type=enderman] run data modify storage hvr:api __input__.id set value "enemy.enderman"
     execute if entity @s[type=blaze] run data modify storage hvr:api __input__.id set value "enemy.blaze"
     execute if entity @s[type=vindicator] run data modify storage hvr:api __input__.id set value "enemy.vindicator"
+    execute if entity @s[type=evoker] run data modify storage hvr:api __input__.id set value "enemy.evoker"
+    execute if entity @s[type=pillager] run data modify storage hvr:api __input__.id set value "enemy.pillager"
     execute if entity @s[type=warden] run data modify storage hvr:api __input__.id set value "enemy.warden"
 
 # Declare skip summon entity

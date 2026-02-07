@@ -1,0 +1,9 @@
+{
+    "values": [
+        "#hvr:is_explosion",
+        "#hvr:is_projectile",
+        "magic",
+        "indirect_magic",
+        "#is_fire"
+    ]
+}

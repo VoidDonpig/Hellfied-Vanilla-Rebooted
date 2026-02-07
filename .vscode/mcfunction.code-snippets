@@ -1,0 +1,9 @@
+{
+    "Dispatch": {
+        "prefix": "dispatcher",
+        "body": [
+            "hvr:entity_manager/(type)$1/event/(event)$2/dispatch/m",
+        ],
+        "description": "Dispacther path"
+    }
+}
