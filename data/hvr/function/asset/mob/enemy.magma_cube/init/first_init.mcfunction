@@ -8,7 +8,7 @@
     data modify entity @s Size set value 6
 
 # Heal
-    execute store result entity @s Health float 0.01 run attribute @s max_health ge
+    execute store result entity @s Health float 0.01 run attribute @s max_health get
 
 # Declare this was the first init process of the mob
     tag @s add hvr.asset.mob.enemy.magma_cube_first_init_done
