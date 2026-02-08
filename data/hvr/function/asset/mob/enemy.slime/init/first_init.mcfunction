@@ -9,7 +9,7 @@
 
 # Set Health
     attribute @s max_health base set 16
-    execute store result entity @s Health float 0.01 run attribute @s max_health get
+    execute store result entity @s Health float 0.01 run attribute @s max_health get 100
 
 # Declare this was the first init process of the mob
     tag @s add hvr.asset.mob.enemy.slime_first_init_done
