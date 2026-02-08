@@ -8,4 +8,4 @@
     execute if predicate hvr:in_hostile run function hvr:asset/mob/enemy.wither_skeleton/tick/in_hostile
 
 # Rotate display
-    execute on passengers if entity @s[type=item_display,tag=hvr.asset.mob.wither_skeleton.item_holder] rotated as @n[type=wither_skeleton,tag=hvr.this] run rotate @s ~ 0
+    execute on passengers if entity @s[type=item_display,tag=hvr.asset.mob.enemy.wither_skeleton.item_holder] rotated as @n[type=wither_skeleton,tag=hvr.this] run rotate @s ~ 0

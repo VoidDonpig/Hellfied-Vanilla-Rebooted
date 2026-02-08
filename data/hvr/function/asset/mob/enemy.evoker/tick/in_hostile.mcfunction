@@ -8,4 +8,4 @@
     function hvr:asset/mob/enemy.evoker/tick/aura_particle/
 
 # Anti projectiles
-    execute anchored eyes positioned ^ ^ ^ as @e[type=#hvr:projectiles,tag=!hvr.asset.mob.evoker_already_passed_projectile,distance=..4] run function hvr:asset/mob/enemy.evoker/tick/anti_projectile/check
+    execute anchored eyes positioned ^ ^ ^ as @e[type=#hvr:projectiles,tag=!hvr.asset.mob.enemy.evoker_already_passed_projectile,distance=..4] run function hvr:asset/mob/enemy.evoker/tick/anti_projectile/check

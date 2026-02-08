@@ -6,22 +6,22 @@
 
 # Generate particle
     execute \
-    at @e[type=marker,tag=hvr.asset.mob.evoker.axis] \
-    at @e[type=marker,tag=hvr.asset.mob.evoker.axis] \
-    at @e[type=marker,tag=hvr.asset.mob.evoker.axis] \
+    at @e[type=marker,tag=hvr.asset.mob.enemy.evoker.axis] \
+    at @e[type=marker,tag=hvr.asset.mob.enemy.evoker.axis] \
+    at @e[type=marker,tag=hvr.asset.mob.enemy.evoker.axis] \
     at @s \
     \
-    rotated as @n[type=marker,tag=hvr.asset.mob.evoker.axis,sort=random] rotated ~ 0 positioned ^ ^ ^2 \
-    rotated as @n[type=marker,tag=hvr.asset.mob.evoker.axis,sort=random] positioned ^2 ^ ^ \
-    rotated as @n[type=marker,tag=hvr.asset.mob.evoker.axis,sort=random] positioned ^ ^ ^2 \
+    rotated as @n[type=marker,tag=hvr.asset.mob.enemy.evoker.axis,sort=random] rotated ~ 0 positioned ^ ^ ^2 \
+    rotated as @n[type=marker,tag=hvr.asset.mob.enemy.evoker.axis,sort=random] positioned ^2 ^ ^ \
+    rotated as @n[type=marker,tag=hvr.asset.mob.enemy.evoker.axis,sort=random] positioned ^ ^ ^2 \
     \
-    rotated as @n[type=marker,tag=hvr.asset.mob.evoker.axis,sort=random] rotated ~ 0 positioned ^ ^ ^1 \
-    rotated as @n[type=marker,tag=hvr.asset.mob.evoker.axis,sort=random] positioned ^1 ^ ^ \
-    rotated as @n[type=marker,tag=hvr.asset.mob.evoker.axis,sort=random] positioned ^ ^ ^1 \
+    rotated as @n[type=marker,tag=hvr.asset.mob.enemy.evoker.axis,sort=random] rotated ~ 0 positioned ^ ^ ^1 \
+    rotated as @n[type=marker,tag=hvr.asset.mob.enemy.evoker.axis,sort=random] positioned ^1 ^ ^ \
+    rotated as @n[type=marker,tag=hvr.asset.mob.enemy.evoker.axis,sort=random] positioned ^ ^ ^1 \
     \
-    rotated as @n[type=marker,tag=hvr.asset.mob.evoker.axis,sort=random] rotated ~ 0 positioned ^ ^ ^0.5 \
-    rotated as @n[type=marker,tag=hvr.asset.mob.evoker.axis,sort=random] positioned ^0.5 ^ ^ \
-    rotated as @n[type=marker,tag=hvr.asset.mob.evoker.axis,sort=random] positioned ^ ^ ^0.5 \
+    rotated as @n[type=marker,tag=hvr.asset.mob.enemy.evoker.axis,sort=random] rotated ~ 0 positioned ^ ^ ^0.5 \
+    rotated as @n[type=marker,tag=hvr.asset.mob.enemy.evoker.axis,sort=random] positioned ^0.5 ^ ^ \
+    rotated as @n[type=marker,tag=hvr.asset.mob.enemy.evoker.axis,sort=random] positioned ^ ^ ^0.5 \
     \
     facing entity @s feet \
     positioned as @s[distance=..4] \

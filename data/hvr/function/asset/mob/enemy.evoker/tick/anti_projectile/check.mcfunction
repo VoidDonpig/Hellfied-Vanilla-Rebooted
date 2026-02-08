@@ -11,7 +11,7 @@
     execute unless score $is_illager_projectile hvr.temporary matches 1 at @s run function hvr:asset/mob/enemy.evoker/tick/anti_projectile/
 
 # Add checked tag
-    tag @s add hvr.asset.mob.evoker_already_passed_projectile
+    tag @s add hvr.asset.mob.enemy.evoker_already_passed_projectile
 
 # Reset
     scoreboard players reset $is_illager_projectile hvr.temporary
