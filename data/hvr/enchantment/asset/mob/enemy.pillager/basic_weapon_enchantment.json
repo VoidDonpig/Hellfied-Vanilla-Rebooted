@@ -1,0 +1,55 @@
+{
+    "anvil_cost": 255,
+    "description": "",
+    "max_cost": {
+        "base": 1,
+        "per_level_above_first": 1
+    },
+    "max_level": 1,
+    "min_cost": {
+        "base": 1,
+        "per_level_above_first": 1
+    },
+    "slots": [
+        "mainhand"
+    ],
+    "supported_items": "crossbow",
+    "weight": 1,
+    "effects": {
+        "damage": [
+            {
+                "effect": {
+                    "type": "add",
+                    "value": {
+                        "type": "linear",
+                        "base": 4,
+                        "per_level_above_first": 4
+                    }
+                },
+                "requirements": {
+                    "condition": "entity_properties",
+                    "entity": "direct_attacker",
+                    "predicate": {
+                        "type": "#hvr:arrows"
+                    }
+                }
+            }
+        ],
+        "projectile_spawned": [
+            {
+                "effect": {
+                    "type": "ignite",
+                    "duration": 200
+                }
+            }
+        ],
+        "armor_effectiveness": [
+            {
+                "effect": {
+                    "type": "add",
+                    "value": -0.1
+                }
+            }
+        ]
+    }
+}
