@@ -4,6 +4,10 @@
 #
 # @within function hvr:core/tick/mob/pre
 
+# Remove may remaining tags
+    tag @s remove hvr.killed
+    tag @s remove hvr.death
+
 # If not asset mob, just restore sys ench and allocate new id and tag
     execute if entity @s[tag=!hvr.asset.mob] run return run function hvr:entity_manager/mob/init/common
 
