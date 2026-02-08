@@ -18,6 +18,8 @@
     execute if entity @s[type=creeper] run data modify storage hvr:api __input__.id set value "enemy.creeper"
     execute if entity @s[type=spider] run data modify storage hvr:api __input__.id set value "enemy.spider"
     execute if entity @s[type=cave_spider] run data modify storage hvr:api __input__.id set value "enemy.cave_spider"
+    execute if entity @s[type=slime] run data modify storage hvr:api __input__.id set value "enemy.slime"
+    execute if entity @s[type=magma_cube] run data modify storage hvr:api __input__.id set value "enemy.magma_cube"
     execute if entity @s[type=enderman] run data modify storage hvr:api __input__.id set value "enemy.enderman"
     execute if entity @s[type=witch] run data modify storage hvr:api __input__.id set value "enemy.witch"
     execute if entity @s[type=piglin] run data modify storage hvr:api __input__.id set value "enemy.piglin"
