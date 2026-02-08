@@ -1,14 +1,101 @@
 {
-    "Dispatch": {
-        "prefix": "dispatcher",
-        "body": [
-            "# @within function hvr:entity_manager/(type)$1/event/(event)$2/dispatch/m",
-        ],
-        "description": "Dispacther path"
-    },
-    "Minecraft Mob Asset Register Template": {
+  "Tick": {
+    "prefix": "tickdispatcher",
+    "body": [
+      "#> hvr:asset/(type)$1/(id)/tick/",
+      "#",
+      "# Tick process",
+      "#",
+      "# @within function hvr:entity_manager/(type)/event/tick/dispatch/m"
+    ],
+    "description": "Tick Dispacther"
+  },
+  "Init": {
+    "prefix": "initdispatcher",
+    "body": [
+      "#> hvr:asset/(type)$1/(id)/init/",
+      "#",
+      "# Init process",
+      "#",
+      "# @within function hvr:entity_manager/(type)/event/init/dispatch/m"
+    ],
+    "description": "Init Dispacther"
+  },
+  "Attack": {
+    "prefix": "attackdispatcher",
+    "body": [
+      "#> hvr:asset/(type)$1/(id)/attack/",
+      "#",
+      "# Attack process",
+      "#",
+      "# @within function hvr:entity_manager/(type)/event/attack/dispatch/m"
+    ],
+    "description": "Attack Dispacther"
+  },
+  "Death": {
+    "prefix": "deathdispatcher",
+    "body": [
+      "#> hvr:asset/(type)$1/(id)/death/",
+      "#",
+      "# Death process",
+      "#",
+      "# @within function hvr:entity_manager/(type)/event/death/dispatch/m"
+    ],
+    "description": "Attack Dispacther"
+  },
+  "Hurt": {
+    "prefix": "hurtdispatcher",
+    "body": [
+      "#> hvr:asset/(type)$1/(id)/hurt/",
+      "#",
+      "# Hurt process",
+      "#",
+      "# @within function hvr:entity_manager/(type)/event/hurt/dispatch/m"
+    ],
+    "description": "Attack Dispacther"
+  },
+  "Kill": {
+    "prefix": "killdispatcher",
+    "body": [
+      "#> hvr:asset/(type)$1/(id)/kill/",
+      "#",
+      "# Kill process",
+      "#",
+      "# @within function hvr:entity_manager/(type)/event/kill/dispatch/m"
+    ],
+    "description": "Attack Dispacther"
+  },
+  "Killed": {
+    "prefix": "killeddispatcher",
+    "body": [
+      "#> hvr:asset/(type)$1/(id)/killed/",
+      "#",
+      "# Killed process",
+      "#",
+      "# @within function hvr:entity_manager/(type)/event/killed/dispatch/m"
+    ],
+    "description": "Attack Dispacther"
+  },
+  "Summon": {
+    "prefix": "summondispatcher",
+    "body": [
+      "#> hvr:asset/(type)$1/(id)/summon/",
+      "#",
+      "# Summon process",
+      "#",
+      "# @within function hvr:entity_manager/(type)/event/summon/dispatch/m"
+    ],
+    "description": "Attack Dispacther"
+  },
+  "Mob Asset Register Template": {
     "prefix": "mobregister",
     "body": [
+      "#> hvr:asset/mob/(id)/register",
+      "#",
+      "# Register function",
+      "#",
+      "# @within function hvr:api/mob/core/summon",
+      "",
       "# ID",
       "    data modify storage hvr:asset/mob id set value $1",
       "",
@@ -72,5 +159,4 @@
     ],
     "description": "Minecraft mob asset template for hvr namespace"
   }
-
 }
