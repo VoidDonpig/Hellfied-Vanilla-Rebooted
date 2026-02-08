@@ -1,4 +1,4 @@
-#> hvr:asset/effect/ominous_bloodlust/given/set_attribute
+#> hvr:asset/effect/ominous_bloodlust/given/set_attribute.m
 #
 # Set attribute
 #

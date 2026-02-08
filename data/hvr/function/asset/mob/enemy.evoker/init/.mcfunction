@@ -6,3 +6,6 @@
 
 # If captain, give buff
     execute if entity @s[predicate=hvr:is_captain] run function hvr:asset/mob/enemy.evoker/init/captain_buff
+
+# If raider, add tag
+    execute if entity @s[predicate=hvr:has_raid] run tag @s add hvr.asset.mob.raider

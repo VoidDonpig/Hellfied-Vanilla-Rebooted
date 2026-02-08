@@ -15,3 +15,6 @@
 
 # Override drop chance
     data modify entity @s drop_chances.mainhand set value 0.0f
+
+# If raider, add tag
+    execute if entity @s[predicate=hvr:has_raid] run tag @s add hvr.asset.mob.raider

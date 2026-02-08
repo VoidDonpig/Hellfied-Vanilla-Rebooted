@@ -14,7 +14,7 @@
     execute store result storage hvr.__temp__:asset/effect increase double 0.01 run scoreboard players get $ hvr.temporary
 
 # Set attribute
-    function hvr:asset/effect/ominous_bloodlust/given/set_attribute with storage hvr.__temp__:asset/effect
+    function hvr:asset/effect/ominous_bloodlust/given/set_attribute.m with storage hvr.__temp__:asset/effect
 
 # Reset
     scoreboard players reset $ hvr.temporary
