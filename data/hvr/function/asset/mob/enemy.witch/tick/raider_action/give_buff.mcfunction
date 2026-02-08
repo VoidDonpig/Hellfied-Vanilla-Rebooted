@@ -5,7 +5,7 @@
 # @within function hvr:asset/mob/enemy.witch/tick/raider_action/
 
 # Give effect
-    data modify storage hvr:api __input__.id set value "witch_raider_effect"
+    data modify storage hvr:api __input__.id set value "witch_raider_buff"
     data modify storage hvr:api __input__.duration set value 6000
     data modify storage hvr:api __input__.level set value 1
     data modify storage hvr:api __input__.duration_operation set value "force"
