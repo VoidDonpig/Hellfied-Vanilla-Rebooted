@@ -46,6 +46,15 @@
         execute if data storage hvr:asset/mob explosion_knockback_resistance run data modify storage hvr:asset/mob attributes append value {id:"minecraft:explosion_knockback_resistance"}
         execute if data storage hvr:asset/mob spawn_reinforcements run data modify storage hvr:asset/mob attributes append value {id:"minecraft:spawn_reinforcements"}
         execute if data storage hvr:asset/mob scale run data modify storage hvr:asset/mob attributes append value {id:"minecraft:scale"}
+        execute if data storage hvr:asset/mob burning_time run data modify storage hvr:asset/mob attributes append value {id:"minecraft:burning_time"}
+        execute if data storage hvr:asset/mob fall_damage_multiplier run data modify storage hvr:asset/mob attributes append value {id:"minecraft:fall_damage_multiplier"}
+        execute if data storage hvr:asset/mob flying_speed run data modify storage hvr:asset/mob attributes append value {id:"minecraft:flying_speed"}
+        execute if data storage hvr:asset/mob gravity run data modify storage hvr:asset/mob attributes append value {id:"minecraft:gravity"}
+        execute if data storage hvr:asset/mob jump_strength run data modify storage hvr:asset/mob attributes append value {id:"minecraft:jump_strength"}
+        execute if data storage hvr:asset/mob oxygen_bonus run data modify storage hvr:asset/mob attributes append value {id:"minecraft:oxygen_bonus"}
+        execute if data storage hvr:asset/mob safe_fall_distance run data modify storage hvr:asset/mob attributes append value {id:"minecraft:safe_fall_distance"}
+        execute if data storage hvr:asset/mob step_height run data modify storage hvr:asset/mob attributes append value {id:"minecraft:step_height"}
+        execute if data storage hvr:asset/mob tempt_range run data modify storage hvr:asset/mob attributes append value {id:"minecraft:tempt_range"}
     # Set
         data modify storage hvr:asset/mob attributes[{id:"minecraft:max_health"}].base set from storage hvr:asset/mob max_health
         data modify storage hvr:asset/mob attributes[{id:"minecraft:max_absorption"}].base set from storage hvr:asset/mob max_absorption
@@ -61,6 +70,15 @@
         data modify storage hvr:asset/mob attributes[{id:"minecraft:explosion_knockback_resistance"}].base set from storage hvr:asset/mob explosion_knockback_resistance
         data modify storage hvr:asset/mob attributes[{id:"minecraft:spawn_reinforcements"}].base set from storage hvr:asset/mob spawn_reinforcements
         data modify storage hvr:asset/mob attributes[{id:"minecraft:scale"}].base set from storage hvr:asset/mob scale
+        data modify storage hvr:asset/mob attributes[{id:"minecraft:burning_time"}].base set from storage hvr:asset/mob burning_time
+        data modify storage hvr:asset/mob attributes[{id:"minecraft:fall_damage_multiplier"}].base set from storage hvr:asset/mob fall_damage_multiplier
+        data modify storage hvr:asset/mob attributes[{id:"minecraft:flying_speed"}].base set from storage hvr:asset/mob flying_speed
+        data modify storage hvr:asset/mob attributes[{id:"minecraft:gravity"}].base set from storage hvr:asset/mob gravity
+        data modify storage hvr:asset/mob attributes[{id:"minecraft:jump_strength"}].base set from storage hvr:asset/mob jump_strength
+        data modify storage hvr:asset/mob attributes[{id:"minecraft:oxygen_bonus"}].base set from storage hvr:asset/mob oxygen_bonus
+        data modify storage hvr:asset/mob attributes[{id:"minecraft:safe_fall_distance"}].base set from storage hvr:asset/mob safe_fall_distance
+        data modify storage hvr:asset/mob attributes[{id:"minecraft:step_height"}].base set from storage hvr:asset/mob step_height
+        data modify storage hvr:asset/mob attributes[{id:"minecraft:tempt_range"}].base set from storage hvr:asset/mob tempt_range
     # Apply
         data modify entity @s attributes set from storage hvr:asset/mob attributes
 
@@ -69,7 +87,7 @@
     execute if data storage hvr:asset/mob custom_name_visible run data modify entity @s CustomNameVisible set from storage hvr:asset/mob custom_name_visible
 
 # Apply equipment
-    data modify entity @s equipment set from storage hvr:asset/mob equipment
+    data modify entity @s equipment merge from storage hvr:asset/mob equipment
     data modify entity @s drop_chances set from storage hvr:asset/mob drop_chances
 
 # Death loot table
@@ -117,6 +135,15 @@
     data remove storage hvr:asset/mob explosion_knockback_resistance
     data remove storage hvr:asset/mob spawn_reinforcements
     data remove storage hvr:asset/mob scale
+    data remove storage hvr:asset/mob burning_time
+    data remove storage hvr:asset/mob fall_damage_multiplier
+    data remove storage hvr:asset/mob flying_speed
+    data remove storage hvr:asset/mob gravity
+    data remove storage hvr:asset/mob jump_strength
+    data remove storage hvr:asset/mob oxygen_bonus
+    data remove storage hvr:asset/mob safe_fall_distance
+    data remove storage hvr:asset/mob step_height
+    data remove storage hvr:asset/mob tempt_range
 
     data remove storage hvr:asset/mob attributes
 
