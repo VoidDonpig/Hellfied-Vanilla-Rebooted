@@ -1,0 +1,19 @@
+{
+    "criteria": {
+        "get_diamond": {
+            "trigger": "inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "diamond"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "function": "hvr:world_manager/difficulty/event/get_diamond"
+    }
+}

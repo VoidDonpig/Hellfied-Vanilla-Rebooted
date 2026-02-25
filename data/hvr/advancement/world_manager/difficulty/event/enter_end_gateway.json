@@ -1,0 +1,13 @@
+{
+    "criteria": {
+        "enter_end_gateway": {
+            "trigger": "enter_block",
+            "conditions": {
+                "block": "end_gateway"
+            }
+        }
+    },
+    "rewards": {
+        "function": "hvr:world_manager/difficulty/event/enter_end_gateway"
+    }
+}

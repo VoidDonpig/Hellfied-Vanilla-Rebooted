@@ -13,6 +13,9 @@
 # Mob pre tick
     execute as @e[type=#hvr:mob,tag=hvr.mob_already_init,tag=!hvr.no_process] at @s run function hvr:core/tick/mob/pre
 
+# World pre tick
+    function hvr:core/tick/world/pre
+
 # Player tick
     execute as @a at @s run function hvr:core/tick/player/
 

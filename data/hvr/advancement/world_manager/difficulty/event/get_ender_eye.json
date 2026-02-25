@@ -1,0 +1,19 @@
+{
+    "criteria": {
+        "get_ender_eye": {
+            "trigger": "inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "ender_eye"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "function": "hvr:world_manager/difficulty/event/get_ender_eye"
+    }
+}

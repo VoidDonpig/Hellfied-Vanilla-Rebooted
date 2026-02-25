@@ -1,0 +1,19 @@
+{
+    "criteria": {
+        "get_elytra": {
+            "trigger": "inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "elytra"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "function": "hvr:world_manager/difficulty/event/get_elytra"
+    }
+}

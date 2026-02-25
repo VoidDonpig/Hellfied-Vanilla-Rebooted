@@ -7,9 +7,10 @@
 # Add system objective
     # Forceload
         execute in overworld run forceload add -1 -1 0 0
+        execute in overworld run forceload add -7608 7608 7610 7610
     # Object
-        execute in overworld run fill -1 -63 -1 1 -64 1 bedrock
-        execute in overworld run setblock 0 -64 0 purple_shulker_box{lock:{items:"debug_stick"}}
+        execute in overworld run fill 7608 -63 7608 7610 -64 7610 bedrock
+        execute in overworld run setblock 7609 -64 7609 purple_shulker_box{lock:{items:"debug_stick"}}
         kill 1db9-0-0-0-0
         execute in overworld run summon marker 0.0 0.0 0.0 {UUID:[I;7609,0,0,0]}
 
@@ -22,11 +23,13 @@
     function hvr:core/load/define_constant
 
 # Declare difficulty
-    execute unless score $difficulty hvr.global matches 1.. run scoreboard players set $difficulty hvr.global 1
+    execute unless score $difficulty hvr.global matches 1.. run scoreboard players set $difficulty hvr.global 0
 
 # Listener objectives
     scoreboard objectives add hvr.used_milk used:milk_bucket
     scoreboard objectives add hvr.used_totem used:totem_of_undying
+    scoreboard objectives add hvr.first_join_event custom:play_time
+    scoreboard objectives add hvr.rejoin_event custom:leave_game
     scoreboard objectives add hvr.death_event deathCount
     scoreboard objectives add hvr.respawn_event custom:time_since_death
 

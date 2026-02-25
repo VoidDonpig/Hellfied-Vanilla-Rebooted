@@ -1,0 +1,15 @@
+{
+    "criteria": {
+        "get_diamond": {
+            "trigger": "player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "ender_dragon"
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "hvr:world_manager/difficulty/event/defeat_ender_dragon"
+    }
+}

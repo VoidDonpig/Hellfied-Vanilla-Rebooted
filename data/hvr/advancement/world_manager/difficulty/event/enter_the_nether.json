@@ -1,0 +1,17 @@
+{
+    "criteria": {
+        "enter_the_nether": {
+            "trigger": "location",
+            "conditions": {
+                "player": {
+                    "location": {
+                        "dimension": "the_nether"
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "hvr:world_manager/difficulty/event/enter_the_nether"
+    }
+}
