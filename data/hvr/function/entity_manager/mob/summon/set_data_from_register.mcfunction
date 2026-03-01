@@ -147,6 +147,9 @@
 
     data remove storage hvr:asset/mob attributes
 
+    data remove storage hvr:asset/mob custom_name
+    data remove storage hvr:asset/mob custom_name_visible
+
     data remove storage hvr:asset/mob equipment
     data remove storage hvr:asset/mob drop_chances
 
