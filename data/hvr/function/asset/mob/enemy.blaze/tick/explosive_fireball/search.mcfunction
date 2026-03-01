@@ -2,7 +2,9 @@
 #
 # Search owner and add data
 #
-# @within function hvr:asset/mob/enemy.blaze/tick/
+# @within function
+#   hvr:asset/mob/enemy.blaze/tick/
+#   hvr:asset/mob/enemy.hazardous.inferno/tick/in_hostile
 
 # Declare this fireball
     tag @s add hvr.asset.mob.blaze.fireball_this

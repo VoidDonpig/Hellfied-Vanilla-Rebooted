@@ -30,6 +30,9 @@
     execute if entity @s[type=pillager] run data modify storage hvr:api __input__.id set value "enemy.pillager"
     execute if entity @s[type=warden] run data modify storage hvr:api __input__.id set value "enemy.warden"
 
+# Hazardous mob
+    execute if score $difficulty hvr.world matches 100 run function hvr:entity_manager/mob/init/convert_into_hazardous_mob
+
 # Declare skip summon entity
     data modify storage hvr:api __input__.skip_summon set value true
 

@@ -1,0 +1,83 @@
+{
+    "anvil_cost": 0,
+    "description": "",
+    "max_cost": {
+        "base": 255,
+        "per_level_above_first": 255
+    },
+    "max_level": 1,
+    "min_cost": {
+        "base": 255,
+        "per_level_above_first": 255
+    },
+    "slots": [
+        "body"
+    ],
+    "supported_items": "#hvr:all",
+    "weight": 1,
+    "effects": {
+        "prevent_equipment_drop": {},
+        "damage_immunity": [
+            {
+                "effect": {},
+                "requirements": {
+                    "condition": "damage_source_properties",
+                    "predicate": {
+                        "tags": [
+                            {
+                                "id": "hvr:asset/mob/enemy.hazardous.inferno/inferno_immune_to",
+                                "expected": true
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "effect": {},
+                "requirements": {
+                    "condition": "damage_source_properties",
+                    "predicate": {
+                        "source_entity": {
+                            "type": "#hvr:enemy/all_without_boss"
+                        }
+                    }
+                }
+            },
+            {
+                "effect": {},
+                "requirements": {
+                    "condition": "damage_source_properties",
+                    "predicate": {
+                        "direct_entity": {
+                            "type": "snowball"
+                        }
+                    }
+                }
+            },
+            {
+                "effect": {},
+                "requirements": {
+                    "condition": "damage_source_properties",
+                    "predicate": {
+                        "direct_entity": {
+                            "type": "splash_potion",
+                            "nbt": "{Item:{components:{\"minecraft:potion_contents\":{potion:\"minecraft:water\"}}}}"
+                        }
+                    }
+                }
+            },
+            {
+                "effect": {},
+                "requirements": {
+                    "condition": "damage_source_properties",
+                    "predicate": {
+                        "direct_entity": {
+                            "type": "lingering_potion",
+                            "nbt": "{Item:{components:{\"minecraft:potion_contents\":{potion:\"minecraft:water\"}}}}"
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}

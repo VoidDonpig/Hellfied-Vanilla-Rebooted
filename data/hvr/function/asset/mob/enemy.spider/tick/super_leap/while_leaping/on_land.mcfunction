@@ -14,4 +14,4 @@
     tag @s remove hvr.asset.mob.spider.leaping.motion_canceled
 
 # Set cooldown
-    scoreboard players set @s hvr.asset.mob.spider.super_leap.cooldown 100
+    scoreboard players set @s hvr.asset.mob.enemy.spider.super_leap.cooldown 100

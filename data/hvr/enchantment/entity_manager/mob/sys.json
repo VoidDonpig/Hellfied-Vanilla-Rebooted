@@ -182,6 +182,34 @@
                         }
                     ]
                 }
+            },
+            {
+                "effect": {
+                    "type": "run_function",
+                    "function": "hvr:entity_manager/mob/event/damaged/on_damaged"
+                },
+                "requirements": {
+                    "condition": "all_of",
+                    "terms": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "predicate": {
+                                "nbt": "{HurtTime:10s}"
+                            }
+                        },
+                        {
+                            "condition": "inverted",
+                            "term": {
+                                "condition": "entity_properties",
+                                "entity": "this",
+                                "predicate": {
+                                    "nbt": "{Tags:[\"hvr.death\"]}"
+                                }
+                            }
+                        }
+                    ]
+                }
             }
         ]
     }

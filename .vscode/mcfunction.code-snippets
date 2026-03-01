@@ -1,4 +1,11 @@
 {
+  "Common Marker": {
+    "prefix": "cmarker",
+    "body": [
+      "1db9-0-0-0-0"
+    ],
+    "description": "Common Marker UUID"
+  },
   "Tick": {
     "prefix": "tickdispatcher",
     "body": [

@@ -16,4 +16,4 @@
     execute anchored eyes positioned ^ ^ ^ run playsound entity.ender_dragon.growl hostile @a[distance=..16] ~ ~ ~ 1 2
 
 # Reset timer
-    scoreboard players reset @s hvr.asset.mob.zombie.boost_buff_activate_timer
+    scoreboard players reset @s hvr.asset.mob.enemy.zombie.boost_buff_activate_timer

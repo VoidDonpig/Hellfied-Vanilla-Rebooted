@@ -52,6 +52,9 @@
         data modify storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].Health set from entity @s Health
         data modify storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].AbsorptionAmount set from entity @s AbsorptionAmount
 
+# Add hurt tag
+    tag @s add hvr.hurt
+
 # Reset
     data remove storage hvr:entity_manager/mob damage_type
     data remove storage hvr:asset/context damage

@@ -13,8 +13,8 @@
     function hvr:api/effect/give
 
 # Give instant regen
-    effect give @s regeneration 300 4 false
-    effect give @s resistance 300 3 false
+    effect give @s regeneration 300 1 false
+    effect give @s resistance 300 0 false
 
 # SFX
     execute anchored eyes positioned ^ ^ ^ run playsound block.trial_spawner.ominous_activate hostile @a[distance=..16] ~ ~ ~ 2 1.4

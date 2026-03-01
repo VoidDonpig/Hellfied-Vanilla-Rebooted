@@ -8,7 +8,7 @@
     execute unless predicate hvr:in_hostile run function hvr:asset/mob/enemy.spider/reset/
 
 # Remove super leap CD
-    scoreboard players remove @s[scores={hvr.asset.mob.spider.super_leap.cooldown=1..}] hvr.asset.mob.spider.super_leap.cooldown 1
+    scoreboard players remove @s[scores={hvr.asset.mob.enemy.spider.super_leap.cooldown=1..}] hvr.asset.mob.enemy.spider.super_leap.cooldown 1
 
 # When in hostile
     execute if entity @s[tag=!hvr.asset.mob.spider.leaping] if predicate hvr:in_hostile run function hvr:asset/mob/enemy.spider/tick/in_hostile

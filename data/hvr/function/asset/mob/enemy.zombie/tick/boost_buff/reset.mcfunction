@@ -19,4 +19,4 @@
     execute unless score $difficulty hvr.global matches 4.. run function hvr:asset/mob/enemy.zombie/tick/boost_buff/give_rebound_debuff
 
 # Reset timer
-    scoreboard players reset @s hvr.asset.mob.zombie.boost_buff_activating_timer
+    scoreboard players reset @s hvr.asset.mob.enemy.zombie.boost_buff_activating_timer

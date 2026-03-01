@@ -11,7 +11,7 @@
     data modify entity @s Invulnerable set value true
 
 # Set DeathTime
-    data modify entity @s DeathTime set value 19s
+    #data modify entity @s DeathTime set value 19s
 
 # Vanish
     tp @s ~ -1024 ~

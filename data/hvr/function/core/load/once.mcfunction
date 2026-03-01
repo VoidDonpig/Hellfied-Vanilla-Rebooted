@@ -76,6 +76,7 @@
     function hvr:asset/mob/enemy.spider/load
     function hvr:asset/mob/enemy.evoker/load
     function hvr:asset/mob/enemy.warden/load
+    function hvr:asset/mob/enemy.hazardous.inferno/load
 
 # Declare this function is loaded
     execute if data storage hvr:core {is_production:true} run data modify storage hvr:core loaded_once set value true

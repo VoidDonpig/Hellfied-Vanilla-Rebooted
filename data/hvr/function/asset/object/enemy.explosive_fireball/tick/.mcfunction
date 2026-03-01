@@ -18,7 +18,7 @@
     scoreboard players add @s hvr.asset.generic 1
 
 # Autokill
-    tag @s[scores={hvr.asset.generic=100..}] add hvr.vanish
+    tag @s[scores={hvr.asset.generic=80..}] add hvr.vanish
 
 # Reset
     scoreboard players reset $remaining_loop hvr.temporary
