@@ -15,4 +15,4 @@
     data remove storage hvr:api locator_bar_icon
 
 # Migrate data
-    data modify storage hvr:api locator_bar_icon set from storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].data_cache.data.locator_bar_icon
+    data modify storage hvr:api locator_bar_icon set from storage hvr:entity_manager/storage fetched.data_cache.data.locator_bar_icon

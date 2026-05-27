@@ -15,4 +15,4 @@
     data remove storage hvr:api sleeping_pos
 
 # Migrate data
-    data modify storage hvr:api sleeping_pos set from storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].data_cache.data.sleeping_pos
+    data modify storage hvr:api sleeping_pos set from storage hvr:entity_manager/storage fetched.data_cache.data.sleeping_pos

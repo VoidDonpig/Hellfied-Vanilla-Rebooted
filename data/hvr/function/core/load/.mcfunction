@@ -10,3 +10,6 @@
 # Only once loaded function
     execute if data storage hvr:core {is_production:true} unless data storage hvr:core {loaded_once:true} run function hvr:core/load/once
     execute unless data storage hvr:core {is_production:true} run function hvr:core/load/once
+
+# Run GC
+    execute if data storage hvr:entity_manager/storage stored[0] run function hvr:entity_manager/storage/gc/

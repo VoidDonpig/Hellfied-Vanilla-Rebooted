@@ -15,4 +15,4 @@
     data remove storage hvr:api XpP
 
 # Migrate data
-    data modify storage hvr:api XpP set from storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].data_cache.data.XpP
+    data modify storage hvr:api XpP set from storage hvr:entity_manager/storage fetched.data_cache.data.XpP

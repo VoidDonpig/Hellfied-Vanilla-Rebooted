@@ -15,4 +15,4 @@
     data remove storage hvr:api current_explosion_impact_pos
 
 # Migrate data
-    data modify storage hvr:api current_explosion_impact_pos set from storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].data_cache.data.current_explosion_impact_pos
+    data modify storage hvr:api current_explosion_impact_pos set from storage hvr:entity_manager/storage fetched.data_cache.data.current_explosion_impact_pos

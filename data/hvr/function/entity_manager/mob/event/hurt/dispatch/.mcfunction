@@ -8,18 +8,18 @@
     tag @s add hvr.this
 
 # Get storage
-    function hvr:entity_manager/storage/access
+    function hvr:api/storage/entity/fetch
 
 # Set Context
-    data modify storage hvr:asset/context id set from storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].id
-    data modify storage hvr:asset/context this set from storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].mob_field
+    data modify storage hvr:asset/context id set from storage hvr:entity_manager/storage fetched.id
+    data modify storage hvr:asset/context this set from storage hvr:entity_manager/storage fetched.mob_field
     
 # Call dispatcher
     function hvr:entity_manager/mob/event/hurt/dispatch/m with storage hvr:asset/context
 
 # Set field
-    function hvr:entity_manager/storage/access
-    data modify storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].mob_field set from storage hvr:asset/context this
+    function hvr:api/storage/entity/fetch
+    data modify storage hvr:entity_manager/storage fetched.mob_field set from storage hvr:asset/context this
 
 # Reset
     tag @s remove hvr.this

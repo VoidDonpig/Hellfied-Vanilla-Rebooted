@@ -15,4 +15,4 @@
     data remove storage hvr:api Silent
 
 # Migrate data
-    data modify storage hvr:api Silent set from storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].data_cache.data.Silent
+    data modify storage hvr:api Silent set from storage hvr:entity_manager/storage fetched.data_cache.data.Silent

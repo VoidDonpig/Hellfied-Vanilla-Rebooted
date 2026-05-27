@@ -173,15 +173,6 @@ This project is released under the **MIT License**.
 
 See the [LICENSE](LICENSE) file for full license text and terms.
 
-### Third-Party Components
-
-Parts of this datapack (specifically the entity manager storage system) make use of **OhMyDat** by Ai-Akaishi.
-
-* Repository: <https://github.com/Ai-Akaishi/OhMyDat>
-* License: **MIT License**
-
-OhMyDat is used in compliance with the terms of the MIT License.
-
 ---
 
 ## 👤 Author

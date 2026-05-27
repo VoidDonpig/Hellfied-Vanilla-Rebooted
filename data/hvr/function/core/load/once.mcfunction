@@ -43,9 +43,6 @@
     scoreboard objectives add hvr.player_taken_damage custom:damage_taken
     scoreboard objectives add hvr.player_absorbed_damage custom:damage_absorbed
 
-# Entity manager objective
-    scoreboard objectives add hvr.entity_storage dummy
-
 # Rom objective
     scoreboard objectives add hvr.rom dummy
 
@@ -62,7 +59,7 @@
     scoreboard objectives add hvr.asset.generic dummy
 
 # Initialize entity storage
-    execute unless data storage hvr:entity_manager/storage _ unless data storage hvr:core/rom _ run function hvr:core/load/initialize_storage
+    execute unless data storage hvr:core {initialized_storage:true} run function hvr:core/load/initialize_storage
 
 # Call global variable
     # tellraw prefix

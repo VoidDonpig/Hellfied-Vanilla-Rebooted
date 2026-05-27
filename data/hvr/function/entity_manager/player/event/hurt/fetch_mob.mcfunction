@@ -5,7 +5,7 @@
 # @within function hvr:entity_manager/player/event/hurt/filter/0
     
 # Call storage
-    function hvr:entity_manager/storage/access
+    function hvr:api/storage/entity/fetch
 
 # Calculate damage value
     scoreboard players set $damage hvr.temporary 0
@@ -28,12 +28,12 @@
     execute if entity @s[tag=hvr.asset.mob] if entity @p[tag=hvr.player_killed] at @s run function hvr:entity_manager/mob/event/kill/dispatch/
 
 # Call storage again
-    function hvr:entity_manager/storage/access
+    function hvr:api/storage/entity/fetch
 
 # Record current Health value
     # Attacker
-        data modify storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].Health set from entity @s Health
-        data modify storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].AbsorptionAmount set from entity @s AbsorptionAmount
+        data modify storage hvr:entity_manager/storage fetched.Health set from entity @s Health
+        data modify storage hvr:entity_manager/storage fetched.AbsorptionAmount set from entity @s AbsorptionAmount
 
 # Reset
     data remove storage hvr:asset/context damage

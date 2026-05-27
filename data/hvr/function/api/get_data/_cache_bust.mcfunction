@@ -4,12 +4,12 @@
 #
 # @input as entity
 #
-# @output storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].data_cache{cache_bust:true}
+# @output storage hvr:entity_manager/storage fetched.data_cache{cache_bust:true}
 #
 # @api
 
 # Get storage
-    function hvr:entity_manager/storage/access
+    function hvr:api/storage/entity/fetch
 
 # Declare flag
-    data modify storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].data_cache.cache_bust set value true
+    data modify storage hvr:entity_manager/storage fetched.data_cache.cache_bust set value true

@@ -20,8 +20,8 @@
     function hvr:entity_manager/mob/event/init/dispatch/m with storage hvr:api __input__
 
 # Set field
-    function hvr:entity_manager/storage/access
-    data modify storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].mob_field set from storage hvr:asset/context this
+    function hvr:api/storage/entity/fetch
+    data modify storage hvr:entity_manager/storage fetched.mob_field set from storage hvr:asset/context this
 
 # Reset
     data remove storage hvr:asset/context this

@@ -15,4 +15,4 @@
     data remove storage hvr:api Invulnerable
 
 # Migrate data
-    data modify storage hvr:api Invulnerable set from storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].data_cache.data.Invulnerable
+    data modify storage hvr:api Invulnerable set from storage hvr:entity_manager/storage fetched.data_cache.data.Invulnerable

@@ -15,4 +15,4 @@
     data remove storage hvr:api ShoulderEntityLeft
 
 # Migrate data
-    data modify storage hvr:api ShoulderEntityLeft set from storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].data_cache.data.ShoulderEntityLeft
+    data modify storage hvr:api ShoulderEntityLeft set from storage hvr:entity_manager/storage fetched.data_cache.data.ShoulderEntityLeft

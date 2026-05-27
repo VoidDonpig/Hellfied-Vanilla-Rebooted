@@ -12,8 +12,8 @@
     execute if entity @s[tag=!hvr.asset.mob] run return run function hvr:entity_manager/mob/init/common
 
 # Get id
-    execute if entity @s[type=!slime,type=!magma_cube] run function hvr:entity_manager/storage/access
-    execute if entity @s[type=!slime,type=!magma_cube] run data modify storage hvr:api __input__.id set from storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].id
+    execute if entity @s[type=!slime,type=!magma_cube] run function hvr:api/storage/entity/fetch
+    execute if entity @s[type=!slime,type=!magma_cube] run data modify storage hvr:api __input__.id set from storage hvr:entity_manager/storage fetched.id
 
 # If slime or magma cube, init as new mob
     execute if entity @s[type=slime,tag=hvr.asset.mob.enemy.slime] run data modify storage hvr:api __input__.id set value "enemy.slime"

@@ -104,14 +104,14 @@
     data modify entity @s PersistenceRequired set from storage hvr:asset/mob persistance_required
 
 # Access storage
-    function hvr:entity_manager/storage/access
+    function hvr:api/storage/entity/fetch
 
 # ID
-    data modify storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].id set from storage hvr:asset/mob id
+    data modify storage hvr:entity_manager/storage fetched.id set from storage hvr:asset/mob id
 
 # Field
     execute if data storage hvr:asset/mob field_override run data modify storage hvr:asset/mob field merge from storage hvr:asset/mob field_override
-    data modify storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].mob_field set from storage hvr:asset/mob field
+    data modify storage hvr:entity_manager/storage fetched.mob_field set from storage hvr:asset/mob field
 
 # Common init
     function hvr:entity_manager/mob/init/common

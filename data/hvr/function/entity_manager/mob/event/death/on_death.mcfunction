@@ -8,11 +8,11 @@
     tag @s[nbt={last_hurt_by_player_memory_time:100}] add hvr.killed
 
 # Call storage
-    function hvr:entity_manager/storage/access
+    function hvr:api/storage/entity/fetch
 
 # Calculate damage value
-    execute store result score $previous_health hvr.temporary run data get storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].Health 100
-    execute store result score $previous_absorption_amount hvr.temporary run data get storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].AbsorptionAmount 100
+    execute store result score $previous_health hvr.temporary run data get storage hvr:entity_manager/storage fetched.Health 100
+    execute store result score $previous_absorption_amount hvr.temporary run data get storage hvr:entity_manager/storage fetched.AbsorptionAmount 100
     execute store result score $current_health hvr.temporary run data get entity @s Health 100
     execute store result score $current_absorption_amount hvr.temporary run data get entity @s AbsorptionAmount 100
     scoreboard players set $damage hvr.temporary 0

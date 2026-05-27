@@ -15,4 +15,4 @@
     data remove storage hvr:api SelectedItem
 
 # Migrate data
-    data modify storage hvr:api SelectedItem set from storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].data_cache.data.SelectedItem
+    data modify storage hvr:api SelectedItem set from storage hvr:entity_manager/storage fetched.data_cache.data.SelectedItem

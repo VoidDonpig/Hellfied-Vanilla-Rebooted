@@ -15,4 +15,4 @@
     data remove storage hvr:api XpSeed
 
 # Migrate data
-    data modify storage hvr:api XpSeed set from storage hvr:entity_manager/storage _[-4][-4][-4][-4][-4][-4][-4][-4].data_cache.data.XpSeed
+    data modify storage hvr:api XpSeed set from storage hvr:entity_manager/storage fetched.data_cache.data.XpSeed
