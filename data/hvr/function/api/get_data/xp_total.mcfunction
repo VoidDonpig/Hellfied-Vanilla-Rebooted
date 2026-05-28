@@ -15,4 +15,4 @@
     data remove storage hvr:api XpTotal
 
 # Migrate data
-    data modify storage hvr:api XpTotal set from storage hvr:entity_manager/storage fetched.data_cache.data.XpTotal
+    data modify storage hvr:api XpTotal set from storage hvr:entity_manager/storage _.data_cache.data.XpTotal

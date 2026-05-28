@@ -15,4 +15,4 @@
     data remove storage hvr:api dataVersion
 
 # Migrate data
-    data modify storage hvr:api dataVersion set from storage hvr:entity_manager/storage fetched.data_cache.data.dataVersion
+    data modify storage hvr:api dataVersion set from storage hvr:entity_manager/storage _.data_cache.data.dataVersion

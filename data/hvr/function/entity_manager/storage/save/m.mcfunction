@@ -5,4 +5,4 @@
 # @within function hvrentity_manager/storage/save/
 
 # Save data
-    $data modify storage hvr:entity_manager/storage stored[{owner_uuid:$(target_uuid)}] set from storage hvr:entity_manager/storage fetched
+    $data modify storage hvr:entity_manager/storage stored_data[{owner_uuid:$(target_uuid)}] set from storage hvr:entity_manager/storage _

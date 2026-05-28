@@ -15,4 +15,4 @@
     data remove storage hvr:api Tags
 
 # Migrate data
-    data modify storage hvr:api Tags set from storage hvr:entity_manager/storage fetched.data_cache.data.Tags
+    data modify storage hvr:api Tags set from storage hvr:entity_manager/storage _.data_cache.data.Tags

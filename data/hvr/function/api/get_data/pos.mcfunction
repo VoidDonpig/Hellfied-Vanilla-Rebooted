@@ -15,4 +15,4 @@
     data remove storage hvr:api Pos
 
 # Migrate data
-    data modify storage hvr:api Pos set from storage hvr:entity_manager/storage fetched.data_cache.data.Pos
+    data modify storage hvr:api Pos set from storage hvr:entity_manager/storage _.data_cache.data.Pos

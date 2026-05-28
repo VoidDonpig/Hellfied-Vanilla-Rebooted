@@ -12,4 +12,4 @@
     execute unless data storage hvr:core {is_production:true} run function hvr:core/load/once
 
 # Run GC
-    execute if data storage hvr:entity_manager/storage stored[0] run function hvr:entity_manager/storage/gc/
+    execute if data storage hvr:entity_manager/storage stored_data[0] run function hvr:entity_manager/storage/gc/

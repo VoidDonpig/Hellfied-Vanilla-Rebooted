@@ -15,4 +15,4 @@
     data remove storage hvr:api SelectedItemSlot
 
 # Migrate data
-    data modify storage hvr:api SelectedItemSlot set from storage hvr:entity_manager/storage fetched.data_cache.data.SelectedItemSlot
+    data modify storage hvr:api SelectedItemSlot set from storage hvr:entity_manager/storage _.data_cache.data.SelectedItemSlot

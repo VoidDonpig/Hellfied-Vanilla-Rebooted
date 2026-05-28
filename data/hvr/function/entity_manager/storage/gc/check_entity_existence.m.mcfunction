@@ -9,4 +9,4 @@
 #declare score_holder $existed
 
 # Check via macro
-    $execute store result score $existed hvr.temporary if entity @e[nbt={UUID:$(owner_uuid)}]
+    $execute store success score $existed hvr.temporary if entity @e[nbt={UUID:$(owner_uuid)}]

@@ -15,4 +15,4 @@
     data remove storage hvr:api UUID
 
 # Migrate data
-    data modify storage hvr:api UUID set from storage hvr:entity_manager/storage fetched.data_cache.data.UUID
+    data modify storage hvr:api UUID set from storage hvr:entity_manager/storage _.data_cache.data.UUID

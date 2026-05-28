@@ -32,8 +32,8 @@
 
 # Record current Health value
     # Attacker
-        data modify storage hvr:entity_manager/storage fetched.Health set from entity @s Health
-        data modify storage hvr:entity_manager/storage fetched.AbsorptionAmount set from entity @s AbsorptionAmount
+        data modify storage hvr:entity_manager/storage _.Health set from entity @s Health
+        data modify storage hvr:entity_manager/storage _.AbsorptionAmount set from entity @s AbsorptionAmount
 
 # Reset
     data remove storage hvr:asset/context damage

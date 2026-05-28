@@ -15,4 +15,4 @@
     data remove storage hvr:api attributes
 
 # Migrate data
-    data modify storage hvr:api attributes set from storage hvr:entity_manager/storage fetched.data_cache.data.attributes
+    data modify storage hvr:api attributes set from storage hvr:entity_manager/storage _.data_cache.data.attributes

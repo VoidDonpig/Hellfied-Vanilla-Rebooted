@@ -14,7 +14,7 @@
     execute unless data storage hvr:asset/effect target_effect_data{duration:-1} run function hvr:entity_manager/effect/give/format_data
 
 # Add effect
-    data modify storage hvr:entity_manager/storage fetched.effects append from storage hvr:asset/effect effect_data
+    data modify storage hvr:entity_manager/storage _.effects append from storage hvr:asset/effect effect_data
 
 # Add tag
     tag @s add hvr.have_asset_effect

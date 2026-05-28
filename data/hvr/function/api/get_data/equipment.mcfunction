@@ -15,4 +15,4 @@
     data remove storage hvr:api equipment
 
 # Migrate data
-    data modify storage hvr:api equipment set from storage hvr:entity_manager/storage fetched.data_cache.data.equipment
+    data modify storage hvr:api equipment set from storage hvr:entity_manager/storage _.data_cache.data.equipment

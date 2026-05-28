@@ -15,4 +15,4 @@
     data remove storage hvr:api foodExhaustionLevel
 
 # Migrate data
-    data modify storage hvr:api foodExhaustionLevel set from storage hvr:entity_manager/storage fetched.data_cache.data.foodExhaustionLevel
+    data modify storage hvr:api foodExhaustionLevel set from storage hvr:entity_manager/storage _.data_cache.data.foodExhaustionLevel

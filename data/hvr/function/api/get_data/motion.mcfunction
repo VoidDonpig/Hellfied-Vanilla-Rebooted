@@ -15,4 +15,4 @@
     data remove storage hvr:api Motion
 
 # Migrate data
-    data modify storage hvr:api Motion set from storage hvr:entity_manager/storage fetched.data_cache.data.Motion
+    data modify storage hvr:api Motion set from storage hvr:entity_manager/storage _.data_cache.data.Motion

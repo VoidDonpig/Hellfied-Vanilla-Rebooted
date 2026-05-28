@@ -15,4 +15,4 @@
     data remove storage hvr:api Brain
 
 # Migrate data
-    data modify storage hvr:api Brain set from storage hvr:entity_manager/storage fetched.data_cache.data.Brain
+    data modify storage hvr:api Brain set from storage hvr:entity_manager/storage _.data_cache.data.Brain

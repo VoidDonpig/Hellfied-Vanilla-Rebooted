@@ -15,4 +15,4 @@
     data remove storage hvr:api respawn
 
 # Migrate data
-    data modify storage hvr:api respawn set from storage hvr:entity_manager/storage fetched.data_cache.data.respawn
+    data modify storage hvr:api respawn set from storage hvr:entity_manager/storage _.data_cache.data.respawn

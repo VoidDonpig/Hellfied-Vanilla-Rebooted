@@ -15,14 +15,14 @@
 
 # ID
     function hvr:api/storage/entity/fetch
-    data modify storage hvr:entity_manager/storage fetched.id set from storage hvr:api __input__.id
+    data modify storage hvr:entity_manager/storage _.id set from storage hvr:api __input__.id
 
 # Init process
     function hvr:entity_manager/object/event/init/dispatch/m with storage hvr:api __input__
 
 # Set field
     function hvr:api/storage/entity/fetch
-    data modify storage hvr:entity_manager/storage fetched.object_field set from storage hvr:asset/context this
+    data modify storage hvr:entity_manager/storage _.object_field set from storage hvr:asset/context this
 
 # Reset
     data remove storage hvr:asset/context this

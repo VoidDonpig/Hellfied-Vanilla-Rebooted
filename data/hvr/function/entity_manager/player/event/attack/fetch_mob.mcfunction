@@ -8,8 +8,8 @@
     function hvr:api/storage/entity/fetch
 
 # Calculate damage value
-    execute store result score $previous_health hvr.temporary run data get storage hvr:entity_manager/storage fetched.Health 100
-    execute store result score $previous_absorption_amount hvr.temporary run data get storage hvr:entity_manager/storage fetched.AbsorptionAmount 100
+    execute store result score $previous_health hvr.temporary run data get storage hvr:entity_manager/storage _.Health 100
+    execute store result score $previous_absorption_amount hvr.temporary run data get storage hvr:entity_manager/storage _.AbsorptionAmount 100
     execute store result score $current_health hvr.temporary run data get entity @s Health 100
     execute store result score $current_absorption_amount hvr.temporary run data get entity @s AbsorptionAmount 100
     scoreboard players set $damage hvr.temporary 0
@@ -36,8 +36,8 @@
 
 # Record current Health value
     # Victim
-        data modify storage hvr:entity_manager/storage fetched.Health set from entity @s Health
-        data modify storage hvr:entity_manager/storage fetched.AbsorptionAmount set from entity @s AbsorptionAmount
+        data modify storage hvr:entity_manager/storage _.Health set from entity @s Health
+        data modify storage hvr:entity_manager/storage _.AbsorptionAmount set from entity @s AbsorptionAmount
 
 # Add hurt tag
     tag @s add hvr.hurt

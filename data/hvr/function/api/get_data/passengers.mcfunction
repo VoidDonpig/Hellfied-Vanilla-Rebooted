@@ -15,4 +15,4 @@
     data remove storage hvr:api Passengers
 
 # Migrate data
-    data modify storage hvr:api Passengers set from storage hvr:entity_manager/storage fetched.data_cache.data.Passengers
+    data modify storage hvr:api Passengers set from storage hvr:entity_manager/storage _.data_cache.data.Passengers

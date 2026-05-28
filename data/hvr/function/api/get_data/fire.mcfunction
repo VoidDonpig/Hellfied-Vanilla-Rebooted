@@ -15,4 +15,4 @@
     data remove storage hvr:api Fire
 
 # Migrate data
-    data modify storage hvr:api Fire set from storage hvr:entity_manager/storage fetched.data_cache.data.Fire
+    data modify storage hvr:api Fire set from storage hvr:entity_manager/storage _.data_cache.data.Fire

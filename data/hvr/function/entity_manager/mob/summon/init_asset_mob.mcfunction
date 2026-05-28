@@ -21,7 +21,7 @@
 
 # Set field
     function hvr:api/storage/entity/fetch
-    data modify storage hvr:entity_manager/storage fetched.mob_field set from storage hvr:asset/context this
+    data modify storage hvr:entity_manager/storage _.mob_field set from storage hvr:asset/context this
 
 # Reset
     data remove storage hvr:asset/context this

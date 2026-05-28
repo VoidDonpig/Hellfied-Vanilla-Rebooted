@@ -15,4 +15,4 @@
     data remove storage hvr:api LastDeathLocation
 
 # Migrate data
-    data modify storage hvr:api LastDeathLocation set from storage hvr:entity_manager/storage fetched.data_cache.data.LastDeathLocation
+    data modify storage hvr:api LastDeathLocation set from storage hvr:entity_manager/storage _.data_cache.data.LastDeathLocation

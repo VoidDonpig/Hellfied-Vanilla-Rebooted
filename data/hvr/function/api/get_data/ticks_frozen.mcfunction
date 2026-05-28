@@ -15,4 +15,4 @@
     data remove storage hvr:api TicksFrozen
 
 # Migrate data
-    data modify storage hvr:api TicksFrozen set from storage hvr:entity_manager/storage fetched.data_cache.data.TicksFrozen
+    data modify storage hvr:api TicksFrozen set from storage hvr:entity_manager/storage _.data_cache.data.TicksFrozen

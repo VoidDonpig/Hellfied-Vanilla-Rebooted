@@ -11,11 +11,11 @@
     function hvr:lib/array/session/open
 
 # Get current effect
-    data modify storage hvr:lib array set from storage hvr:entity_manager/storage fetched.effects
+    data modify storage hvr:lib array set from storage hvr:entity_manager/storage _.effects
     function hvr:lib/array/reverse
     data modify storage hvr:asset/effect effects set from storage hvr:lib array
     # Remove origin
-        data remove storage hvr:entity_manager/storage fetched.effects
+        data remove storage hvr:entity_manager/storage _.effects
 
 # Close session
     function hvr:lib/array/session/close
@@ -28,10 +28,10 @@
     function hvr:api/storage/entity/fetch
 
 # Restore effects
-    data modify storage hvr:entity_manager/storage fetched.effects append from storage hvr:asset/effect hand_over_effects[]
+    data modify storage hvr:entity_manager/storage _.effects append from storage hvr:asset/effect hand_over_effects[]
 
 # If doesn't have effect, remove tag
-    execute unless data storage hvr:entity_manager/storage fetched.effects[0] run tag @s remove hvr.have_asset_effect
+    execute unless data storage hvr:entity_manager/storage _.effects[0] run tag @s remove hvr.have_asset_effect
 
 # Reset
     scoreboard players reset @s hvr.used_milk

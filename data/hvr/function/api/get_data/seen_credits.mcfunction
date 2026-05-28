@@ -15,4 +15,4 @@
     data remove storage hvr:api seenCredits
 
 # Migrate data
-    data modify storage hvr:api seenCredits set from storage hvr:entity_manager/storage fetched.data_cache.data.seenCredits
+    data modify storage hvr:api seenCredits set from storage hvr:entity_manager/storage _.data_cache.data.seenCredits

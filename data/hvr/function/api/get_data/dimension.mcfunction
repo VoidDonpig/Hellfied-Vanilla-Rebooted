@@ -15,4 +15,4 @@
     data remove storage hvr:api Dimension
 
 # Migrate data
-    data modify storage hvr:api Dimension set from storage hvr:entity_manager/storage fetched.data_cache.data.Dimension
+    data modify storage hvr:api Dimension set from storage hvr:entity_manager/storage _.data_cache.data.Dimension

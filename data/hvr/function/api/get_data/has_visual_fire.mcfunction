@@ -15,4 +15,4 @@
     data remove storage hvr:api HasVisualFire
 
 # Migrate data
-    data modify storage hvr:api HasVisualFire set from storage hvr:entity_manager/storage fetched.data_cache.data.HasVisualFire
+    data modify storage hvr:api HasVisualFire set from storage hvr:entity_manager/storage _.data_cache.data.HasVisualFire

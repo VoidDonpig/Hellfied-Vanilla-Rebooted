@@ -13,7 +13,7 @@
 
 # Get id
     execute if entity @s[type=!slime,type=!magma_cube] run function hvr:api/storage/entity/fetch
-    execute if entity @s[type=!slime,type=!magma_cube] run data modify storage hvr:api __input__.id set from storage hvr:entity_manager/storage fetched.id
+    execute if entity @s[type=!slime,type=!magma_cube] run data modify storage hvr:api __input__.id set from storage hvr:entity_manager/storage _.id
 
 # If slime or magma cube, init as new mob
     execute if entity @s[type=slime,tag=hvr.asset.mob.enemy.slime] run data modify storage hvr:api __input__.id set value "enemy.slime"
